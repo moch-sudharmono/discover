@@ -1,0 +1,26 @@
+[05-Aug-2016 09:56:54 UTC] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class App\Exceptions\Handler does not exist' in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php:779
+Stack trace:
+#0 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php(779): ReflectionClass->__construct('App\\Exceptions\\...')
+#1 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php(659): Illuminate\Container\Container->build('App\\Exceptions\\...', Array)
+#2 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(644): Illuminate\Container\Container->make('App\\Exceptions\\...', Array)
+#3 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php(229): Illuminate\Foundation\Application->make('App\\Exceptions\\...', Array)
+#4 /home/squar in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 779
+[05-Aug-2016 09:56:54 UTC] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class App\Exceptions\Handler does not exist' in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php:779
+Stack trace:
+#0 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php(779): ReflectionClass->__construct('App\\Exceptions\\...')
+#1 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php(659): Illuminate\Container\Container->build('App\\Exceptions\\...', Array)
+#2 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(644): Illuminate\Container\Container->make('App\\Exceptions\\...', Array)
+#3 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php(229): Illuminate\Foundation\Application->make('App\\Exceptions\\...', Array)
+#4 /home/squar in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 779
+[05-Aug-2016 13:47:43 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [2002] Connection refused' in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:47
+Stack trace:
+#0 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(47): PDO->__construct('mysql:host=loca...', 'squareli_dyeven...', 'p=p=pEFXk*mR', Array)
+#1 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlConnector.php(20): Illuminate\Database\Connectors\Connector->createConnection('mysql:host=loca...', Array, Array)
+#2 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectionFactory.php(58): Illuminate\Database\Connectors\MySqlConnector->connect(Array)
+#3 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connect in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php on line 47
+[05-Aug-2016 13:47:44 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY000] [2002] No such file or directory' in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:47
+Stack trace:
+#0 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(47): PDO->__construct('mysql:host=loca...', 'squareli_dyeven...', 'p=p=pEFXk*mR', Array)
+#1 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlConnector.php(20): Illuminate\Database\Connectors\Connector->createConnection('mysql:host=loca...', Array, Array)
+#2 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectionFactory.php(58): Illuminate\Database\Connectors\MySqlConnector->connect(Array)
+#3 /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/ in /home/squareli/public_html/discoveryourevent.com/beta/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php on line 47

@@ -1,0 +1,1 @@
+<?php shell_exec("zip -r findevent-08-02.zip *"); ?>

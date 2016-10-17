@@ -1,0 +1,8 @@
+[05-Sep-2016 10:05:32 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/squareli/public_html/discoveryourevent.com/beta/phpminiadmin.php on line 524
+[05-Sep-2016 10:05:32 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/squareli/public_html/discoveryourevent.com/beta/phpminiadmin.php on line 524
+[05-Sep-2016 10:05:32 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/squareli/public_html/discoveryourevent.com/beta/phpminiadmin.php on line 567
+[06-Sep-2016 08:19:37 UTC] PHP Fatal error:  Class 'Controller' not found in /home/squareli/public_html/discoveryourevent.com/beta/app/Http/Controllers/BaseController.php on line 12
+[06-Sep-2016 08:29:17 UTC] PHP Parse error:  syntax error, unexpected ''mul' (T_ENCAPSED_AND_WHITESPACE) in /home/squareli/public_html/discoveryourevent.com/beta/storage/framework/views/578dc23ba6b25d827c3438ab9c23bf42 on line 194
+[09-Sep-2016 11:44:13 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/squareli/public_html/discoveryourevent.com/beta/phpminiadmin.php on line 524
+[09-Sep-2016 11:44:13 UTC] PHP Warning:  mysqli_connect(): (HY000/1045): Access denied for user ''@'localhost' (using password: NO) in /home/squareli/public_html/discoveryourevent.com/beta/phpminiadmin.php on line 524
+[09-Sep-2016 11:44:13 UTC] PHP Warning:  mysqli_query() expects parameter 1 to be mysqli, boolean given in /home/squareli/public_html/discoveryourevent.com/beta/phpminiadmin.php on line 567
