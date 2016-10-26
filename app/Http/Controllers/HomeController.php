@@ -257,9 +257,6 @@ class HomeController extends BaseController {
                     $x++;
                 }
             } 
-			
-        echo "<pre>";
-        print_r($all_events);exit();
 
             /*             
             * 
@@ -286,12 +283,12 @@ class HomeController extends BaseController {
                                     ->with('maarray', $maddressArray)
         							->with('mTiAr', $morgTitleArray)
         							->with('mog_slar', $morg_surlArray);
-        }
-        else {
+        }else {        
             
             $date["result"] = 8;
             $all_events = $Event->searchEvents($date , "limit");
             $event_date = $Event->getAllCategories();
+            
             $home_blade = 'index';
             $this->layout->content = 
 							View::make('public.' . $this->current_theme . '.' . $home_blade)
