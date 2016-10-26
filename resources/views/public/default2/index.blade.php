@@ -77,24 +77,23 @@
 	</h2>   
    <div class="all-features" id="all_event">   
     @if(!empty($al_event[0]->id))
-	 @foreach($al_event as $aet) 
+	   @foreach($al_event as $aet) 
       <div class="col-lg-3 col-sm-4 col-xs-12 ftr">
         <div class="box">
-	<a href="{!!URL('event/'.$aet->event_url)!!}" class="delegation-ajax more-det" data-tipped-options="ajax:{data:{ event: '{!! $aet->event_url !!}', _token: '{!! $tok !!}' } }"> 
- @if(!empty($aet->event_image))	
-  @if(is_numeric($aet->event_image)) 	 
-   <?php 
-
-$evtoimg = DB::table('event_catimages')->where('id', '=', $aet->event_image)->select('id','ecat_name','ecat_path','ecat_image')->get(); ?>	
-    @if(!empty($evtoimg[0]->id))	
-     <img src="{!!URL::to('uploads/'.$evtoimg[0]->ecat_path.'/'.$evtoimg[0]->ecat_name.'/'.$evtoimg[0]->ecat_image)!!}" class="img-responsive"/>
-    @endif 
-  @else			 
-	<img src="{!!URL::to('uploads/events/'.$aet->account_type.'/'.$aet->event_image)!!}" class="img-responsive"/>
-  @endif 
- @else
-	<img src="{!!URL::to('assets/public/default2/images/events-pic1.jpg')!!}" class="img-responsive"/> 	  
- @endif
+	       <a href="{!!URL('event/'.$aet->event_url)!!}" class="delegation-ajax more-det" data-tipped-options="ajax:{data:{ event: '{!! $aet->event_url !!}', _token: '{!! $tok !!}' } }"> 
+      @if(!empty($aet->event_image))	
+        @if(is_numeric($aet->event_image)) 	 
+      <?php 
+        $evtoimg = DB::table('event_catimages')->where('id', '=', $aet->event_image)->select('id','ecat_name','ecat_path','ecat_image')->get(); ?>	
+        @if(!empty($evtoimg[0]->id))	
+          <img src="{!!URL::to('uploads/'.$evtoimg[0]->ecat_path.'/'.$evtoimg[0]->ecat_name.'/'.$evtoimg[0]->ecat_image)!!}" class="img-responsive"/>
+        @endif 
+      @else			 
+	       <img src="{!!URL::to('uploads/events/'.$aet->account_type.'/'.$aet->event_image)!!}" class="img-responsive"/>
+      @endif 
+    @else
+	   <img src="{!!URL::to('assets/public/default2/images/events-pic1.jpg')!!}" class="img-responsive"/> 	  
+    @endif
           <div class="overbox">
             <div class="title overtext">{!! ucfirst($aet->event_name) !!}</div>
             <div class="tagline overtext">

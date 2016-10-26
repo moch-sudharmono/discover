@@ -258,6 +258,9 @@ class HomeController extends BaseController {
                 }
             } 
 			
+        echo "<pre>";
+        print_r($all_events);exit();
+
             /*             
             * 
             *********************end-lmap***************************

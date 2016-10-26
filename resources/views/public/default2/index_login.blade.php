@@ -892,19 +892,14 @@ var org_surl = [<?php echo '"'.implode('","', $org_surlArray).'"';?>];
           if (status === 'OK') {
             directionsDisplay.setDirections(response);
             var route = response.routes[0];
-           // var summaryPanel = document.getElementById('directions-panel');
-          //  summaryPanel.innerHTML = '';
-            // For each route, display summary information.
+
             for (var i = 0; i < route.legs.length; i++) {
               var routeSegment = i + 1;
-            //  summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
-              //    '</b><br>';
-            //  summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-            //  summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-            //  summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
             }
+          /*
           } else {
             window.alert('Directions request failed due to ' + status);
+          */
           }
         });
 	   
