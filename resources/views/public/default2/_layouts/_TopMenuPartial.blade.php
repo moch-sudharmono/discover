@@ -213,7 +213,7 @@
 				<!-- Signup form pop_up -->
                 <li><a href="{{url('help')}}">Help</a></li>
     			<!-- <li class="create-event"><a href="{{url('createPage/cye')}}">Create Your Event</a></li> -->
-    			<li class="create-event"><a href="{{url('account/CreateEvent')}}">Create Your Event</a></li>
+    			<li class="create-event"><a href="{{url('createEvent')}}">Create Your Event</a></li>
   @endif				
  </ul>	
  <script> 

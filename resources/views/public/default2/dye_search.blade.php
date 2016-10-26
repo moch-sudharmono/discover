@@ -16,21 +16,13 @@
               );
  
 
-  if(!empty($search_data['category'])){
-		$fdata = $search_data['category']; 
-  } else {
-		$fdata = old('category');  
-  }
-  if(!is_array($fdata)){
-	  $fdata = array();
-  }
+  $fdata    = (!empty($search_data['category'])? $search_data['category']:old('category') );
+		
+  if(!is_array($fdata)){	  $fdata = array();  }
    
    
-  if(!empty($search_data['city'])){ 
-		$fcydata = $search_data['city'];	
-  } else {
-		$fcydata = old('city');
-  }
+  $fcydata  = (!empty($search_data['city'])? $search_data['city'] : old('city')); 
+		 
  
   
   if(!empty($search_data['eventday'])){ 

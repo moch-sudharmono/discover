@@ -28,7 +28,7 @@ class HomeController extends BaseController {
 
         $page                   = Post::where('permalink', '=', 'welcome')->first();
         $user_account_city      = '';
-        $this->layout->title    = 'Welcome To DiscoverYourEvents';
+        $this->layout->title    = 'Welcome To Discover Your Event';
         $cdate                  = date('Y-m-d');
         $hoevdat_grop           = '>=';
         $hocdate                = date("Y-m-d");
@@ -85,8 +85,8 @@ class HomeController extends BaseController {
             $attend_event = $Event->getAttendingEvents();
 			
             /** get users following * */
-            $fl_acc = $UsersFollow->getUserFollow();
-            $unfl_acc = $AccountDetails->getCurrentUserAccountDetails();
+            $fl_acc     = $UsersFollow->getUserFollow();
+            $unfl_acc   = $AccountDetails->getCurrentUserAccountDetails();
             
             $home_blade = 'index_login';
 
@@ -198,8 +198,6 @@ class HomeController extends BaseController {
             
             $u_upcevent = $Event->getAttendingEvents();
 
-
-
             $addressArray = null;
             $orgTitleArray = null;
             $org_surlArray = null;
@@ -260,28 +258,31 @@ class HomeController extends BaseController {
                 }
             } 
 			
-            /*             * *********************end-lmap**************************** */
+            /*             
+            * 
+            *********************end-lmap***************************
+            * 
+            */
 					$this->layout->content = 
 							View::make('public.' . $this->current_theme . '.' . $home_blade)
-							->with('page', $page)
-							->with('attend_event', $attend_event)
-							->with('al_event', $all_events)
-                            ->with('clid', $lg_id)
-							->with('fl_acc', $fl_acc)
-							->with('unfl_acc', $unfl_acc)
-							->with('evtsdata', $evtsdata)
-                            ->with('all_address', $all_address)
-							->with('upcevnt', $u_upcevent)
-							->with('addressArray', $addressArray)
-							->with('ucuntry', $ucuntry)
-							->with('rsearch_detail', $rsearch_detail)
-                            ->with('orgTitleArray', $orgTitleArray)
-							->with('org_surlArray', $org_surlArray)
-							->with('full_event', $full_event)
-                            ->with('maarray', $maddressArray)
-							->with('mTiAr', $morgTitleArray)
-							->with('mog_slar', $morg_surlArray);
-//al_event	 rsearch_detail
+        							->with('page', $page)
+        							->with('attend_event', $attend_event)
+        							->with('al_event', $all_events)
+                                    ->with('clid', $lg_id)
+        							->with('fl_acc', $fl_acc)
+        							->with('unfl_acc', $unfl_acc)
+        							->with('evtsdata', $evtsdata)
+                                    ->with('all_address', $all_address)
+        							->with('upcevnt', $u_upcevent)
+        							->with('addressArray', $addressArray)
+        							->with('ucuntry', $ucuntry)
+        							->with('rsearch_detail', $rsearch_detail)
+                                    ->with('orgTitleArray', $orgTitleArray)
+        							->with('org_surlArray', $org_surlArray)
+        							->with('full_event', $full_event)
+                                    ->with('maarray', $maddressArray)
+        							->with('mTiAr', $morgTitleArray)
+        							->with('mog_slar', $morg_surlArray);
         }
         else {
             

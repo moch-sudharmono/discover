@@ -18,20 +18,14 @@ Route::get('/', function () {
 //Registration routes...
 Route::get('forgot_password', 'AuthController@getForgotPassword');
 Route::get('logInSignUp', 'AuthController@getBothlr');
-//Route::get('login/user', 'AuthController@getsLogin');
 Route::post('login/user', 'AuthController@postsLogin');
 Route::post('signup', 'AuthController@postRegisters');
 
 Route::get('cscdata/{getdata}/{id}', 'AccountController@getScdata');
-/*Route::post('event-date', 'EventController@saveEventdate');
-Route::get('revent-date/{eid}', 'EventController@removeEventdate');
-Route::post('editevent-date/{eid}', 'EventController@editEventdate');*/
-
 Route::get('createPage', 'PageController@getCreatevent'); 
 Route::get('createPage/{xword}', 'PageController@getSCreatevent');
 Route::get('getStarted', 'PageController@getStarted');
 Route::post('getStarted', 'PageController@postgetStarted');
-
 Route::post('clocation', 'HomeController@postClocation');
 Route::get('ghome-slide/{latlong}', 'HomeController@getImglocation');
 
@@ -46,31 +40,30 @@ Route::get('club-organization-form', 'PageController@getCluborgform');
 Route::post('bmc-form', 'PageController@postAllform');
 Route::post('contact/send', 'PageController@postContact');
 
+/*Account Page*/
 Route::get('set-up-account', 'PageController@getSetaccount');
+Route::get('account-user/remove-eventu/{id}', 'PageController@removeEventuser');
+Route::get('account-user/{actype}', 'PageController@getAccountu');
+Route::get('account', 'PageController@getAccount');
+Route::get('account/notifications', 'PageController@getNotifications');
+Route::get('account/following', 'PageController@getFollowing');
+
 Route::post('set-up-account', 'PageController@postSetaccount');
 Route::post('account-user/add-eventu', 'PageController@postAddeventuser');
-Route::get('account-user/remove-eventu/{id}', 'PageController@removeEventuser');
-
 Route::post('account-user/send-request', 'PageController@postSendrequest');
-Route::get('account-user/{actype}', 'PageController@getAccountu');
 Route::post('account-user/{actype}', 'PageController@postAccountu');
-Route::get('account', 'PageController@getAccount');
 Route::post('account', 'AccountController@postAccount');
-Route::get('account/notifications', 'PageController@getNotifications');
 Route::post('account/notifications', 'PageController@postNotifications');
-Route::get('account/following', 'PageController@getFollowing');
-//Route::get('account/users', 'PageController@getManageuser');
 Route::post('account/follow', 'AccountController@postAccfollow');
 Route::post('account/unfollow', 'AccountController@postUnfollow');
+
 Route::post('event/pageList', 'AccountController@postEvpgList');
 Route::post('event/arrangeList', 'AccountController@postEvagList');
-
-//Route::post('event/follow', 'EventController@postEvntfollow');
 Route::get('saveEvent/{eventurl}', 'EventController@saveEvent');
 Route::post('event/unattendEvent', 'EventController@unattendEvent');
 Route::post('sharewfriend', 'EventController@postSfriend');
-Route::get('account/createEvent', 'EventController@createEvent');
-Route::post('account/createEvent', 'EventController@postCevent');
+Route::get('createEvent', 'EventController@createEvent');
+Route::post('createEvent', 'EventController@postCevent');
 Route::get('account/manageEvent', 'EventController@manageEvent');
 Route::get('account/getmEvent', 'EventController@getMevent');
 Route::get('account/updateEvent/{eid}', 'EventController@updateEvent');

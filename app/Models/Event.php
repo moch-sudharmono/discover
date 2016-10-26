@@ -49,12 +49,11 @@ class Event extends Model {
         $city_search = $category_search = $day_search = $keyword_search = $location_search = $etype_search = $free_event = false;
         $event_for_relegion = $event_for_family = $event_for_kids = $event_cost = $ac_type = $custom_date = false;
 
-        $event_operation = '=';
-
-        $evdate_op = '!=';
-        $event_date = ' ';
-        $evdate_lsop = '<=';
-        $evdate_grop = '>=';
+        $event_operation    = '=';
+        $evdate_op          = '!=';
+        $event_date         = ' ';
+        $evdate_lsop        = '<=';
+        $evdate_grop        = '>=';
 
         $cdate = date("Y-m-d");
 
@@ -103,7 +102,8 @@ class Event extends Model {
         if (!empty($data['event_date'])) {
             $custom_date = true;
             $day_search = false;
-            $custom_date_value = "%" . date('Y-m-d', strtotime($data['event_date'])) . '%';
+            /*$custom_date_value = "%" . date('Y-m-d', strtotime($data['event_date'])) . '%';*/
+            $custom_date_value = date('Y-m-d', strtotime($data['event_date']));
         }
 
         if (!empty($data['category']) && is_array($data['category']) && !in_array("all", $data['category'])) {
@@ -211,7 +211,7 @@ class Event extends Model {
         $refine_events = $refine_events->join('countries', 'events.country', '=', 'countries.id');
 
         if ($custom_date) {
-            $refine_events = $refine_events->where('events.event_date', "like", $custom_date_value);
+            $refine_events = $refine_events->where('events.event_date', ">", $custom_date_value);
         }
 
         if ($ac_type) {
@@ -221,7 +221,6 @@ class Event extends Model {
         $refine_events = $refine_events->select('events.id', 'events.event_name', 'account_id', 'events.account_type', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.event_cost', 'events.event_price', 'countries.name as country_name', 'countries.name as country_code');
 
         $refine_events = $refine_events->orderBy('id', 'desc');
-
 
         if ($return == "sql") {
             $refine_events = $refine_events->toSql();

@@ -44,7 +44,7 @@ class EventController extends Controller {
                             ->with('st_cvs', $st_cvs)
                             ->with('active', 'ce');
         } else {
-            return Redirect::to('/');
+            return Redirect::to('/logInSignUp');
         }
     }
 

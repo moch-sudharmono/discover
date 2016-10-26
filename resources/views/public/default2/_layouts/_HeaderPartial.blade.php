@@ -1,22 +1,3 @@
- <!-- BEGIN TOP BAR -->
-<?php /* <div class="pre-header">
-    <div class="container">
-        <div class="row">
-            <!-- BEGIN TOP BAR LEFT PART -->
-            <div class="col-md-6 col-sm-6 additional-shop-info">
-                {!! Services\MenuManager::generate('public-small-menu-left', 'list-unstyled list-inline') !!}
-            </div>
-            <!-- END TOP BAR LEFT PART -->
-            <!-- BEGIN TOP BAR MENU -->
-            <div class="col-md-6 col-sm-6 additional-nav">
-                {!! Services\MenuManager::generate('public-small-menu-right', 'list-unstyled list-inline pull-right') !!}
-            </div>
-            <!-- END TOP BAR MENU -->
-        </div>
-    </div>
-</div>
-<!-- END TOP BAR -->
-*/ ?>
  <nav class="navbar navbar-default header-main1">
     <div class="header_bg2">
       <div class="border-line">
