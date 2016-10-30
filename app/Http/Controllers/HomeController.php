@@ -52,9 +52,9 @@ class HomeController extends BaseController {
         if (Sentry::check()) {
 
             Session::forget('selaccount');
-            $lg_id = Sentry::getUser()->id;
+            $lg_id          = Sentry::getUser()->id;
 
-            $uaccount_dts = $usergroup->getUserAccountDetails();
+            $uaccount_dts   = $usergroup->getUserAccountDetails();
             if ($uaccount_dts) {
                 $user_account_city = $uaccount_dts->city;
             }

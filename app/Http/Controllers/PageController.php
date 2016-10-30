@@ -23,8 +23,9 @@ class PageController extends Controller {
 
     public function getCreatevent() {
         if (Sentry::check()) {
-            // Sentry::getUser()->id; 	    
-            return \View::make('public/default2/create-page')->with('title', 'Create Your Event - DiscoverYourEvent')->with('active', 'ce');
+            return \View::make('public/default2/create-page')
+                        ->with('title', 'Create Your Event - DiscoverYourEvent')
+                        ->with('active', 'ce');
         } else {
             return Redirect::to('logInSignUp');
         }
@@ -32,8 +33,10 @@ class PageController extends Controller {
 
     public function getSCreatevent($xword) {
         if (Sentry::check()) {
-            // Sentry::getUser()->id; 	    
-            return \View::make('public/default2/create-page')->with('title', 'Create Your Event - DiscoverYourEvent')->with('active', 'ce');
+            
+            return \View::make('public/default2/create-page')
+                        ->with('title', 'Create Your Event - DiscoverYourEvent')
+                        ->with('active', 'ce');
         } else {
             if (!empty($xword)) {
                 Session::forget('persignup');
@@ -48,8 +51,17 @@ class PageController extends Controller {
        
         $cspid = Session::get('cspid');
         if (!empty($cspid)) {
-            $coun_data = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-            return \View::make('public/default2/get-started')->with('title', 'getStarted - DiscoverYourEvent')->with('cou_data', $coun_data)->with('signupid', $cspid);
+            $coun_data = DB::table('countries')
+                                ->select('id', 'name')
+                                ->where('id', '=', 38)
+                                ->orWhere('id', '=', 231)
+                                ->get();
+
+            return \View::make('public/default2/get-started')
+                        ->with('title', 'getStarted - DiscoverYourEvent')
+                        ->with('cou_data', $coun_data)
+                        ->with('signupid', $cspid);
+
         } else {
             return Redirect::to('/');
         }
@@ -62,12 +74,12 @@ class PageController extends Controller {
         if (!empty($cspid)) {
             $data = $request->input();
             $validator = Validator::make($request->all(), [
-                        'phone' => 'required|min:10',
-                        'address' => 'required',
-                        'country' => 'required',
-                        'state' => 'required',
-                        'city' => 'required',
-                        'zip_code' => 'required|min:6|max:6',
+                        'phone'     => 'required|min:10',
+                        'address'   => 'required',
+                        'country'   => 'required',
+                        'state'     => 'required',
+                        'city'      => 'required',
+                        'zip_code'  => 'required|min:6|max:6',
             ]);
             if ($validator->fails()) {
                 return redirect('getStarted')->withErrors($validator)->withInput();
@@ -77,11 +89,26 @@ class PageController extends Controller {
                 $city = $data['city'];
             }
                 
-                $gd_id = DB::table('group_details')->insertGetId(['g_id' => 3, 'u_id' => $cspid, 'address' => $data['address'], 'city' => $city,
-                    'state' => $data['state'], 'zip_code' => $data['zip_code'], 'country' => $data['country'], 'phone' => $data['phone'], 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
+                $gd_id = DB::table('group_details')
+                            ->insertGetId(['g_id'           => 3, 
+                                            'u_id'          => $cspid, 
+                                            'address'       => $data['address'], 
+                                            'city'          => $city,
+                                            'state'         => $data['state'], 
+                                            'zip_code'      => $data['zip_code'], 
+                                            'country'       => $data['country'], 
+                                            'phone'         => $data['phone'], 
+                                            'created_at'    => date('Y-m-d H:i:s'), 
+                                            'updated_at'    => date('Y-m-d H:i:s')]
                 );
-                DB::table('mail_notifications')->insertGetId(['user_id' => $cspid, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+
+                DB::table('mail_notifications')
+                    ->insertGetId(['user_id' => $cspid, 
+                                    'created_at' => date('Y-m-d H:i:s'), 
+                                    'updated_at' => date('Y-m-d H:i:s')]);
+
                 Session::forget('cspid');
+                
                 return Redirect::to('set-up-account')->with('grd_id', $gd_id);
            
         } else {
@@ -91,8 +118,16 @@ class PageController extends Controller {
 
     public function getBusinessform() {
         if (Sentry::check()) {
-            $coun_data = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-            return \View::make('public/default2/business-form')->with('title', 'Business Form - DiscoverYourEvent')->with('cou_data', $coun_data);
+            $coun_data = DB::table('countries')
+                            ->select('id', 'name')
+                            ->where('id', '=', 38)
+                            ->orWhere('id', '=', 231)
+                            ->get();
+
+            return \View::make('public/default2/business-form')
+                        ->with('title', 'Business Form - DiscoverYourEvent')
+                        ->with('cou_data', $coun_data);
+
         } else {
             return Redirect::to('logInSignUp');
         }
@@ -100,17 +135,34 @@ class PageController extends Controller {
 
     public function getMunicipalityform() {
         if (Sentry::check()) {
-            $coun_data = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-            return \View::make('public/default2/municipality-form')->with('title', 'Municipality Form - DiscoverYourEvent')->with('cou_data', $coun_data);
+            $coun_data = DB::table('countries')
+                            ->select('id', 'name')
+                            ->where('id', '=', 38)
+                            ->orWhere('id', '=', 231)
+                            ->get();
+
+            return \View::make('public/default2/municipality-form')
+                        ->with('title', 'Municipality Form - DiscoverYourEvent')
+                        ->with('cou_data', $coun_data);
+
         } else {
             return Redirect::to('logInSignUp');
         }
     }
 
+    /*Club or Organization*/
     public function getCluborgform() {
         if (Sentry::check()) {
-            $coun_data = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-            return \View::make('public/default2/club_organization')->with('title', 'Club/Organization Form - DiscoverYourEvent')->with('cou_data', $coun_data);
+            $coun_data = DB::table('countries')
+                            ->select('id', 'name')
+                            ->where('id', '=', 38)
+                            ->orWhere('id', '=', 231)
+                            ->get();
+
+            return \View::make('public/default2/club_organization')
+                        ->with('title', 'Club/Organization Form - DiscoverYourEvent')
+                        ->with('cou_data', $coun_data);
+
         } else {
             return Redirect::to('logInSignUp');
         }
@@ -122,85 +174,105 @@ class PageController extends Controller {
         
         if (!empty($data['actype'])) {
             if ($data['actype'] == 'business') {
-                $acid = 2;
-                $bladename = 'business-form';
+                $acid       = 2;
+                $bladename  = 'business-form';
             } else if ($data['actype'] == 'municipality') {
-                $acid = 5;
-                $bladename = 'municipality-form';
+                $acid       = 5;
+                $bladename  = 'municipality-form';
             } else {
                 $acid = 6;
-                $bladename = 'club-organization-form';
+                $bladename  = 'club-organization-form';
             }
             
             $validator = Validator::make($request->all(), [
-                        'name' => 'required|unique:account_details',
-                        'phone' => 'required|min:10',
-                        'email' => 'required|email',
-                        'address' => 'required',
-                        'city' => 'required',
-                        'state' => 'required',
-                        'country' => 'required',
-                        'zip_code' => 'required|min:6|max:6',
-                        'upload_file' => 'mimes:png,gif,jpeg,bmp',
+                        'name'          => 'required|unique:account_details',
+                        'phone'         => 'required|min:10',
+                        'email'         => 'required|email',
+                        'address'       => 'required',
+                        'city'          => 'required',
+                        'state'         => 'required',
+                        'country'       => 'required',
+                        'zip_code'      => 'required|min:6|max:6',
+                        'upload_file'   => 'mimes:png,gif,jpeg,bmp',
             ]);
             
             
             if ($validator->fails()) {
-                    return redirect($bladename)->withErrors($validator)->withInput();
+                    return redirect($bladename)
+                            ->withErrors($validator)
+                            ->withInput();
+
             } else {
-                $clid = Sentry::getUser()->id;
+                $clid       = Sentry::getUser()->id;
                 $input_file = $request->file();
                 if (!empty($data['city'])) {
-                    $dcity = $data['city'];
+                    $dcity  = $data['city'];
                 } else {
-                    $dcity = null;
+                    $dcity  = null;
                 }
                 if (!empty($input_file)) {
                     $u_filesize = $input_file['upload_file']->getClientSize();
                     if ($u_filesize < 2000001) {
                         //Upload Image
                         $rid = Str::random(7);
-                        $destinationPath = 'public/uploads/account_type/' . $data['actype'] . '/';
-                        $filename = $input_file['upload_file']->getClientOriginalName();
-                        $mime_type = $input_file['upload_file']->getMimeType();
-                        $extension = $input_file['upload_file']->getClientOriginalExtension();
-                        $filename = basename($input_file['upload_file']->getClientOriginalName(), "." . $extension) . '_' . $rid . '.' . $extension;
-                        $upload_success = $input_file['upload_file']->move($destinationPath, $filename);
-                        /*                         * *************resize-image*************** */
-                        /* $rsfname = basename($input_file['upload_file']->getClientOriginalName(), ".".$extension).'_'.$rid.'_200x200.'.$extension;
-                          $rspath = public_path('uploads/account_type/'.$imgs_apath.'/'.$rsfname);
-                          Image::make($destinationPath.$filename)->resize(200, 200)->save($rspath); */
-                        /*                         * *************************************** */
-                        $grd_id = DB::table('account_details')->insertGetId(['g_id' => $acid, 'u_id' => $clid, 'name' => $data['name'], 'address' => $data['address'], 'city' => $dcity,
-                            'email' => $data['email'], 'state' => $data['state'], 'website' => $data['website'], 'zip_code' => $data['zip_code'], 'upload_file' => $filename,
-                            'country' => $data['country'], 'phone' => $data['phone'], 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
+                        $destinationPath    = 'public/uploads/account_type/' . $data['actype'] . '/';
+                        $filename           = $input_file['upload_file']->getClientOriginalName();
+                        $mime_type          = $input_file['upload_file']->getMimeType();
+                        $extension          = $input_file['upload_file']->getClientOriginalExtension();
+                        $filename           = basename($input_file['upload_file']
+                                                ->getClientOriginalName(), "." . $extension) . '_' . $rid . '.' . $extension;
+                        $upload_success     = $input_file['upload_file']->move($destinationPath, $filename);
+                        
+                        $grd_id             = DB::table('account_details')
+                                                ->insertGetId(['g_id'           => $acid, 
+                                                                'u_id'          => $clid, 
+                                                                'name'          => $data['name'], 
+                                                                'address'       => $data['address'], 
+                                                                'city'          => $dcity,
+                                                                'email'         => $data['email'], 
+                                                                'state'         => $data['state'], 
+                                                                'website'       => $data['website'], 
+                                                                'zip_code'      => $data['zip_code'], 
+                                                                'upload_file'   => $filename,
+                                                                'country'       => $data['country'], 
+                                                                'phone'         => $data['phone'], 
+                                                                'created_at'    => date('Y-m-d H:i:s'), 
+                                                                'updated_at'    => date('Y-m-d H:i:s')]
                         );
                     } else {
-                        return redirect($bladename)->with('failed_upfile', 'Please upload max file size of 2mb.')->withInput();
+                        return redirect($bladename)
+                                ->with('failed_upfile', 'Please upload max file size of 2mb.')
+                                ->withInput();
                         die;
                     }
                 } else {
-                    $grd_id = DB::table('account_details')->insertGetId(['g_id' => $acid, 'u_id' => $clid, 'name' => $data['name'], 'address' => $data['address'], 'city' => $dcity,
-                        'email' => $data['email'], 'state' => $data['state'], 'website' => $data['website'], 'zip_code' => $data['zip_code'], 'country' => $data['country'],
-                        'phone' => $data['phone'], 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
+                    $grd_id = DB::table('account_details')
+                                ->insertGetId(['g_id'           => $acid, 
+                                                'u_id'          => $clid, 
+                                                'name'          => $data['name'], 
+                                                'address'       => $data['address'], 
+                                                'city'          => $dcity,
+                                                'email'         => $data['email'], 
+                                                'state'         => $data['state'], 
+                                                'website'       => $data['website'], 
+                                                'zip_code'      => $data['zip_code'], 
+                                                'country'       => $data['country'],
+                                                'phone'         => $data['phone'], 
+                                                'created_at'    => date('Y-m-d H:i:s'), 
+                                                'updated_at'    => date('Y-m-d H:i:s')]
                     );
                 }
 
-                DB::table('user_accounts')->insert(['u_id' => $clid, 'account_did' => $grd_id, 'status' => 'open', 'account_urole' => 'admin', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
-                //Send Email
-                /* 	$SendToEmail = $data['email'];
-                  $eve = url('logInSignUp');
-                  $Subject = "You are successfully select the Account Type - Discover Your Event";
-                  $emdata = array(
-                  'uname'      => Sentry::getUser()->full_name,
-                  'uemail'      => Sentry::getUser()->email,
-                  'loginurl'    => $eve
-                  );
-                  Mail::send('email.signup_email', $emdata, function($message) use ($SendToEmail, $Subject)
-                  {
-                  $message->to($SendToEmail)->cc('vikassharma.itcorporates@gmail.com')->subject($Subject);
-                  }); */
-                return Redirect::to('account-user/' . $data['actype'])->with('saccid', $grd_id);
+                DB::table('user_accounts')
+                    ->insert(['u_id' => $clid, 
+                                'account_did' => $grd_id, 
+                                'status' => 'open', 
+                                'account_urole' => 'admin', 
+                                'created_at' => date('Y-m-d H:i:s'), 
+                                'updated_at' => date('Y-m-d H:i:s')]);
+
+                return Redirect::to('account-user/' . $data['actype'])
+                                ->with('saccid', $grd_id);
             }
         } else {
             return Redirect::to('/');
@@ -211,15 +283,26 @@ class PageController extends Controller {
         
         $grd_id = Session::get('grd_id');
         if (!empty($grd_id)) {
-            $get_ctyd = DB::table('group_details')->where('id', '=', $grd_id)->select('country')->get();
+            $get_ctyd   = DB::table('group_details')
+                            ->where('id', '=', $grd_id)
+                            ->select('country')->get();
             
-            $event_data = DB::table('event_data')->distinct('event_category')->select('event_category')->get();
+            $event_data = DB::table('event_data')
+                            ->distinct('event_category')
+                            ->select('event_category')
+                            ->get();
+
             foreach ($event_data as $obj_arr) {
                 $et_dt[] = $obj_arr->event_category;
             }
             
             $evtsdata = array_unique($et_dt);
-            return \View::make('public/default2/setup-account')->with('title', 'Set up Personal Account - DiscoverYourEvent')->with('evtsdata', $evtsdata)->with('grd_id', $grd_id)->with('get_ctyd', $get_ctyd);
+
+            return \View::make('public/default2/setup-account')
+                        ->with('title', 'Set up Personal Account - DiscoverYourEvent')
+                        ->with('evtsdata', $evtsdata)
+                        ->with('grd_id', $grd_id)
+                        ->with('get_ctyd', $get_ctyd);
         }
         else {
             return Redirect::to('/');
@@ -272,31 +355,55 @@ class PageController extends Controller {
                 } else {
                     $em_up = 'n';
                 }
-                $getCu = DB::table('group_details')->where('id', '=', $data['grd_id'])->select('id', 'u_id')->get();
-                DB::table('group_details')->where('id', '=', $data['grd_id'])->update(['enotification_status' => $enf_status, 'interested_catagories' => $int_cat,
-                    'selected_event' => $selected_event, 'email_nbusiness' => $em_nb, 'email_nupdate' => $em_up, 'updated_at' => date('Y-m-d H:i:s')]);
+            
+                $getCu = DB::table('group_details')
+                            ->where('id', '=', $data['grd_id'])
+                            ->select('id', 'u_id')
+                            ->get();
+            
+                DB::table('group_details')
+                    ->where('id', '=', $data['grd_id'])
+                    ->update(['enotification_status'    => $enf_status, 
+                                'interested_catagories' => $int_cat,
+                                'selected_event'        => $selected_event, 
+                                'email_nbusiness'       => $em_nb, 
+                                'email_nupdate'         => $em_up, 
+                                'updated_at'            => date('Y-m-d H:i:s')]);
+
                 if (!empty($getCu[0]->u_id)) {
-                    DB::table('mail_notifications')->where('user_id', '=', $getCu[0]->u_id)->update(['enotification_status' => $enf_status, 'yfollow_page' => $em_nb,
-                        'dye_notf' => $em_up, 'updated_at' => date('Y-m-d H:i:s')]);
+                    DB::table('mail_notifications')
+                        ->where('user_id', '=', $getCu[0]->u_id)
+                        ->update(['enotification_status' => $enf_status, 
+                                    'yfollow_page' => $em_nb,
+                                    'dye_notf' => $em_up, 
+                                    'updated_at' => date('Y-m-d H:i:s')]);
+
                 }
 
-                $dbnuser = DB::table('users')->where('id', '=', $getCu[0]->u_id)->select('full_name', 'email')->get();
+                $dbnuser = DB::table('users')
+                                ->where('id', '=', $getCu[0]->u_id)
+                                ->select('full_name', 'email')
+                                ->get();
+
                 //Send Email
-                $eve = url('logInSignUp');
-                $SendToEmail = $dbnuser[0]->email;
-                $Subject = "You are successfully sign up - Discover Your Event";
-                $emdata = array(
-                    'uname' => $dbnuser[0]->full_name,
-                    'uemail' => $dbnuser[0]->email,
-                    'loginurl' => $eve
-                );
+                $eve            = url('logInSignUp');
+                $SendToEmail    = $dbnuser[0]->email;
+                $Subject        = "You are successfully sign up - Discover Your Event";
+                $emdata         = array(
+                                    'uname'     => $dbnuser[0]->full_name,
+                                    'uemail'    => $dbnuser[0]->email,
+                                    'loginurl'  => $eve
+                                );
+
                 Mail::send('email.signup_email', $emdata, function($message) use ($SendToEmail, $Subject) {
-                    $message->to($SendToEmail)->cc('nick@discoveryourevent.com')->subject($Subject);
+                    $message->to($SendToEmail)
+                            ->cc('nick@discoveryourevent.com')
+                            ->subject($Subject);
                 });
 
                 $credentials = array(
-                    'login' => Session::get('remail'),
-                    'password' => Session::get('rpassword')
+                    'login'     => Session::get('remail'),
+                    'password'  => Session::get('rpassword')
                 );
                 if (Sentry::authenticate($credentials)) {
                     Session::forget('remail');
@@ -308,32 +415,25 @@ class PageController extends Controller {
                     return Redirect::to('logInSignUp')->with('persignup', 'done-signup');
                 }
             }
-        } /* elseif(!empty($data['ckd']) && $data['ckd'] == 'yes'){
-          $credentials = array(
-          'login' => Session::get('remail'),
-          'password' => Session::get('rpassword')
-          );
-          if(Sentry::authenticate($credentials)){
-          Session::forget('remail');
-          Session::forget('rpassword');
-          return Redirect::to('/');
-          } else {
-          Session::forget('remail');
-          Session::forget('rpassword');
-          return Redirect::to('logInSignUp')->with('persignup','done-signup');
-          }
-          } */ else {
+        } else {
             return Redirect::to('/');
         }
     }
 
     public function getAccountu($actype) {
-        $cspid = Session::get('saccid');
+        $cspid      = Session::get('saccid');
         if (!empty($cspid) && Sentry::check()) {
-            $atype = ucfirst($actype);
-            $account_name = DB::table('account_details')->where('id', '=', $cspid)->select('name', 'account_url')->get();
-            $ac_murl = $account_name[0]->account_url;
-            return \View::make('public/default2/account_user')->with('title', 'Set up ' . $atype . ' Account User - DiscoverYourEvent')->with('accountyp', $actype)->with('acid', $cspid)
+            $atype  = ucfirst($actype);
+            $account_name   = DB::table('account_details')
+                                ->where('id', '=', $cspid)
+                                ->select('name', 'account_url')
+                                ->get();
+
+            $ac_murl        = $account_name[0]->account_url;
+            return \View::make('public/default2/account_user')
+                            ->with('title', 'Set up ' . $atype . ' Account User - DiscoverYourEvent')
+                            ->with('accountyp', $actype)
+                            ->with('acid', $cspid)
                             ->with('account_url', $ac_murl);
         } else {
             return Redirect::to('/');
@@ -344,29 +444,41 @@ class PageController extends Controller {
         $data = $request->input();
         if (!empty($actype)) {
             if ($actype == 'business') {
-                $acid = 2;
-                $bladename = 'business-form';
+                $acid       = 2;
+                $bladename  = 'business-form';
             } else if ($actype == 'municipality') {
-                $acid = 5;
-                $bladename = 'municipality-form';
+                $acid       = 5;
+                $bladename  = 'municipality-form';
             } else {
-                $acid = 6;
-                $bladename = 'club_organization';
+                $acid       = 6;
+                $bladename  = 'club_organization';
             }
             $clid = Sentry::getUser()->id;
             $validator = Validator::make($request->all(), [
-                        'email' => 'email',
-                        'account_url' => 'unique:account_details',
-            ]);
+                                        'email'         => 'email',
+                                        'account_url'   => 'unique:account_details',
+                            ]);
+
             if ($validator->fails()) {
-                return redirect('account-user/' . $bladename)->withErrors($validator)->withInput();
+                return redirect('account-user/' . $bladename)
+                        ->withErrors($validator)
+                        ->withInput();
+
             } else {
                 if (empty($data['account_url'])) {
-                    $cu_number = mt_rand(1000000000, 9999999999);
-                    $ac_murl = $data['account'] . $cu_number . '_ref';
-                    DB::table('account_details')->where('id', '=', $data['account'])->update(['account_url' => $ac_murl, 'updated_at' => date('Y-m-d H:i:s')]);
+                    $cu_number  = mt_rand(1000000000, 9999999999);
+                    $ac_murl    = $data['account'] . $cu_number . '_ref';
+                    DB::table('account_details')
+                        ->where('id', '=', $data['account'])
+                        ->update(['account_url' => $ac_murl, 
+                                    'updated_at' => date('Y-m-d H:i:s')]);
+
                 } else {
-                    DB::table('account_details')->where('id', '=', $data['account'])->update(['account_url' => $data['account_url'], 'updated_at' => date('Y-m-d H:i:s')]);
+                    DB::table('account_details')
+                        ->where('id', '=', $data['account'])
+                        ->update(['account_url' => $data['account_url'], 
+                                    'updated_at' => date('Y-m-d H:i:s')]);
+
                     $ac_murl = $data['account_url'];
                 }
                 $atype = ucfirst($actype);
@@ -378,35 +490,53 @@ class PageController extends Controller {
                 $url_rand = Str::random(12);
                 $lformat_url = 'dye' . strtolower($url_rand);
                 if (isset($data['evtmg_count']) && $data['evtmg_count'] != '0') {
-                    $mail_request = DB::table('mail_request')->where('sender_uid', '=', $clid)->where('account_did', '=', $data['account'])
-                                    ->select('id', 'addition_accmail')->orderBy('id', 'desc')->take($data['evtmg_count'])->get();
+                    $mail_request   = DB::table('mail_request')
+                                        ->where('sender_uid', '=', $clid)
+                                        ->where('account_did', '=', $data['account'])
+                                        ->select('id', 'addition_accmail')
+                                        ->orderBy('id', 'desc')
+                                        ->take($data['evtmg_count'])
+                                        ->get();
 
-                    $account_name = DB::table('account_details')->where('id', '=', $data['account'])->select('name')->get();
-                    $macc_name = $account_name[0]->name;
+                    $account_name   = DB::table('account_details')
+                                        ->where('id', '=', $data['account'])
+                                        ->select('name')
+                                        ->get();
+
+                    $macc_name      = $account_name[0]->name;
                     //Send Email	
-                    $Subject = "Join the " . $macc_name . " Account - Discover Your Event";
-                    $joinurl = url('logInSignUp/' . $lformat_url);
-                    $emdata = array(
-                        'uname' => Sentry::getUser()->full_name,
-                        'uemail' => Sentry::getUser()->email,
-                        'jaccount' => $macc_name,
-                        'jnurl' => $joinurl,
-                    );
+                    $Subject        = "Join the " . $macc_name . " Account - Discover Your Event";
+                    $joinurl        = url('logInSignUp/' . $lformat_url);
+                    $emdata         = array(
+                                        'uname'     => Sentry::getUser()->full_name,
+                                        'uemail'    => Sentry::getUser()->email,
+                                        'jaccount'  => $macc_name,
+                                        'jnurl'     => $joinurl
+                                    );
 
                     foreach ($mail_request as $mrst) {
                         $SendToEmail = $mrst->addition_accmail;
                         Mail::send('email.account_email', $emdata, function($message) use ($SendToEmail, $Subject) {
-                            $message->to($SendToEmail)->subject($Subject);
+                            $message->to($SendToEmail)
+                                    ->subject($Subject);
                         });
                     }
                     $email_status = 'sent';
                 } else {
                     $email_status = 'nsend';
                 }
-                DB::table('mail_request')->where('account_did', '=', $data['account'])->where('email_nupdate', '=', 'n')
-                        ->update(['email_status' => $email_status, 'sdurl_code' => $lformat_url, 'email_nupdate' => $enupd, 'created_at' => date('Y-m-d H:i:s'),
-                            'updated_at' => date('Y-m-d H:i:s')]);
-                return Redirect::to($ac_murl . '/account')->with('succ_mesg', 'Account created successfully!');
+
+                DB::table('mail_request')
+                    ->where('account_did', '=', $data['account'])
+                    ->where('email_nupdate', '=', 'n')
+                    ->update(['email_status' => $email_status, 
+                                'sdurl_code' => $lformat_url, 
+                                'email_nupdate' => $enupd, 
+                                'created_at' => date('Y-m-d H:i:s'),
+                                'updated_at' => date('Y-m-d H:i:s')]);
+
+                return Redirect::to($ac_murl . '/account')
+                                ->with('succ_mesg', 'Account created successfully!');
             }
         } else {
             return Redirect::to('/');
@@ -416,22 +546,42 @@ class PageController extends Controller {
     public function postAddeventuser(Request $request) {
         $data = $request->input();
         if (Sentry::check() && !empty($data['user_type'])) {
-            $clid = Sentry::getUser()->id;
-            $validator = Validator::make($request->all(), [
-                        'email' => 'email',
-            ]);
+            $clid       = Sentry::getUser()->id;
+            $validator  = Validator::make($request->all(), [
+                            'email' => 'email'
+                        ]);
+
             if ($validator->fails()) {
                 return 'error';
             } else {
                 if (!empty($data['account'])) {
-                    $account_name = DB::table('account_details')->where('id', '=', $data['account'])->select('id', 'name')->get();
+                    $account_name = DB::table('account_details')
+                                        ->where('id', '=', $data['account'])
+                                        ->select('id', 'name')
+                                        ->get();
+
                     if (!empty($data['email']) && !empty($account_name[0]->id)) {
-                        $check_exist = DB::table('mail_request')->where('sender_uid', '=', $clid)->where('account_did', '=', $data['account'])
-                                        ->where('addition_accmail', '=', $data['email'])->select('id')->get();
+                        $check_exist = DB::table('mail_request')
+                                            ->where('sender_uid', '=', $clid)
+                                            ->where('account_did', '=', $data['account'])
+                                            ->where('addition_accmail', '=', $data['email'])
+                                            ->select('id')
+                                            ->get();
+
                         if (empty($check_exist[0]->id) || !isset($check_exist[0]->id)) {
-                            $getmr_id = DB::table('mail_request')->insertGetId(['sender_uid' => $clid, 'account_did' => $data['account'], 'addition_accmail' => $data['email'],
-                                'user_type' => 'event', 'status' => 'nresponed', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
-                            return array('success' => 'success', 'aid' => $getmr_id, 'email' => $data['email']);
+                            $getmr_id = DB::table('mail_request')
+                                            ->insertGetId(['sender_uid'         => $clid, 
+                                                            'account_did'       => $data['account'], 
+                                                            'addition_accmail'  => $data['email'],
+                                                            'user_type'         => 'event', 
+                                                            'status'            => 'nresponed', 
+                                                            'created_at'        => date('Y-m-d H:i:s'), 
+                                                            'updated_at'        => date('Y-m-d H:i:s')]);
+
+                            return array('success' => 'success', 
+                                            'aid' => $getmr_id, 
+                                            'email' => $data['email']);
+
                         } else {
                             return 'exist_mail';
                         }
@@ -458,23 +608,35 @@ class PageController extends Controller {
     public function postSendrequest(Request $request) {
         $data = $request->input();
         if (Sentry::check() && !empty($data['acid'])) {
-            $account_name = DB::table('account_details')->where('id', '=', $data['acid'])->select('name')->get();
-            $mrq_dataget = DB::table('mail_request')->where('account_did', '=', $data['acid'])->where('email_status', '=', 'nsend')
-                            ->select('id', 'user_type', 'addition_accmail', 'sdurl_code')->get();
+            $account_name   = DB::table('account_details')
+                                    ->where('id', '=', $data['acid'])
+                                    ->select('name')
+                                    ->get();
+
+            $mrq_dataget    = DB::table('mail_request')
+                                    ->where('account_did', '=', $data['acid'])
+                                    ->where('email_status', '=', 'nsend')
+                                    ->select('id', 'user_type', 'addition_accmail', 'sdurl_code')
+                                    ->get();
+
             if (!empty($mrq_dataget[0]->id)) {
                 $macc_name = $account_name[0]->name;
                 foreach ($mrq_dataget as $mr_all) {
-                    DB::table('mail_request')->where('id', '=', $mr_all->id)->update(['email_status' => 'sent', 'updated_at' => date('Y-m-d H:i:s')]);
+                    DB::table('mail_request')
+                        ->where('id', '=', $mr_all->id)
+                        ->update(['email_status' => 'sent', 'updated_at' => date('Y-m-d H:i:s')]);
+
                     //Send Email
-                    $SendToEmail = $mr_all->addition_accmail;
-                    $Subject = "Join the " . $macc_name . " Account - Discover Your Event";
-                    $joinurl = url('logInSignUp/' . $mr_all->sdurl_code); //url($ac_murl.'/'.$lformat_url);			 
+                    $SendToEmail    = $mr_all->addition_accmail;
+                    $Subject        = "Join the " . $macc_name . " Account - Discover Your Event";
+                    $joinurl        = url('logInSignUp/' . $mr_all->sdurl_code); 
                     $emdata = array(
-                        'uname' => Sentry::getUser()->full_name,
-                        'uemail' => Sentry::getUser()->email,
-                        'jaccount' => $macc_name,
-                        'jnurl' => $joinurl,
-                    );
+                                    'uname'     => Sentry::getUser()->full_name,
+                                    'uemail'    => Sentry::getUser()->email,
+                                    'jaccount'  => $macc_name,
+                                    'jnurl'     => $joinurl,
+                                );
+
                     Mail::send('email.account_email', $emdata, function($message) use ($SendToEmail, $Subject) {
                         $message->to($SendToEmail)->subject($Subject);
                     });
@@ -491,24 +653,51 @@ class PageController extends Controller {
     public function getCreatedacc($aname) {
         if (!empty($aname) && Sentry::check()) {
             $ids = Sentry::getUser()->id;
-            $accountdetail = DB::table('user_accounts')->where('user_accounts.u_id', '=', $ids)->Where('user_accounts.status', '=', 'open')
-                            ->orWhere('user_accounts.status', '=', 'transfer')->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
-                            ->select('account_details.id', 'account_details.name', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')->get();
+            $accountdetail  = DB::table('user_accounts')
+                                    ->where('user_accounts.u_id', '=', $ids)
+                                    ->Where('user_accounts.status', '=', 'open')
+                                    ->orWhere('user_accounts.status', '=', 'transfer')
+                                    ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
+                                    ->select('account_details.id', 
+                                                'account_details.name', 
+                                                'account_details.account_url', 
+                                                'user_accounts.status', 
+                                                'user_accounts.account_urole')
+                                    ->get();
+
             if (sizeof($accountdetail) > 0) {
                 foreach ($accountdetail as $acdls) {
                     $ac_murl = $acdls->account_url;
                     if ($aname == $ac_murl) {
                         Session::put('selaccount', $aname);
-                        $acd_name = $acdls->name;
+                        $acd_name       = $acdls->name;
                         $account_status = $acdls->status;
-                        $auser_role = $acdls->account_urole;
-                        $accdetails = DB::table('account_details')->where('id', '=', $acdls->id)->get();
+                        $auser_role     = $acdls->account_urole;
+                        $accdetails     = DB::table('account_details')
+                                                ->where('id', '=', $acdls->id)
+                                                ->get();
+
                     }
                 }
                 if (!empty($accdetails[0]->u_id)) {
-                    $get_admindetail = DB::table('users')->where('id', '=', $accdetails[0]->u_id)->select('full_name', 'email')->get();
-                    $coun_data = DB::table('countries')->select('id', 'name')->get();
-                    return \View::make('public/default2/account/accindex')->with('title', $acd_name . ' Account - DiscoverYourEvent')->with('event_details', $accdetails)->with('acc_status', $account_status)->with('auser_role', $auser_role)->with('gadmin_detail', $get_admindetail)->with('cou_data', $coun_data)->with('active', 'acc');
+                    $get_admindetail = DB::table('users')
+                                            ->where('id', '=', $accdetails[0]->u_id)
+                                            ->select('full_name', 'email')
+                                            ->get();
+
+                    $coun_data = DB::table('countries')
+                                    ->select('id', 'name')
+                                    ->get();
+
+                    return \View::make('public/default2/account/accindex')
+                                    ->with('title', $acd_name . ' Account - DiscoverYourEvent')
+                                    ->with('event_details', $accdetails)
+                                    ->with('acc_status', $account_status)
+                                    ->with('auser_role', $auser_role)
+                                    ->with('gadmin_detail', $get_admindetail)
+                                    ->with('cou_data', $coun_data)
+                                    ->with('active', 'acc');
+
                 } else {
                     return Redirect::to('/');
                 }
@@ -521,15 +710,28 @@ class PageController extends Controller {
     }
 
     public function getDyesearch() {
-        //$Searchevnt = new Searchevnt();
-
         $Searchevnt = new Searchevnt();
         $evtsdata = $Searchevnt->getAllCategories();
 
         $al_event = DB::table('events')
                 ->where('events.private_event', '!=', 'y')
                 ->where('events.user_evdelete', '=', 'n')
-                ->select('events.id', 'events.event_name', 'events.account_type', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.event_cost', 'events.event_price')
+                ->select('events.id', 
+                            'events.event_name', 
+                            'events.account_type', 
+                            'events.event_url', 
+                            'events.event_image', 
+                            'events.event_venue', 
+                            'events.event_address', 
+                            'events.address_secd', 
+                            'events.city', 
+                            'events.state', 
+                            'events.country', 
+                            'events.event_dtype', 
+                            'events.event_date', 
+                            'events.event_time', 
+                            'events.event_cost', 
+                            'events.event_price')
                 ->orderBy('id', 'desc')
                 ->paginate(5);
 
@@ -591,9 +793,9 @@ class PageController extends Controller {
                 if (!empty($uce->country)) {
 
                     $getcccdata = DB::table('countries')
-                            ->where('id', '=', $uce->country)
-                            ->select('id', 'name')
-                            ->get();
+                                        ->where('id', '=', $uce->country)
+                                        ->select('id', 'name')
+                                        ->get();
 
                     if (!empty($lfal_add)) {
                         $lfal_add .= ',' . $getcccdata[0]->name;
@@ -731,11 +933,21 @@ class PageController extends Controller {
         if (!empty($data['city'])) {
             $rl_op = '=';
             $ev_rl = $data['city'];
-            $chk_c = DB::table('events')->where('user_evdelete', '=', 'n')->where('city', $rl_op, $ev_rl)->select('id')->get();
+            $chk_c = DB::table('events')
+                        ->where('user_evdelete', '=', 'n')
+                        ->where('city', $rl_op, $ev_rl)
+                        ->select('id')
+                        ->get();
+
             if (!empty($chk_c[0]->id)) {
                 $cy_poid = 'city';
             } else {
-                $chk_pid = DB::table('events')->where('user_evdelete', '=', 'n')->where('zip_code', $rl_op, $ev_rl)->select('id')->get();
+                $chk_pid = DB::table('events')
+                                ->where('user_evdelete', '=', 'n')
+                                ->where('zip_code', $rl_op, $ev_rl)
+                                ->select('id')
+                                ->get();
+
                 if (!empty($chk_pid[0]->id)) {
                     $cy_poid = 'zip_code';
                 } else {
@@ -749,39 +961,45 @@ class PageController extends Controller {
         }
         if (!empty($data['eventday'])) {
             if ($data['eventday'] == 'today') {
-                $evdate_op = '=';
+                $evdate_op  = '=';
                 $event_date = date("Y-m-d");
             } else if ($data['eventday'] == 'tomorrow') {
-                $evdate_op = '=';
-                $datetime = new DateTime('tomorrow');
+                $evdate_op  = '=';
+                $datetime   = new DateTime('tomorrow');
                 $event_date = $datetime->format('Y-m-d');
             } else if ($data['eventday'] == 'week') {
-                $evdate_grop = '>=';
-                $cdate = date("Y-m-d");
-                $evdate_lsop = '<=';
-                $event_date = date('Y-m-d', strtotime('next Sunday'));
+                $evdate_grop    = '>=';
+                $cdate          = date("Y-m-d");
+                $evdate_lsop    = '<=';
+                $event_date     = date('Y-m-d', strtotime('next Sunday'));
             } else if ($data['eventday'] == 'weekend') {
-                $cdate = date("Y-m-d");
-                $evdate_op = '=';
+                $cdate      = date("Y-m-d");
+                $evdate_op  = '=';
                 if (date('D') != 'Sun') {
                     $event_date = date('Y-m-d', strtotime('next sunday'));
                 } else {
                     $event_date = date('Y-m-d');
                 }
             } else {
-                $evdate_grop = '>=';
-                $cdate = date("Y-m-d");
-                $evdate_lsop = '<=';
-                $event_date = date("Y-m-t", strtotime($cdate));
+                $evdate_grop    = '>=';
+                $cdate          = date("Y-m-d");
+                $evdate_lsop    = '<=';
+                $event_date     = date("Y-m-t", strtotime($cdate));
             }
         } else {
             $evdate_op = '!=';
             $event_date = ' ';
         }
-        $event_data = DB::table('event_data')->distinct('event_data.event_category')->select('event_data.event_category')->get();
+
+        $event_data = DB::table('event_data')
+                            ->distinct('event_data.event_category')
+                            ->select('event_data.event_category')
+                            ->get();
+
         foreach ($event_data as $obj_arr) {
             $et_dt[] = $obj_arr->event_category;
         }
+
         $evtsdata = array_unique($et_dt);
         if (!empty($data['category']) && $data['category'] != 'Category') {
             $ent_op = '=';
@@ -792,19 +1010,90 @@ class PageController extends Controller {
         }
         if (!empty($data['eventday'])) {
             if ($data['eventday'] == 'week' || $data['eventday'] == 'month') {
-                $refine_events = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.' . $cy_poid, $rl_op, $ev_rl)->where('event_data.event_category', $ent_op, $ev_cat)
-                                ->where('events.private_event', '!=', 'y')->where('events.event_date', $evdate_grop, $cdate)->where('events.event_date', $evdate_lsop, $event_date)
-                                ->join('event_data', 'events.event_catid', '=', 'event_data.id')->select('events.id', 'events.event_name', 'events.account_type', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.event_cost', 'events.event_price')->orderBy('id', 'desc')->paginate(5);
+                $refine_events = DB::table('events')
+                                        ->where('events.user_evdelete', '=', 'n')
+                                        ->where('events.' . $cy_poid, $rl_op, $ev_rl)
+                                        ->where('event_data.event_category', $ent_op, $ev_cat)
+                                        ->where('events.private_event', '!=', 'y')
+                                        ->where('events.event_date', $evdate_grop, $cdate)
+                                        ->where('events.event_date', $evdate_lsop, $event_date)
+                                        ->join('event_data', 'events.event_catid', '=', 'event_data.id')
+                                        ->select('events.id', 
+                                                    'events.event_name', 
+                                                    'events.account_type', 
+                                                    'events.event_url', 
+                                                    'events.event_image', 
+                                                    'events.event_venue', 
+                                                    'events.event_address', 
+                                                    'events.address_secd', 
+                                                    'events.city', 
+                                                    'events.state', 
+                                                    'events.country', 
+                                                    'events.event_dtype', 
+                                                    'events.event_date', 
+                                                    'events.event_time', 
+                                                    'events.event_cost', 
+                                                    'events.event_price')
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(5);
+
             } else {
-                $refine_events = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.' . $cy_poid, $rl_op, $ev_rl)->where('event_data.event_category', $ent_op, $ev_cat)
-                                ->where('events.private_event', '!=', 'y')->where('events.event_date', $evdate_op, $event_date)->join('event_data', 'events.event_catid', '=', 'event_data.id')
-                                ->select('events.id', 'events.event_name', 'events.account_type', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.event_cost', 'events.event_price')->orderBy('id', 'desc')->paginate(5);
+                $refine_events = DB::table('events')
+                                    ->where('events.user_evdelete', '=', 'n')
+                                    ->where('events.' . $cy_poid, $rl_op, $ev_rl)
+                                    ->where('event_data.event_category', $ent_op, $ev_cat)
+                                    ->where('events.private_event', '!=', 'y')
+                                    ->where('events.event_date', $evdate_op, $event_date)
+                                    ->join('event_data', 'events.event_catid', '=', 'event_data.id')
+                                    ->select('events.id', 
+                                                'events.event_name', 
+                                                'events.account_type', 
+                                                'events.event_url', 
+                                                'events.event_image', 
+                                                'events.event_venue', 
+                                                'events.event_address', 
+                                                'events.address_secd', 
+                                                'events.city', 
+                                                'events.state', 
+                                                'events.country', 
+                                                'events.event_dtype', 
+                                                'events.event_date', 
+                                                'events.event_time', 
+                                                'events.event_cost', 
+                                                'events.event_price')
+                                    ->orderBy('id', 'desc')
+                                    ->paginate(5);
+
             }
         } else {
-            $refine_events = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.' . $cy_poid, $rl_op, $ev_rl)->where('event_data.event_category', $ent_op, $ev_cat)
-                            ->where('events.private_event', '!=', 'y')->join('event_data', 'events.event_catid', '=', 'event_data.id')->select('events.id', 'events.event_name', 'events.account_type', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.event_cost', 'events.event_price')->orderBy('id', 'desc')->paginate(5);
+            $refine_events = DB::table('events')
+                                ->where('events.user_evdelete', '=', 'n')
+                                ->where('events.' . $cy_poid, $rl_op, $ev_rl)
+                                ->where('event_data.event_category', $ent_op, $ev_cat)
+                                ->where('events.private_event', '!=', 'y')
+                                ->join('event_data', 'events.event_catid', '=', 'event_data.id')
+                                ->select('events.id', 
+                                            'events.event_name', 
+                                            'events.account_type', 
+                                            'events.event_url', 
+                                            'events.event_image', 
+                                            'events.event_venue', 
+                                            'events.event_address', 
+                                            'events.address_secd', 
+                                            'events.city', 
+                                            'events.state', 
+                                            'events.country', 
+                                            'events.event_dtype', 
+                                            'events.event_date', 
+                                            'events.event_time', 
+                                            'events.event_cost', 
+                                            'events.event_price')
+                                ->orderBy('id', 'desc')
+                                ->paginate(5);
         }
-        return \View::make('public/default2/ajex/search')->with('al_event', $refine_events)->with('evtsdata', $evtsdata);
+        return \View::make('public/default2/ajex/search')
+                        ->with('al_event', $refine_events)
+                        ->with('evtsdata', $evtsdata);
     }
 
     public function getAccountpage($aname) {
@@ -1158,19 +1447,7 @@ class PageController extends Controller {
                     DB::table('mail_request')->insert(['sender_uid' => $id, 'account_did' => $checkAccount[0]->id, 'addition_accmail' => $data['email'],
                         'user_type' => 'admin', 'status' => 'nresponed', 'email_status' => 'sent', 'sdurl_code' => $lformat_url, 'email_nupdate' => 'n', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
                     $accept_url = URL('logInSignUp') . '/transfer/' . $lformat_url;
-                    //$Subject = accept admin reasonability for  $checkAccount[0]->name." account  - Discover Your Event";
-                    //Send Email
-                    /* 	$SendToEmail = $data['email']; 
-                      $emdata = array(
-                      'uname'      => Sentry::getUser()->full_name,
-                      'uemail'      => Sentry::getUser()->email,
-                      'caccount_name' => $checkAccount[0]->name,
-                      'redirect_url' => $accept_url
-                      );
-                      Mail::send('email.account_transfer', $emdata, function($message) use ($SendToEmail, $Subject)
-                      {
-                      $message->to($SendToEmail)->cc('vikassharma.itcorporates@gmail.com')->subject($Subject);
-                      }); */
+                    
                     if ($data['future-access'] == 'y') {
                         DB::table('user_accounts')->where('u_id', '=', $id)->where('account_did', '=', $checkAccount[0]->id)->update(['status' => 'transfer', 'account_urole' => 'event', 'updated_at' => date('Y-m-d H:i:s')]);
                         return Redirect::to($aname . '/account')->with('succ_mesg', 'Your user role changed and Request sent successfully');
@@ -1193,11 +1470,11 @@ class PageController extends Controller {
     public function postContact(Request $request) {
         $data = $request->input();
         $validator = Validator::make($request->all(), [
-                    'name' => 'required',
-                    'email' => 'required|email',
-                    'phone' => 'required|numeric|min:10|min:12',
-                    'subject' => 'required',
-                    'message' => 'required'
+                    'name'      => 'required',
+                    'email'     => 'required|email',
+                    'phone'     => 'required|numeric|min:10|min:12',
+                    'subject'   => 'required',
+                    'message'   => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -1207,22 +1484,19 @@ class PageController extends Controller {
             //Send Email
             $SendToEmail = $data['email'];
             $emdata = array(
-                'uname' => $data['name'],
-                'uemail' => $SendToEmail,
-                'uphone' => $data['phone'],
-                'usubject' => $data['subject'],
-                'umessage' => $data['message'],
-                'redirect_url' => URL('/')
+                'uname'         => $data['name'],
+                'uemail'        => $SendToEmail,
+                'uphone'        => $data['phone'],
+                'usubject'      => $data['subject'],
+                'umessage'      => $data['message'],
+                'redirect_url'  => URL('/')
             );
             Mail::send('email.contact_form', $emdata, function($message) use ($SendToEmail, $Subject) {
                 $message->to('info@discoveryourevent.com')->subject($Subject);
             });
-            /* Mail::send('email.contact_form', $emdata, function($message) use ($SendToEmail, $Subject)
-              {
-              $message->to($SendToEmail)->cc('vikassharma.itcorporates@gmail.com')->subject($Subject);
-              }); */
+            
         }
-        return Redirect('contact')->with('success_message', 'Thank you for your message. It has been sent.');
+        return Redirect('contact')->with('success_message', 'Thank you for your message.');
     }
 
     public function getAnotification() {
