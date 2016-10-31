@@ -4,8 +4,8 @@
   <div class="container text-center">
   <ul class="nav-bootom">
    <li><a href="{!!URL('about')!!}">About</a></li>
-   <li><a href="{!!URL('privacy')!!}">Privacy User</a></li>
-   <li><a href="{!!URL('userAgreement')!!}">Agreement</a></li>
+   <li><a href="{!!URL('privacy')!!}">Privacy</a></li>
+   <li><a href="{!!URL('userAgreement')!!}">User Agreement</a></li>
    <li class="active"><a href="{!!URL('cookies')!!}">Cookies</a></li>
    <li><a href="{!!URL('contact')!!}">Contact</a></li>
    <li><a href="{!!URL('help')!!}">Help</a></li>

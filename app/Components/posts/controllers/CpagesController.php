@@ -31,7 +31,7 @@ class CpagesController extends BaseController {
     public function show()
     { 
 	   
-	  $permalink = Request::path();
+	    $permalink = Request::path();
       $post = Post::wherePermalink($permalink)->first();
   
       if (!$post) App::abort('404');
