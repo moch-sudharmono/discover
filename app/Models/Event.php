@@ -210,7 +210,7 @@ class Event extends Model {
             // change statments with while loop
             if ($data['eventday'] == 'today') {
                 $event_operation    = '=';
-                $evdate_op          = '='
+                $evdate_op          = '=';
                 $event_date         = date("Y-m-d");
             } else if ($data['eventday'] == 'tomorrow') {
                 $event_operation    = '=';

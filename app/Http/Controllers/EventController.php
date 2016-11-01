@@ -448,6 +448,8 @@ class EventController extends Controller {
     }
 
     public function getAllevent() {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();                    
 
         if (Sentry::check()) {
             $clid = Sentry::getUser()->id;
@@ -468,6 +470,7 @@ class EventController extends Controller {
                                 ->where('city', '=', $uaccount_dts[0]->city)
                                 ->where('event_date', $hoevdat_grop, $hocdate)
                                 ->where('event_date', $hoevdate_lsop, $hoevent_dat)
+                                ->where('event_date', '>', $today)
                                 ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'address_secd', 'city', 'state', 'country', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price')
                                 ->orderBy('id', 'desc')->paginate(8);
 
@@ -475,13 +478,20 @@ class EventController extends Controller {
                     $all_events = DB::table('events')
                             ->where('user_evdelete', '=', 'n')
                             ->where('private_event', '!=', 'y')
+                            ->where('event_date', '>', $today)
                             ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'address_secd', 'city', 'state', 'country', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price')
                             ->orderBy('id', 'desc')
                             ->paginate(8);
                 }
             } else {
 
-                $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'address_secd', 'city', 'state', 'country', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                $all_events = DB::table('events')
+                                    ->where('user_evdelete', '=', 'n')
+                                    ->where('private_event', '!=', 'y')
+                                    ->where('event_date', '>', $today)
+                                    ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'address_secd', 'city', 'state', 'country', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price')
+                                    ->orderBy('id', 'desc')
+                                    ->paginate(8);
             }
             $womicon = 8;
             return \View::make('public/default2/ajex/lghome-event')
@@ -492,6 +502,7 @@ class EventController extends Controller {
             $all_events = DB::table('events')
                     ->where('user_evdelete', '=', 'n')
                     ->where('private_event', '!=', 'y')
+                    ->where('event_date', '>', $today)
                     ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'address_secd', 'city', 'state', 'country', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price')
                     ->orderBy('id', 'desc')
                     ->paginate(8);
@@ -502,6 +513,9 @@ class EventController extends Controller {
     }
 
     public function getCeventdata($address) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         if (!empty($address)) {
             $cyt = explode(",_", $address);
 
@@ -513,43 +527,120 @@ class EventController extends Controller {
             if (Sentry::check()) {
                 if (!empty($cunt_id[0]->id)) {
                     if (isset($cyt[1]) && !empty($cyt[1])) {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('state', '=', $cyt[0])->where('country', '=', $cunt_id[0]->id)->where('private_event', '!=', 'y')
-                                ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_dtype', 'event_venue', 'event_address', 'country', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')
-                                ->paginate(2);
+                        $all_events = DB::table('events')
+                                            ->where('user_evdelete', '=', 'n')
+                                            ->where('state', '=', $cyt[0])
+                                            ->where('country', '=', $cunt_id[0]->id)
+                                            ->where('private_event', '!=', 'y')
+                                            ->where('event_date', '>', $today)
+                                            ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_dtype', 'event_venue', 'event_address', 'country', 'event_date', 'event_cost', 'event_price')
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(2);
+
                         if (empty($all_events[0]->id)) {
-                            $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_date', 'event_cost', 'event_dtype', 'event_price')->orderBy('id', 'desc')->paginate(2);
+                            $all_events = DB::table('events')
+                                                ->where('user_evdelete', '=', 'n')
+                                                ->where('private_event', '!=', 'y')
+                                                ->where('event_date', '>', $today)
+                                                ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_date', 'event_cost', 'event_dtype', 'event_price')
+                                                ->orderBy('id', 'desc')
+                                                ->paginate(2);
+
                         }
                     } else {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('country', '=', $cunt_id[0]->id)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')
-                                ->paginate(2);
+                        $all_events = DB::table('events')
+                                            ->where('user_evdelete', '=', 'n')
+                                            ->where('country', '=', $cunt_id[0]->id)
+                                            ->where('private_event', '!=', 'y')
+                                            ->where('event_date', '>', $today)
+                                            ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(2);
+
                         if (empty($all_events[0]->id)) {
-                            $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(2);
+                            $all_events = DB::table('events')
+                                                ->where('user_evdelete', '=', 'n')
+                                                ->where('private_event', '!=', 'y')
+                                                ->where('event_date', '>', $today)
+                                                ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                                ->orderBy('id', 'desc')
+                                                ->paginate(2);
+
                         }
                     }
                 } else {
-                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_dtype', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(2);
+                    $all_events = DB::table('events')
+                                        ->where('user_evdelete', '=', 'n')
+                                        ->where('private_event', '!=', 'y')
+                                        ->where('event_date', '>', $today)
+                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'country', 'event_dtype', 'event_date', 'event_cost', 'event_price')
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(2);
+
                 }
                 $go_homent = 'public/default2/ajex/lfeature-event';
             } else {
                 if (!empty($cunt_id[0]->id)) {
                     if (isset($cyt[1]) && !empty($cyt[1])) {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('state', '=', $cyt[0])->where('country', '=', $cunt_id[0]->id)->where('private_event', '!=', 'y')
-                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_dtype', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
-                                        ->orderBy('id', 'desc')->paginate(8);
+                        $all_events = DB::table('events')
+                                            ->where('user_evdelete', '=', 'n')
+                                            ->where('state', '=', $cyt[0])
+                                            ->where('country', '=', $cunt_id[0]->id)
+                                            ->where('private_event', '!=', 'y')
+                                            ->where('event_date', '>', $today)
+                                            ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_dtype', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(8);
+
                         if (empty($all_events[0]->id)) {
-                            $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                            $all_events = DB::table('events')
+                                                ->where('user_evdelete', '=', 'n')
+                                                ->where('private_event', '!=', 'y')
+                                                ->where('event_date', '>', $today)
+                                                ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                                ->orderBy('id', 'desc')
+                                                ->paginate(8);
+
                         }
                     } else {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('country', '=', $cunt_id[0]->id)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                        $all_events = DB::table('events')
+                                            ->where('user_evdelete', '=', 'n')
+                                            ->where('country', '=', $cunt_id[0]->id)
+                                            ->where('private_event', '!=', 'y')
+                                            ->where('event_date', '>', $today)
+                                            ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                            ->orderBy('id', 'desc')
+                                            ->paginate(8);
+
                         if (empty($all_events[0]->id)) {
-                            $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                            $all_events = DB::table('events')
+                                                ->where('user_evdelete', '=', 'n')
+                                                ->where('private_event', '!=', 'y')
+                                                ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                                ->orderBy('id', 'desc')
+                                                ->paginate(8);
+
                         }
                     }
                 } else {
-                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                    $all_events = DB::table('events')
+                                        ->where('user_evdelete', '=', 'n')
+                                        ->where('private_event', '!=', 'y')
+                                        ->where('event_date', '>', $today)
+                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(8);
+
                 }
                 if (!isset($all_events[0]->id)) {
-                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                    $all_events = DB::table('events')
+                                        ->where('user_evdelete', '=', 'n')
+                                        ->where('private_event', '!=', 'y')
+                                        ->where('event_date', '>', $today)
+                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_dtype', 'event_cost', 'event_price')
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(8);
+
                 }
                 $go_homent = 'public/default2/ajex/home-event';
             }
@@ -558,24 +649,26 @@ class EventController extends Controller {
     }
 
     public function getCstatedata($country, $state) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
         if (!empty($country)) {
             if ($country == 'y' && $state == 'n') {
-                $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                $all_events = DB::table('events')->where('event_date', '>', $today)->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
             } else {
                 if (!empty($state)) {
-                    $state_name = DB::table('states')->where('id', '=', $state)->where('country_id', '=', $country)->select('id', 'name')->get();
+                    $state_name = DB::table('states')->where('id', '=', $state)->where('event_date', '>', $today)->where('country_id', '=', $country)->select('id', 'name')->get();
                     if (!empty($state_name[0]->id)) {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('state', '=', $state_name[0]->name)->where('country', '=', $country)->where('private_event', '!=', 'y')
+                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_date', '>', $today)->where('state', '=', $state_name[0]->name)->where('country', '=', $country)->where('private_event', '!=', 'y')
                                         ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
                     } else {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('country', '=', $country)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')
+                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('country', '=', $country)->where('event_date', '>', $today)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')
                                 ->paginate(8);
                     }
                 } else {
-                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('country', '=', $country)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                    $all_events = DB::table('events')->where('event_date', '>', $today)->where('user_evdelete', '=', 'n')->where('country', '=', $country)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
                 }
                 if (!isset($all_events[0]->id)) {
-                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_date', '>', $today)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
                 }
             }
             return \View::make('public/default2/ajex/home-event')->with('al_event', $all_events)->with('geo_loc', 'geo');
@@ -583,6 +676,8 @@ class EventController extends Controller {
     }
 
     public function updateEvent($eid) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
 
         if (Sentry::check() && !empty($eid)) {
             $eventModel = new Event;
@@ -619,6 +714,9 @@ class EventController extends Controller {
     }
 
     public function getDeletevent($eid) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         if (Sentry::check() && !empty($eid)) {
             $clid = Sentry::getUser()->id;
             $check_data = DB::table('events')->where('u_id', '=', $clid)->where('id', '=', $eid)->select('id', 'account_type', 'event_image')->get();
@@ -641,6 +739,9 @@ class EventController extends Controller {
     }
 
     public function getAccdeletevent($bcmurl, $eid) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         if (Sentry::check() && !empty($eid)) {
             $clid = Sentry::getUser()->id;
             $check_data = DB::table('events')->where('user_evdelete', '=', 'n')->where('u_id', '=', $clid)->where('id', '=', $eid)->select('id', 'account_type', 'event_image')->get();
@@ -662,6 +763,9 @@ class EventController extends Controller {
     }
 
     public function postUpdatevent($eid, Request $request) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         $data = $request->input();
         $clid = Sentry::getUser()->id;
         $check_data = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.u_id', '=', $clid)->where('events.id', '=', $eid)->select('id', 'event_image')->get();
@@ -905,6 +1009,10 @@ class EventController extends Controller {
     }
 
     public function getEvents($eventurl) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
+
         if (!empty($eventurl)) {
 
             $Model      = new Event;
@@ -914,7 +1022,7 @@ class EventController extends Controller {
                 $ev_id = DB::table('events')
                                 ->where('user_evdelete', '=', 'n')
                                 ->where('event_url', '=', $eventurl)
-                                ->select('id')->get();
+                                ->select('id')->get();            
 
                 $count_eattpeopl = DB::table('users_events')
                                         ->where('e_id', '=', $ev_id[0]->id)
@@ -1031,8 +1139,11 @@ class EventController extends Controller {
     }
 
     public function getEventpopup($eventurl) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         if (!empty($eventurl)) {
-            $event_data = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->join('event_data', 'events.event_catid', '=', 'event_data.id')->get();
+            $event_data = DB::table('events')->where('events.event_date', '>', $today)->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->join('event_data', 'events.event_catid', '=', 'event_data.id')->get();
             if (!empty($event_data[0]->id)) {
                 $ev_id = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('event_url', '=', $eventurl)->select('id')->get();
                 $count_eattpeopl = DB::table('users_events')->where('e_id', '=', $ev_id[0]->id)->count();
@@ -1053,10 +1164,13 @@ class EventController extends Controller {
     }
 
     public function postEventpopup(Request $request) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         $data = $request->input();
         if (!empty($data['event'])) {
             $eventurl = $data['event'];
-            $event_data = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->where('events.private_event', '!=', 'y')->join('event_data', 'events.event_catid', '=', 'event_data.id')
+            $event_data = DB::table('events')->where('event_date', '>', $today)->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->where('events.private_event', '!=', 'y')->join('event_data', 'events.event_catid', '=', 'event_data.id')
                             ->select('events.id as eid', 'events.account_type', 'events.account_id', 'events.event_catid', 'events.contact_person', 'events.phone_no', 'events.email_address', 'events.website', 'events.event_name', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.zip_code', 'events.map_show', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.end_date', 'events.end_time', 'events.event_cost', 'events.event_price', 'events.ticket_surl', 'events.event_description', 'events.fb_link', 'events.tw_link', 'events.private_event', 'event_data.event_category', 'event_data.id as ed_id')->get();
             if (!empty($event_data[0]->eid)) {
                 $ev_id = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_url', '=', $eventurl)->select('id')->get();
@@ -1132,9 +1246,12 @@ class EventController extends Controller {
     }
 
     public function accEventpopup($eventurl) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         if (!empty($eventurl)) {
 
-            $event_data = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->join('event_data', 'events.event_catid', '=', 'event_data.id')->get();
+            $event_data = DB::table('events')->where('events.event_date', '>', $today)->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->join('event_data', 'events.event_catid', '=', 'event_data.id')->get();
             if (!empty($event_data[0]->id)) {
                 $ev_id = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_url', '=', $eventurl)->select('id')->get();
                 $count_eattpeopl = DB::table('users_events')->where('e_id', '=', $ev_id[0]->id)->count();

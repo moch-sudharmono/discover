@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Services\UserManager;
 use Services\UserGroupManager;
 use Illuminate\Support\Facades\Validator;
@@ -929,6 +930,9 @@ class PageController extends Controller {
     }
 
     public function SearchEvent(Request $request) {
+        $mytime = Carbon::now();
+        $today  = $mytime->toDateTimeString();
+
         $data = $request->input();
         if (!empty($data['city'])) {
             $rl_op = '=';
@@ -1017,6 +1021,7 @@ class PageController extends Controller {
                                         ->where('events.private_event', '!=', 'y')
                                         ->where('events.event_date', $evdate_grop, $cdate)
                                         ->where('events.event_date', $evdate_lsop, $event_date)
+                                        ->where('events.event_date', '>', $today)
                                         ->join('event_data', 'events.event_catid', '=', 'event_data.id')
                                         ->select('events.id', 
                                                     'events.event_name', 
