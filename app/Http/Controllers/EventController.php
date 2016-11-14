@@ -26,13 +26,13 @@ class EventController extends Controller {
         if (Sentry::check()) {
 
             $eventModel = new Event;
-            $md_arr = $eventModel->md_arr;
-            $tmf = $eventModel->tmf;
-            $sdwkfmt = $eventModel->sdwkfmt;
-            $ofday = $eventModel->ofday;
-            $st_cvs = $eventModel->st_cvs;
+            $md_arr     = $eventModel->md_arr;
+            $tmf        = $eventModel->tmf;
+            $sdwkfmt    = $eventModel->sdwkfmt;
+            $ofday      = $eventModel->ofday;
+            $st_cvs     = $eventModel->st_cvs;
 
-            $countries = $eventModel->getEventCountries();
+            $countries  = $eventModel->getEventCountries();
 
             return \View::make('public/default2/account/create-event')
                             ->with('cuntd', $countries)
@@ -54,33 +54,33 @@ class EventController extends Controller {
 
     public function postCevent(Request $request) {
 
-        $data = $request->input();
-        $clid = Sentry::getUser()->id; // current user id
-        $evp_regs = '/^[0-9]+$/';
-        $evp_regss = '/^[0-9]+[.][0-9]+$/';
+        $data               = $request->input();
+        $clid               = Sentry::getUser()->id; // current user id
+        $evp_regs           = '/^[0-9]+$/';
+        $evp_regss          = '/^[0-9]+[.][0-9]+$/';
         $all_ep = $ticket_surl = $end_date = $mw_date = null;
         $kid_event = $family_event = $religious_event = $end_date = "n";
-        $allowd_image = array('image/png', 'image/gif', 'image/jpeg', 'image/jpg', 'image/bmp');
-        $destinationPath = 'public/uploads/events/personal/';
-        $eventModel = new Event();
+        $allowd_image       = array('image/png', 'image/gif', 'image/jpeg', 'image/jpg', 'image/bmp');
+        $destinationPath    = 'public/uploads/events/personal/';
+        $eventModel         = new Event();
 
         $validator = Validator::make(
                         $request->all(), array(
-                    'event_type' => 'required',
-                    'event_catid' => 'required',
-                    'email_address' => 'min:4|email',
-                    'event_venue' => 'required',
-                    'phone_no' => 'min:10',
-                    'event_name' => 'required',
-                    //'sevent_date' => 'required|date',
-                    //'sevent_time' => 'required',
-                    'state' => 'required',
-                    'country' => 'required',
-                    'city' => 'required',
-                    'event_cost' => 'required',
-                    'event_description' => 'required',
-                    'private_event' => 'required')
-        );
+                                            'event_type'        => 'required',
+                                            'event_catid'       => 'required',
+                                            'email_address'     => 'min:4|email',
+                                            'event_venue'       => 'required',
+                                            'phone_no'          => 'min:10',
+                                            'event_name'        => 'required',
+                                            //'sevent_date' => 'required|date',
+                                            //'sevent_time' => 'required',
+                                            'state'             => 'required',
+                                            'country'           => 'required',
+                                            'city'              => 'required',
+                                            'event_cost'        => 'required',
+                                            'event_description' => 'required',
+                                            'private_event'     => 'required')
+                                            );
         /* 'event_url' => 'unique:events',	 */
 
 
@@ -95,8 +95,8 @@ class EventController extends Controller {
                 if ($data['event_price'] != '') {
 
                     if (preg_match($evp_regs, $data['event_price']) || preg_match($evp_regss, $data['event_price'])) {
-                        $event_price = $data['event_price'];
-                        $all_ep = $event_price;
+                        $event_price    = $data['event_price'];
+                        $all_ep         = $event_price;
                     }
                     else {
                         return Redirect::back()->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')->withInput();
@@ -104,7 +104,9 @@ class EventController extends Controller {
                         
                     $ticket_surl = $data['ticket_surl'];
                     if (!empty($data['ticket_surl']) && filter_var($ticket_surl, FILTER_VALIDATE_URL) === false) {
-                            return Redirect::back()->with('inv_tkurl', $ticket_surl . ' is not a valid URL, http:// or https:// is required')->withInput();
+                            return Redirect::back()
+                                    ->with('inv_tkurl', $ticket_surl . ' is not a valid URL, http:// or https:// is required')
+                                    ->withInput();
                     }
                     else {
                         $ticket_surl = null;
@@ -112,7 +114,9 @@ class EventController extends Controller {
                     
                 }
                 else {
-                    return Redirect::back()->with('req_evprice', 'Cost price is required field')->withInput();
+                    return Redirect::back()
+                                ->with('req_evprice', 'Cost price is required field')
+                                ->withInput();
                 }
 
                 if (!empty($data['mevent_price'])) {
@@ -120,10 +124,12 @@ class EventController extends Controller {
 
 
                     if (preg_match($evp_regs, $data['mevent_price']) || preg_match($evp_regss, $data['mevent_price'])) {
-                        $mevent_price = $data['mevent_price'];
-                        $all_ep = $event_price . '-' . $mevent_price;
+                        $mevent_price   = $data['mevent_price'];
+                        $all_ep         = $event_price . '-' . $mevent_price;
                     } else {
-                        return Redirect::back()->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')->withInput();
+                        return Redirect::back()
+                                ->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')
+                                ->withInput();
                     }
                 }
             }
@@ -232,88 +238,89 @@ class EventController extends Controller {
                   Image::make($destinationPath.$filename)->resize(200, 200)->save($rspath); */
                 /*                 * *************************************** */
                 $inserted_array = array(
-                    'u_id' => $clid,
-                    'account_type' => 'personal',
-                    'event_type' => $data['event_type'],
-                    'event_catid' => $data['event_catid'],
-                    'contact_person' => $data['contact_person'],
-                    'phone_no' => $data['phone_no'],
-                    'email_address' => $data['email_address'],
-                    'website' => $data['website'],
-                    'event_name' => $data['event_name'],
-                    'event_url' => $event_url,
-                    'event_image' => $filename,
-                    'event_venue' => $data['event_venue'],
-                    'event_address' => $data['event_address'],
-                    'address_secd' => $data['address_secd'],
-                    'city' => $data['city'],
-                    'state' => $data['state'],
-                    'country' => $data['country'],
-                    'zip_code' => $data['zip_code'],
-                    'map_show' => $showmap,
-                    'event_dtype' => $data['event_dtype'],
-                    'event_date' => $ev_date,
-                    'event_time' => $data['sevent_time'],
-                    'end_date' => $end_date,
-                    'end_time' => $data['eevent_time'],
-                    'event_cost' => $data['event_cost'],
-                    'event_price' => $all_ep,
-                    'ticket_surl' => $ticket_surl,
+                    'u_id'              => $clid,
+                    'account_type'      => 'personal',
+                    'event_type'        => $data['event_type'],
+                    'event_catid'       => $data['event_catid'],
+                    'contact_person'    => $data['contact_person'],
+                    'phone_no'          => $data['phone_no'],
+                    'email_address'     => $data['email_address'],
+                    'website'           => $data['website'],
+                    'event_name'        => $data['event_name'],
+                    'event_url'         => $event_url,
+                    'event_image'       => $filename,
+                    'event_venue'       => $data['event_venue'],
+                    'event_address'     => $data['event_address'],
+                    'address_secd'      => $data['address_secd'],
+                    'city'              => $data['city'],
+                    'state'             => $data['state'],
+                    'country'           => $data['country'],
+                    'zip_code'          => $data['zip_code'],
+                    'map_show'          => $showmap,
+                    'event_dtype'       => $data['event_dtype'],
+                    'event_date'        => $ev_date,
+                    'event_time'        => $data['sevent_time'],
+                    'end_date'          => $end_date,
+                    'end_time'          => $data['eevent_time'],
+                    'event_cost'        => $data['event_cost'],
+                    'event_price'       => $all_ep,
+                    'ticket_surl'       => $ticket_surl,
                     'event_description' => $data['event_description'],
-                    'fb_link' => $data['fb_link'],
-                    'tw_link' => $data['tw_link'],
-                    'kid_event' => $kid_event,
-                    'family_event' => $family_event,
-                    'religious_event' => $religious_event,
-                    'private_event' => $data['private_event'],
-                    'share_event' => $share_event,
-                    'password_estatus' => $password_estatus,
-                    'pass_event' => $pass_event,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'fb_link'           => $data['fb_link'],
+                    'tw_link'           => $data['tw_link'],
+                    'kid_event'         => $kid_event,
+                    'family_event'      => $family_event,
+                    'religious_event'   => $religious_event,
+                    'private_event'     => $data['private_event'],
+                    'share_event'       => $share_event,
+                    'password_estatus'  => $password_estatus,
+                    'pass_event'        => $pass_event,
+                    'created_at'        => date('Y-m-d H:i:s'),
+                    'updated_at'        => date('Y-m-d H:i:s')
                 );
 
                 $nw_evid = $eventModel->createEvent($inserted_array);
             } else {
-                $inserted_array = array('u_id' => $clid,
-                    'account_type' => 'personal',
-                    'event_type' => $data['event_type'],
-                    'event_catid' => $data['event_catid'],
-                    'contact_person' => $data['contact_person'],
-                    'phone_no' => $data['phone_no'],
-                    'email_address' => $data['email_address'],
-                    'website' => $data['website'],
-                    'event_name' => $data['event_name'],
-                    'event_url' => $event_url,
-                    'event_image' => $evid_img,
-                    'event_venue' => $data['event_venue'],
-                    'event_address' => $data['event_address'],
-                    'address_secd' => $data['address_secd'],
-                    'city' => $data['city'],
-                    'state' => $data['state'],
-                    'country' => $data['country'],
-                    'zip_code' => $data['zip_code'],
-                    'map_show' => $showmap,
-                    'event_dtype' => $data['event_dtype'],
-                    'event_date' => $ev_date,
-                    'event_time' => $data['sevent_time'],
-                    'end_date' => $end_date,
-                    'end_time' => $data['eevent_time'],
-                    'event_cost' => $data['event_cost'],
-                    'event_price' => $all_ep,
-                    'ticket_surl' => $ticket_surl,
+                $inserted_array = array(
+                    'u_id'              => $clid,
+                    'account_type'      => 'personal',
+                    'event_type'        => $data['event_type'],
+                    'event_catid'       => $data['event_catid'],
+                    'contact_person'    => $data['contact_person'],
+                    'phone_no'          => $data['phone_no'],
+                    'email_address'     => $data['email_address'],
+                    'website'           => $data['website'],
+                    'event_name'        => $data['event_name'],
+                    'event_url'         => $event_url,
+                    'event_image'       => $evid_img,
+                    'event_venue'       => $data['event_venue'],
+                    'event_address'     => $data['event_address'],
+                    'address_secd'      => $data['address_secd'],
+                    'city'              => $data['city'],
+                    'state'             => $data['state'],
+                    'country'           => $data['country'],
+                    'zip_code'          => $data['zip_code'],
+                    'map_show'          => $showmap,
+                    'event_dtype'       => $data['event_dtype'],
+                    'event_date'        => $ev_date,
+                    'event_time'        => $data['sevent_time'],
+                    'end_date'          => $end_date,
+                    'end_time'          => $data['eevent_time'],
+                    'event_cost'        => $data['event_cost'],
+                    'event_price'       => $all_ep,
+                    'ticket_surl'       => $ticket_surl,
                     'event_description' => $data['event_description'],
-                    'fb_link' => $data['fb_link'],
-                    'tw_link' => $data['tw_link'],
-                    'kid_event' => $kid_event,
-                    'family_event' => $family_event,
-                    'religious_event' => $religious_event,
-                    'private_event' => $data['private_event'],
-                    'share_event' => $share_event,
-                    'password_estatus' => $password_estatus,
-                    'pass_event' => $pass_event,
-                    'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'fb_link'           => $data['fb_link'],
+                    'tw_link'           => $data['tw_link'],
+                    'kid_event'         => $kid_event,
+                    'family_event'      => $family_event,
+                    'religious_event'   => $religious_event,
+                    'private_event'     => $data['private_event'],
+                    'share_event'       => $share_event,
+                    'password_estatus'  => $password_estatus,
+                    'pass_event'        => $pass_event,
+                    'created_at'        => date('Y-m-d H:i:s'),
+                    'updated_at'        => date('Y-m-d H:i:s')
                 );
 
 
@@ -329,15 +336,29 @@ class EventController extends Controller {
                 if (sizeof($data['arrdate']) > 1) {
 
                     foreach ($data['arrdate'] as $stdt) {
-                        $startdt = date('Y-m-d', strtotime($stdt));
-                        $itcendate = date('Y-m-d', strtotime($data['enddate'][$xlx]));
+                        $startdt    = date('Y-m-d', strtotime($stdt));
+                        $itcendate  = date('Y-m-d', strtotime($data['enddate'][$xlx]));
 
                         if (!empty($data['mw_date'][$xlx]) && $data['mw_date'][$xlx] != 'Month Date') {
                             $mw_date = $data['mw_date'][$xlx];
                         }
 
 
-                        DB::table('event_multidate')->insert(array('ev_id' => $nw_evid, 'event_datetype' => $data['nspd'][$xlx], 'start_date' => $startdt, 'enddate' => $itcendate, 'ofthe' => $data['ofthe'][$xlx], 'start_time' => $data['startime'][$xlx], 'st_format' => $data['st_format'][$xlx], 'endtime' => $data['endtime'][$xlx], 'et_format' => $data['et_format'][$xlx], 'total_day' => $data['total_day'][$xlx], 'multype_wm' => $data['wgtdaysvl'][$xlx], 'mw_date' => $mw_date, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')));
+                        DB::table('event_multidate')->insert(array(
+                            'ev_id' => $nw_evid, 
+                            'event_datetype' => $data['nspd'][$xlx], 
+                            'start_date' => $startdt, 
+                            'enddate' => $itcendate, 
+                            'ofthe' => $data['ofthe'][$xlx], 
+                            'start_time' => $data['startime'][$xlx], 
+                            'st_format' => $data['st_format'][$xlx], 
+                            'endtime' => $data['endtime'][$xlx], 
+                            'et_format' => $data['et_format'][$xlx], 
+                            'total_day' => $data['total_day'][$xlx], 
+                            'multype_wm' => $data['wgtdaysvl'][$xlx], 
+                            'mw_date' => $mw_date, 
+                            'created_at' => date('Y-m-d H:i:s'), 
+                            'updated_at' => date('Y-m-d H:i:s')));
                         $xlx++;
                     }
                 } else {
@@ -347,7 +368,21 @@ class EventController extends Controller {
                     $startdt = date('Y-m-d', strtotime($data['arrdate'][$xlx]));
                     $itcendate = date('Y-m-d', strtotime($data['enddate'][$xlx]));
 
-                    DB::table('event_multidate')->insert(['ev_id' => $nw_evid, 'event_datetype' => $data['nspd'][$xlx], 'start_date' => $startdt, 'enddate' => $itcendate, 'ofthe' => $data['ofthe'][$xlx], 'start_time' => $data['startime'][$xlx], 'st_format' => $data['st_format'][$xlx], 'endtime' => $data['endtime'][$xlx], 'et_format' => $data['et_format'][$xlx], 'total_day' => $data['total_day'][$xlx], 'multype_wm' => $data['wgtdaysvl'][$xlx], 'mw_date' => $mw_date, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+                    DB::table('event_multidate')->insert([
+                            'ev_id' => $nw_evid, 
+                            'event_datetype' => $data['nspd'][$xlx], 
+                            'start_date' => $startdt, 
+                            'enddate' => $itcendate, 
+                            'ofthe' => $data['ofthe'][$xlx], 
+                            'start_time' => $data['startime'][$xlx], 
+                            'st_format' => $data['st_format'][$xlx], 
+                            'endtime' => $data['endtime'][$xlx], 
+                            'et_format' => $data['et_format'][$xlx], 
+                            'total_day' => $data['total_day'][$xlx], 
+                            'multype_wm' => $data['wgtdaysvl'][$xlx], 
+                            'mw_date' => $mw_date, 
+                            'created_at' => date('Y-m-d H:i:s'), 
+                            'updated_at' => date('Y-m-d H:i:s')]);
                 }
             }
             return Redirect::to('account/manageEvent')->with('succ_mesg', 'Event created successfully');
@@ -653,25 +688,70 @@ class EventController extends Controller {
         $today  = $mytime->toDateTimeString();
         if (!empty($country)) {
             if ($country == 'y' && $state == 'n') {
-                $all_events = DB::table('events')->where('event_date', '>', $today)->where('user_evdelete', '=', 'n')->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                $all_events = DB::table('events')
+                                ->where('event_date', '>', $today)
+                                ->where('user_evdelete', '=', 'n')
+                                ->where('private_event', '!=', 'y')
+                                ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
+                                ->orderBy('id', 'desc')
+                                ->paginate(8);
+
             } else {
                 if (!empty($state)) {
-                    $state_name = DB::table('states')->where('id', '=', $state)->where('event_date', '>', $today)->where('country_id', '=', $country)->select('id', 'name')->get();
+                    $state_name = DB::table('states')
+                                    ->where('id', '=', $state)
+                                    ->where('event_date', '>', $today)
+                                    ->where('country_id', '=', $country)
+                                    ->select('id', 'name')
+                                    ->get();
+
                     if (!empty($state_name[0]->id)) {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_date', '>', $today)->where('state', '=', $state_name[0]->name)->where('country', '=', $country)->where('private_event', '!=', 'y')
-                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                        $all_events = DB::table('events')
+                                        ->where('user_evdelete', '=', 'n')
+                                        ->where('event_date', '>', $today)
+                                        ->where('state', '=', $state_name[0]->name)
+                                        ->where('country', '=', $country)
+                                        ->where('private_event', '!=', 'y')
+                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(8);
+
                     } else {
-                        $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('country', '=', $country)->where('event_date', '>', $today)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')
-                                ->paginate(8);
+                        $all_events = DB::table('events')
+                                        ->where('user_evdelete', '=', 'n')
+                                        ->where('country', '=', $country)
+                                        ->where('event_date', '>', $today)
+                                        ->where('private_event', '!=', 'y')
+                                        ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
+                                        ->orderBy('id', 'desc')
+                                        ->paginate(8);
+
                     }
                 } else {
-                    $all_events = DB::table('events')->where('event_date', '>', $today)->where('user_evdelete', '=', 'n')->where('country', '=', $country)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                    $all_events = DB::table('events')
+                                    ->where('event_date', '>', $today)
+                                    ->where('user_evdelete', '=', 'n')
+                                    ->where('country', '=', $country)
+                                    ->where('private_event', '!=', 'y')
+                                    ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
+                                    ->orderBy('id', 'desc')
+                                    ->paginate(8);
+
                 }
                 if (!isset($all_events[0]->id)) {
-                    $all_events = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_date', '>', $today)->where('private_event', '!=', 'y')->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')->orderBy('id', 'desc')->paginate(8);
+                    $all_events = DB::table('events')
+                                    ->where('user_evdelete', '=', 'n')
+                                    ->where('event_date', '>', $today)
+                                    ->where('private_event', '!=', 'y')
+                                    ->select('id', 'event_name', 'account_id', 'account_type', 'event_url', 'event_image', 'event_venue', 'event_address', 'event_date', 'event_cost', 'event_price')
+                                    ->orderBy('id', 'desc')
+                                    ->paginate(8);
+
                 }
             }
-            return \View::make('public/default2/ajex/home-event')->with('al_event', $all_events)->with('geo_loc', 'geo');
+            return \View::make('public/default2/ajex/home-event')
+                        ->with('al_event', $all_events)
+                        ->with('geo_loc', 'geo');
         }
     }
 
@@ -719,18 +799,24 @@ class EventController extends Controller {
 
         if (Sentry::check() && !empty($eid)) {
             $clid = Sentry::getUser()->id;
-            $check_data = DB::table('events')->where('u_id', '=', $clid)->where('id', '=', $eid)->select('id', 'account_type', 'event_image')->get();
+            $check_data = DB::table('events')
+                            ->where('u_id', '=', $clid)
+                            ->where('id', '=', $eid)
+                            ->select('id', 'account_type', 'event_image')
+                            ->get();
+
             if (!empty($check_data[0]->id)) {
                 if (!empty($check_data[0]->event_image)) {
                     $destinationPath = 'public/uploads/events/' . $check_data[0]->account_type . '/';
                     File::delete($destinationPath . $check_data[0]->event_image);
                 }
 
-                DB::table('events')->where('id', '=', $eid)->update(['user_evdelete' => 'y', 'updated_at' => date('Y-m-d H:i:s')]);
-                /* DB::delete('delete from events WHERE id = '.$eid);
-                  DB::delete('delete from users_events WHERE e_id = '.$eid);
-                  DB::delete('delete from event_multidate WHERE ev_id = '.$eid); */
+                DB::table('events')
+                    ->where('id', '=', $eid)
+                    ->update(['user_evdelete' => 'y', 'updated_at' => date('Y-m-d H:i:s')]);
+
                 DB::delete('delete from notifications WHERE type = "event" && object_id = ' . $eid);
+
                 return Redirect::to('account/manageEvent')->with('succ_mesg', 'Event deleted successfully');
             }
         } else {
@@ -743,18 +829,26 @@ class EventController extends Controller {
         $today  = $mytime->toDateTimeString();
 
         if (Sentry::check() && !empty($eid)) {
-            $clid = Sentry::getUser()->id;
-            $check_data = DB::table('events')->where('user_evdelete', '=', 'n')->where('u_id', '=', $clid)->where('id', '=', $eid)->select('id', 'account_type', 'event_image')->get();
+            $clid       = Sentry::getUser()->id;
+            $check_data = DB::table('events')
+                            ->where('user_evdelete', '=', 'n')
+                            ->where('u_id', '=', $clid)
+                            ->where('id', '=', $eid)
+                            ->select('id', 'account_type', 'event_image')
+                            ->get();
+
             if (!empty($check_data[0]->id)) {
                 if (!empty($check_data[0]->event_image)) {
                     $destinationPath = 'public/uploads/events/' . $check_data[0]->account_type . '/';
                     File::delete($destinationPath . $check_data[0]->event_image);
                 }
-                DB::table('events')->where('id', '=', $eid)->update(['user_evdelete' => 'y', 'updated_at' => date('Y-m-d H:i:s')]);
-                /* DB::delete('delete from events WHERE id = '.$eid);      
-                  DB::delete('delete from users_events WHERE e_id = '.$eid);
-                  DB::delete('delete from event_multidate WHERE ev_id = '.$eid); */
+
+                DB::table('events')
+                    ->where('id', '=', $eid)
+                    ->update(['user_evdelete' => 'y', 'updated_at' => date('Y-m-d H:i:s')]);
+
                 DB::delete('delete from notifications WHERE type = "event" && object_id = ' . $eid);
+
                 return Redirect::to($bcmurl . '/account/manageEvent')->with('succ_mesg', 'Event deleted successfully');
             }
         } else {
@@ -766,9 +860,15 @@ class EventController extends Controller {
         $mytime = Carbon::now();
         $today  = $mytime->toDateTimeString();
 
-        $data = $request->input();
-        $clid = Sentry::getUser()->id;
-        $check_data = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('events.u_id', '=', $clid)->where('events.id', '=', $eid)->select('id', 'event_image')->get();
+        $data       = $request->input();
+        $clid       = Sentry::getUser()->id;
+        $check_data = DB::table('events')
+                        ->where('events.user_evdelete', '=', 'n')
+                        ->where('events.u_id', '=', $clid)
+                        ->where('events.id', '=', $eid)
+                        ->select('id', 'event_image')
+                        ->get();
+
         if (!empty($check_data[0]->id)) {
             $validator = Validator::make($request->all(), [
                         'event_type' => 'required',
@@ -800,29 +900,35 @@ class EventController extends Controller {
                             $event_price = $data['event_price'];
                             $all_ep = $event_price;
                         } else {
-                            return Redirect::back()->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')->withInput();
+                            return Redirect::back()
+                                    ->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')
+                                    ->withInput();
                         }
                         
                         $ticket_surl = $data['ticket_surl'];
                         if (!empty($ticket_surl) && filter_var($ticket_surl , FILTER_VALIDATE_URL) === false) {
-                                return Redirect::back()->with('inv_tkurl', $ticket_surl . ' is not a valid URL, http:// or https:// is required')->withInput();
+                                return Redirect::back()
+                                        ->with('inv_tkurl', $ticket_surl . ' is not a valid URL, http:// or https:// is required')
+                                        ->withInput();
                         } else {
-                            $ticket_surl = null;
-                            /* return Redirect::back()->with('inv_tkurl', 'Ticket Sales URL is required field')->withInput(); 
-                              die; */
+                            $ticket_surl = null;                            
                         }
                     } else {
-                        return Redirect::back()->with('req_evprice', 'Cost price is required field')->withInput();
+                        return Redirect::back()
+                                ->with('req_evprice', 'Cost price is required field')
+                                ->withInput();
                         die;
                     }
                     if (!empty($data['mevent_price'])) {
                         $mevp_regs = '/^[0-9]+$/';
                         $mevp_reg = '/^[0-9]+[.][0-9]+$/';
                         if (preg_match($mevp_regs, $data['mevent_price']) || preg_match($mevp_reg, $data['mevent_price'])) {
-                            $mevent_price = $data['mevent_price'];
-                            $all_ep = $event_price . '-' . $mevent_price;
+                            $mevent_price   = $data['mevent_price'];
+                            $all_ep         = $event_price . '-' . $mevent_price;
                         } else {
-                            return Redirect::back()->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')->withInput();
+                            return Redirect::back()
+                                    ->with('req_evprice', 'Cost price value not valid, please used 0-9 or 10.99 format')
+                                    ->withInput();
                             die;
                         }
                     }
@@ -934,33 +1040,97 @@ class EventController extends Controller {
                             if (!empty($check_data[0]->event_image)) {
                                 File::delete($destinationPath . $check_data[0]->event_image);
                             }
-                            DB::table('events')->where('events.u_id', '=', $clid)->where('events.id', '=', $eid)->update(['event_type' => $data['event_type'], 'event_catid' => $data['event_catid'],
-                                'contact_person' => $data['contact_person'], 'phone_no' => $data['phone_no'], 'email_address' => $data['email_address'], 'website' => $data['website'],
-                                'event_name' => $data['event_name'], 'event_image' => $filename, 'event_venue' => $data['event_venue'], 'event_address' => $data['event_address'],
-                                'address_secd' => $data['address_secd'], 'city' => $data['city'], 'state' => $data['state'], 'country' => $data['country'], 'zip_code' => $data['zip_code'],
-                                'map_show' => $showmap, 'event_dtype' => $data['event_dtype'], 'event_date' => $ev_date, 'event_time' => $data['sevent_time'], 'end_date' => $end_date, 'end_time' => $data['eevent_time'],
-                                'event_cost' => $data['event_cost'], 'event_price' => $all_ep, 'ticket_surl' => $ticket_surl, 'event_description' => $data['event_description'],
-                                'fb_link' => $data['fb_link'], 'tw_link' => $data['tw_link'], 'kid_event' => $kid_event, 'family_event' => $family_event, 'religious_event' => $religious_event,
-                                'private_event' => $data['private_event'], 'share_event' => $share_event, 'password_estatus' => $password_estatus, 'pass_event' => $pass_event,
-                                'updated_at' => date('Y-m-d H:i:s')]);
+
+                            DB::table('events')
+                                ->where('events.u_id', '=', $clid)
+                                ->where('events.id', '=', $eid)
+                                ->update([  'event_type' => $data['event_type'], 
+                                            'event_catid' => $data['event_catid'],
+                                            'contact_person' => $data['contact_person'], 
+                                            'phone_no' => $data['phone_no'], 
+                                            'email_address' => $data['email_address'], 
+                                            'website' => $data['website'],
+                                            'event_name' => $data['event_name'], 
+                                            'event_image' => $filename, 
+                                            'event_venue' => $data['event_venue'], 
+                                            'event_address' => $data['event_address'],
+                                            'address_secd' => $data['address_secd'], 
+                                            'city' => $data['city'], 
+                                            'state' => $data['state'], 
+                                            'country' => $data['country'], 
+                                            'zip_code' => $data['zip_code'],
+                                            'map_show' => $showmap, 
+                                            'event_dtype' => $data['event_dtype'], 
+                                            'event_date' => $ev_date, 
+                                            'event_time' => $data['sevent_time'], 
+                                            'end_date' => $end_date, 
+                                            'end_time' => $data['eevent_time'],
+                                            'event_cost' => $data['event_cost'], 
+                                            'event_price' => $all_ep, 
+                                            'ticket_surl' => $ticket_surl, 
+                                            'event_description' => $data['event_description'],
+                                            'fb_link' => $data['fb_link'], 
+                                            'tw_link' => $data['tw_link'], 
+                                            'kid_event' => $kid_event, 
+                                            'family_event' => $family_event, 
+                                            'religious_event' => $religious_event,
+                                            'private_event' => $data['private_event'], 
+                                            'share_event' => $share_event, 
+                                            'password_estatus' => $password_estatus, 
+                                            'pass_event' => $pass_event,
+                                            'updated_at' => date('Y-m-d H:i:s')]);
+
                         } else {
-                            return Redirect::back()->with('failed_upfile', 'Image tupe not supported, please upload (png/gif/jpeg/jpg/bmp) format')->withInput();
+                            return Redirect::back()
+                                    ->with('failed_upfile', 'Image tupe not supported, please upload (png/gif/jpeg/jpg/bmp) format')
+                                    ->withInput();
                         }
                     } else {
-                        return Redirect::back()->with('failed_upfile', 'We recommend using at least a 2160x1080px (2:1 ratio) image that no larger than 10MB')->withInput();
+                        return Redirect::back()
+                                ->with('failed_upfile', 'We recommend using at least a 2160x1080px (2:1 ratio) image that no larger than 10MB')
+                                ->withInput();
                         die;
                     }
                 } else {
-                    DB::table('events')->where('events.u_id', '=', $clid)->where('events.id', '=', $eid)->update(['event_type' => $data['event_type'],
-                        'event_catid' => $data['event_catid'], 'contact_person' => $data['contact_person'], 'phone_no' => $data['phone_no'],
-                        'email_address' => $data['email_address'], 'website' => $data['website'], 'event_name' => $data['event_name'], 'event_image' => $evid_img,
-                        'event_venue' => $data['event_venue'], 'event_address' => $data['event_address'], 'address_secd' => $data['address_secd'],
-                        'city' => $data['city'], 'state' => $data['state'], 'country' => $data['country'], 'zip_code' => $data['zip_code'], 'map_show' => $showmap,
-                        'event_dtype' => $data['event_dtype'], 'event_date' => $ev_date, 'event_time' => $data['sevent_time'], 'end_date' => $end_date, 'end_time' => $data['eevent_time'],
-                        'event_cost' => $data['event_cost'], 'event_price' => $all_ep, 'ticket_surl' => $ticket_surl, 'event_description' => $data['event_description'],
-                        'fb_link' => $data['fb_link'], 'tw_link' => $data['tw_link'], 'kid_event' => $kid_event, 'family_event' => $family_event,
-                        'religious_event' => $religious_event, 'private_event' => $data['private_event'], 'share_event' => $share_event, 'password_estatus' => $password_estatus,
-                        'pass_event' => $pass_event, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                    DB::table('events')
+                        ->where('events.u_id', '=', $clid)
+                        ->where('events.id', '=', $eid)
+                        ->update([  'event_type' => $data['event_type'],
+                                    'event_catid' => $data['event_catid'], 
+                                    'contact_person' => $data['contact_person'], 
+                                    'phone_no' => $data['phone_no'],
+                                    'email_address' => $data['email_address'], 
+                                    'website' => $data['website'], 
+                                    'event_name' => $data['event_name'], 
+                                    'event_image' => $evid_img,
+                                    'event_venue' => $data['event_venue'], 
+                                    'event_address' => $data['event_address'], 
+                                    'address_secd' => $data['address_secd'],
+                                    'city' => $data['city'], 
+                                    'state' => $data['state'], 
+                                    'country' => $data['country'], 
+                                    'zip_code' => $data['zip_code'], 
+                                    'map_show' => $showmap,
+                                    'event_dtype' => $data['event_dtype'], 
+                                    'event_date' => $ev_date, 
+                                    'event_time' => $data['sevent_time'], 
+                                    'end_date' => $end_date, 
+                                    'end_time' => $data['eevent_time'],
+                                    'event_cost' => $data['event_cost'], 
+                                    'event_price' => $all_ep, 
+                                    'ticket_surl' => $ticket_surl, 
+                                    'event_description' => $data['event_description'],
+                                    'fb_link' => $data['fb_link'], 
+                                    'tw_link' => $data['tw_link'], 
+                                    'kid_event' => $kid_event, 
+                                    'family_event' => $family_event,
+                                    'religious_event' => $religious_event, 
+                                    'private_event' => $data['private_event'], 
+                                    'share_event' => $share_event, 
+                                    'password_estatus' => $password_estatus,
+                                    'pass_event' => $pass_event, 
+                                    'updated_at' => date('Y-m-d H:i:s')]);
                 }
                 /*                 * ****event-date-multi-section******** */
                 if ($data['event_dtype'] == 'multi') {
@@ -982,13 +1152,18 @@ class EventController extends Controller {
                         $startdt = date('Y-m-d', strtotime($stdt));
                         $itcendate = date('Y-m-d', strtotime($data['enddate'][$xlx]));
                         if (isset($data['multieid'][$xlx]) && !empty($data['multieid'][$xlx])) {
-                            DB::table('event_multidate')->where('id', '=', $data['multieid'][$xlx])->where('ev_id', '=', $eid)
-                                    ->update(['event_datetype' => $data['nspd'][$xlx], 'start_date' => $startdt, 'enddate' => $itcendate, 'ofthe' => $data['ofthe'][$xlx],
+                            DB::table('event_multidate')
+                                ->where('id', '=', $data['multieid'][$xlx])
+                                ->where('ev_id', '=', $eid)
+                                ->update(['event_datetype' => $data['nspd'][$xlx], 'start_date' => $startdt, 'enddate' => $itcendate, 'ofthe' => $data['ofthe'][$xlx],
                                         'start_time' => $data['startime'][$xlx], 'st_format' => $data['st_format'][$xlx], 'endtime' => $data['endtime'][$xlx],
                                         'et_format' => $data['et_format'][$xlx], 'total_day' => $data['total_day'][$xlx], 'multype_wm' => $data['wgtdaysvl'][$xlx],
                                         'mw_date' => $mw_date, 'updated_at' => date('Y-m-d H:i:s')]);
+
                         } else {
-                            DB::table('event_multidate')->insert(['ev_id' => $eid, 'event_datetype' => $data['nspd'][$xlx], 'start_date' => $startdt,
+
+                            DB::table('event_multidate')
+                                ->insert(['ev_id' => $eid, 'event_datetype' => $data['nspd'][$xlx], 'start_date' => $startdt,
                                 'enddate' => $itcendate, 'ofthe' => $data['ofthe'][$xlx], 'start_time' => $data['startime'][$xlx],
                                 'st_format' => $data['st_format'][$xlx], 'endtime' => $data['endtime'][$xlx], 'et_format' => $data['et_format'][$xlx],
                                 'total_day' => $data['total_day'][$xlx], 'multype_wm' => $data['wgtdaysvl'][$xlx], 'created_at' => date('Y-m-d H:i:s'),
@@ -1126,10 +1301,19 @@ class EventController extends Controller {
                     $accdata = null;
                     $cimg_apath = null;
                 }
-                return \View::make('public/default2/events/index')->with('title', $event_data[0]->event_name . ' Event - DiscoverYourEvent')
-                                ->with('clid', $clid)->with('maddArr', $maddressArray)->with('event_data', $event_data)->with('accdata', $accdata)
-                                ->with('attending_people', $count_eattpeopl)->with('your_event', $ur_event)->with('cimg_apath', $cimg_apath)->with('bcity', $bcity)
-                                ->with('bstates', $bstates)->with('bcountry', $bcountry);
+                return \View::make('public/default2/events/index')
+                            ->with('title', $event_data[0]->event_name . ' Event - DiscoverYourEvent')
+                            ->with('clid', $clid)
+                            ->with('maddArr', $maddressArray)
+                            ->with('event_data', $event_data)
+                            ->with('accdata', $accdata)
+                            ->with('attending_people', $count_eattpeopl)
+                            ->with('your_event', $ur_event)
+                            ->with('cimg_apath', $cimg_apath)
+                            ->with('bcity', $bcity)
+                            ->with('bstates', $bstates)
+                            ->with('bcountry', $bcountry);
+                            
             } else {
                 return \View::make('public/default2/404')->with('title', '404 - DiscoverYourEvent');
             }
