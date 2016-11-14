@@ -1313,7 +1313,7 @@ class EventController extends Controller {
                             ->with('bcity', $bcity)
                             ->with('bstates', $bstates)
                             ->with('bcountry', $bcountry);
-                            
+
             } else {
                 return \View::make('public/default2/404')->with('title', '404 - DiscoverYourEvent');
             }
@@ -1327,20 +1327,43 @@ class EventController extends Controller {
         $today  = $mytime->toDateTimeString();
 
         if (!empty($eventurl)) {
-            $event_data = DB::table('events')->where('events.event_date', '>', $today)->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->join('event_data', 'events.event_catid', '=', 'event_data.id')->get();
+            $event_data = DB::table('events')
+                            ->where('events.event_date', '>', $today)
+                            ->where('events.user_evdelete', '=', 'n')
+                            ->where('events.event_url', '=', $eventurl)
+                            ->join('event_data', 'events.event_catid', '=', 'event_data.id')
+                            ->get();
+
             if (!empty($event_data[0]->id)) {
-                $ev_id = DB::table('events')->where('events.user_evdelete', '=', 'n')->where('event_url', '=', $eventurl)->select('id')->get();
-                $count_eattpeopl = DB::table('users_events')->where('e_id', '=', $ev_id[0]->id)->count();
+                $ev_id = DB::table('events')
+                            ->where('events.user_evdelete', '=', 'n')
+                            ->where('event_url', '=', $eventurl)
+                            ->select('id')
+                            ->get();
+
+                $count_eattpeopl = DB::table('users_events')
+                                        ->where('e_id', '=', $ev_id[0]->id)
+                                        ->count();
 
                 if (Sentry::check()) {
                     $clid = Sentry::getUser()->id;
-                    $ur_event = DB::table('users_events')->where('e_id', '=', $ev_id[0]->id)->where('u_id', '=', $clid)->select('e_id')->get();
+                    $ur_event = DB::table('users_events')
+                                    ->where('e_id', '=', $ev_id[0]->id)
+                                    ->where('u_id', '=', $clid)
+                                    ->select('e_id')
+                                    ->get();
+
                 } else {
                     $ur_event = null;
                 }
-                return \View::make('public/default2/ajex/event-ajex')->with('event_data', $event_data)->with('attending_people', $count_eattpeopl)->with('your_event', $ur_event);
+                return \View::make('public/default2/ajex/event-ajex')
+                            ->with('event_data', $event_data)
+                            ->with('attending_people', $count_eattpeopl)
+                            ->with('your_event', $ur_event);
+
             } else {
-                return \View::make('public/default2/404')->with('title', '404 - DiscoverYourEvent');
+                return \View::make('public/default2/404')
+                        ->with('title', '404 - DiscoverYourEvent');
             }
         } else {
             return Redirect::to('/');
@@ -1354,11 +1377,25 @@ class EventController extends Controller {
         $data = $request->input();
         if (!empty($data['event'])) {
             $eventurl = $data['event'];
-            $event_data = DB::table('events')->where('event_date', '>', $today)->where('events.user_evdelete', '=', 'n')->where('events.event_url', '=', $eventurl)->where('events.private_event', '!=', 'y')->join('event_data', 'events.event_catid', '=', 'event_data.id')
-                            ->select('events.id as eid', 'events.account_type', 'events.account_id', 'events.event_catid', 'events.contact_person', 'events.phone_no', 'events.email_address', 'events.website', 'events.event_name', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.zip_code', 'events.map_show', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.end_date', 'events.end_time', 'events.event_cost', 'events.event_price', 'events.ticket_surl', 'events.event_description', 'events.fb_link', 'events.tw_link', 'events.private_event', 'event_data.event_category', 'event_data.id as ed_id')->get();
+            $event_data = DB::table('events')
+                            ->where('event_date', '>', $today)
+                            ->where('events.user_evdelete', '=', 'n')
+                            ->where('events.event_url', '=', $eventurl)
+                            ->where('events.private_event', '!=', 'y')
+                            ->join('event_data', 'events.event_catid', '=', 'event_data.id')
+                            ->select('events.id as eid', 'events.account_type', 'events.account_id', 'events.event_catid', 'events.contact_person', 'events.phone_no', 'events.email_address', 'events.website', 'events.event_name', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.zip_code', 'events.map_show', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.end_date', 'events.end_time', 'events.event_cost', 'events.event_price', 'events.ticket_surl', 'events.event_description', 'events.fb_link', 'events.tw_link', 'events.private_event', 'event_data.event_category', 'event_data.id as ed_id')
+                            ->get();
+
             if (!empty($event_data[0]->eid)) {
-                $ev_id = DB::table('events')->where('user_evdelete', '=', 'n')->where('event_url', '=', $eventurl)->select('id')->get();
-                $count_eattpeopl = DB::table('users_events')->where('e_id', '=', $ev_id[0]->id)->count();
+                $ev_id = DB::table('events')
+                            ->where('user_evdelete', '=', 'n')
+                            ->where('event_url', '=', $eventurl)
+                            ->select('id')
+                            ->get();
+
+                $count_eattpeopl = DB::table('users_events')
+                                    ->where('e_id', '=', $ev_id[0]->id)
+                                    ->count();
 
                 if (Sentry::check()) {
                     $clid = Sentry::getUser()->id;
@@ -1910,19 +1947,8 @@ class EventController extends Controller {
                 
                 $cuntdata = DB::table('countries')->select('id', 'name')->get();
                 $data['eid'] =$eid;
-                //$data['acd_id'] =$acd_id;
                 
-                $edit_event = $eventModel->getUserPersonalEvents($data);
-                /*
-                        DB::table('events')
-                        //->where('events.user_evdelete', '=', 'n')
-                        ->where('events.u_id', '=', $id)
-                        ->where('events.id', '=', $eid)
-                        //->where('events.account_id', '=', $acd_id)
-                        ->join('event_data', 'events.event_catid', '=', 'event_data.id')
-                        ->select('events.id as eid', 'events.account_type', 'events.account_id', 'events.event_catid', 'events.event_type', 'events.contact_person', 'events.phone_no', 'events.email_address', 'events.website', 'events.event_name', 'events.event_url', 'events.event_image', 'events.event_venue', 'events.event_address', 'events.address_secd', 'events.city', 'events.state', 'events.country', 'events.zip_code', 'events.map_show', 'events.event_dtype', 'events.event_date', 'events.event_time', 'events.end_date', 'events.end_time', 'events.event_cost', 'events.event_price', 'events.ticket_surl', 'events.event_description', 'events.fb_link', 'events.tw_link', 'events.private_event', 'event_data.event_category', 'event_data.id as ed_id', 'events.available_purchase', 'events.kid_event', 'events.family_event', 'events.religious_event', 'events.private_event', 'events.share_event', 'events.password_estatus', 'events.pass_event')
-                        ->get();
-                */
+                $edit_event = $eventModel->getUserPersonalEvents($data);                
                
                 return \View::make('public/default2/account/acc-update-event')
                         ->with('title', 'Update Event - DiscoverYourEvent')
@@ -2112,8 +2138,7 @@ class EventController extends Controller {
                     $password_estatus = 'n';
                     $pass_event = null;
                 }
-                //$check_eurl = DB::table('events')->where('id', '!=', $eid)->where('event_url', '=', $data['event_url'])->select('id')->get();
-                //if(empty($check_eurl[0]->id)){		 
+                
                 $input_file = $request->file();
                 if (!empty($input_file['event_image'][0])) {
                     $event_filesize = $input_file['event_image'][0]->getClientSize();
@@ -2126,11 +2151,7 @@ class EventController extends Controller {
                             $extension = $input_file['event_image'][0]->getClientOriginalExtension();
                             $filename = basename($input_file['event_image'][0]->getClientOriginalName(), "." . $extension) . '_' . $rid . '.' . $extension;
                             $upload_success = $input_file['event_image'][0]->move($destinationPath, $filename);
-                            /*                             * *************resize-image*************** */
-                            /* $rsfname = basename($input_file['event_image']->getClientOriginalName(), ".".$extension).'_'.$rid.'_200x200.'.$extension;
-                              $rspath = public_path('uploads/account_type/'.$imgs_apath.'/'.$rsfname);
-                              Image::make($destinationPath.$filename)->resize(200, 200)->save($rspath); */
-                            /*                             * *************************************** */
+                            
                             if (!empty($check_data[0]->event_image)) {
                                 File::delete($destinationPath . $check_data[0]->event_image);
                             }
@@ -2202,10 +2223,7 @@ class EventController extends Controller {
                     DB::delete('delete from event_multidate WHERE ev_id = ' . $eid);
                 }
                 return Redirect::to($aname . '/account/manageEvent')->with('succ_mesg', 'Event updated successfully');
-                /* } else {
-                  return redirect::back()->with('invl_url', 'The event URL has already been taken.')->withInput();
-                  die;
-                  } */
+                
             }
         }
     }
@@ -2223,17 +2241,14 @@ class EventController extends Controller {
                     DB::table('users_events')->insertGetId(['e_id' => $check_data[0]->id, 'u_id' => $clid, 'eowner_id' => $check_data[0]->u_id, 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
                     $notfsub = '<span class="ntf-uname">You have an new person</span> attending the <span class="ntf-data">"' . $check_data[0]->event_name . '"</span> event';
                     DB::table('notifications')->insert(['onr_id' => $check_data[0]->u_id, 'u_id' => $clid, 'type' => 'event', 'subject' => $notfsub, 'object_id' => $check_data[0]->id, 'object_type' => 'attend', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
-                    //return Redirect::to('event/'.$eventurl)->with('succ_mesg', 'Event successfully saved on your account');
 
                     if (!empty($check_data[0]->account_id)) {
                         $account_data = DB::table('account_details')->where('account_details.id', '=', $check_data[0]->account_id)->join('users', 'account_details.u_id', '=', 'users.id')
                                         ->select('account_details.id', 'account_details.name', 'account_details.account_url', 'account_details.flemail_update', 'users.full_name', 'users.email')->get();
                         if (isset($account_data[0]->id) && $account_data[0]->flemail_update == 'y') {
-//echo 12312;
-//die;	   
-                            /*                             * *********mail************ */
+                            /**********mail*************/
                             $acc_name = $account_data[0]->name;
-                            /* , 'uemail'     => Sentry::getUser()->email, */
+                            
                             //Send Email	
                             $Subject = "You have an person attending the event for " . $acc_name . " Account - Discover Your Event";
                             $pagurl = url($account_data[0]->account_url);
@@ -2257,9 +2272,8 @@ class EventController extends Controller {
                         $mailevent_data = DB::table('mail_notifications')->where('mail_notifications.user_id', '=', $check_data[0]->u_id)->join('users', 'mail_notifications.user_id', '=', 'users.id')
                                         ->select('mail_notifications.id', 'mail_notifications.event_attend', 'users.full_name', 'users.email')->get();
                         if (isset($mailevent_data[0]->id) && $mailevent_data[0]->event_attend == 'y') {
-                            /*                             * *********mail************ */
+                            /**********mail*************/
                             $acc_name = $mailevent_data[0]->name;
-                            /* , 'uemail'     => Sentry::getUser()->email, */
                             //Send Email	
                             $Subject = "You have an person attending the event for " . $acc_name . " Account - Discover Your Event";
                             $pagurl = url('event/' . $check_data[0]->event_url);
@@ -2276,7 +2290,7 @@ class EventController extends Controller {
                             Mail::send('email.pagenotf_email', $emdata, function($message) use ($SendToEmail, $Subject) {
                                 $message->to($SendToEmail)->subject($Subject);
                             });
-                            /*                             * ************** */
+                            /*************** */
                         }
                     }
 
@@ -2287,7 +2301,6 @@ class EventController extends Controller {
             }
         } else {
             return 'not-log';
-            // return Redirect::to('logInSignUp')->with('persignup','lnot-saved');
         }
     }
 
