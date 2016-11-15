@@ -9,12 +9,15 @@
   ================================================== -->
     <meta charset="utf-8">
     <title>{!! Services\MenuManager::getTitle($title) !!}</title>
+
     @section('meta_description')
         {{-- Here goes the meta_description --}}
     @show
+    
     @section('meta_keywords')
         {{-- Here goes the meta_keywords --}}
     @show
+
   <meta property="og:image:width" content="3500" >
   <meta property="og:image:height" content="2300" >
   <meta property="og:site_name" content="DiscoverYourEvent" />
@@ -31,23 +34,36 @@
 
 </head>
 <body class="corporate">
-<?php if(Sentry::check()){
-	  $bcuid = Sentry::getUser()->id; 
-	  $bcuname = Sentry::getUser()->full_name;
-	   $user_photo = Sentry::getUser()->photo; 
-    $an_dye = DB::table('user_accounts')->where('user_accounts.u_id', '=', $bcuid)->where('user_accounts.account_urole', '=', 'admin')->Where('user_accounts.status','=', 'open')
-      ->orWhere('user_accounts.status','=', 'transfer')->where('user_accounts.u_id', '=', $bcuid)->where('user_accounts.account_urole', '=', 'admin')
-	  ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
-	 ->select('account_details.g_id','account_details.name','account_details.account_url','account_details.upload_file')->get();	
-		$vs = 'yes';
+
+<?php 
+
+if(Sentry::check()){
+	  $bcuid       = Sentry::getUser()->id; 
+	  $bcuname     = Sentry::getUser()->full_name;
+	  $user_photo  = Sentry::getUser()->photo; 
+    $an_dye      = DB::table('user_accounts')
+                    ->where('user_accounts.u_id', '=', $bcuid)
+                    ->where('user_accounts.account_urole', '=', 'admin')
+                    ->where('user_accounts.status','=', 'open')
+                    ->orWhere('user_accounts.status','=', 'transfer')
+                    ->where('user_accounts.u_id', '=', $bcuid)
+                    ->where('user_accounts.account_urole', '=', 'admin')
+	                  ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
+	                  ->select('account_details.g_id','account_details.name','account_details.account_url','account_details.upload_file')
+                    ->get();	
+
+		$vs          = 'yes';
 	  $sel_accname = Session::get('selaccount');	
+
 	  /*******Notification*******/  
-	   $wanotfresult = DB::table('notifications')->where('onr_id', '=', $bcuid)->where('global_read', '=', 0)->count(); 
-	  $allntfCount = DB::table('notifications')->where('onr_id', '=', $bcuid)->where('is_read', '=', 0)->count(); 
-	  $wanotfdata = DB::table('notifications')->where('onr_id', '=', $bcuid)->where('is_read', '=', 0)->orderBy('id', 'desc')->take(10)->get(); 	  
-     } else {
-	   $vs = 'no'; 
-     }	 
+	  $wanotfresult  = DB::table('notifications')->where('onr_id', '=', $bcuid)->where('global_read', '=', 0)->count(); 
+	  $allntfCount   = DB::table('notifications')->where('onr_id', '=', $bcuid)->where('is_read', '=', 0)->count(); 
+	  $wanotfdata    = DB::table('notifications')->where('onr_id', '=', $bcuid)->where('is_read', '=', 0)->orderBy('id', 'desc')->take(10)->get(); 	  
+
+} else {
+  $vs = 'no'; 
+}	 
+
 ?>	 
     <!-- Primary Page Layout  ================================================== -->
     <!-- BEGIN HEADER -->

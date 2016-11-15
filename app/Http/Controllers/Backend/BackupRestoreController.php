@@ -31,15 +31,15 @@ class BackupRestoreController extends AdminController {
 
     public function getBackup()
     {
-        $this->layout->title = 'Backup';
-        $this->layout->content = View::make($this->link_type.'.'.$this->current_theme.'.backup_restore.backup');
+        $this->layout->title    = 'Backup';
+        $this->layout->content  = View::make($this->link_type.'.'.$this->current_theme.'.backup_restore.backup');
     }
 
     public function postBackup()
     {
         $this->current_time = date("Y-m-d-H-i-s");
-        $this->backup_dir = backup_path() . "/backup/";
-        $this->backup_file = backup_path() . "/backup_{$this->current_time}.zip";
+        $this->backup_dir   = backup_path() . "/backup/";
+        $this->backup_file  = backup_path() . "/backup_{$this->current_time}.zip";
         $this->restore_file = restore_path() . "/backup_{$this->current_time}.zip";
 
         $synchronizer = new Synchronize($this);
@@ -51,8 +51,8 @@ class BackupRestoreController extends AdminController {
 
     public function getRestore()
     {
-        $this->layout->title = 'Restore from Backup';
-        $this->layout->content = View::make($this->link_type.'.'.$this->current_theme.'.backup_restore.restore');
+        $this->layout->title    = 'Restore from Backup';
+        $this->layout->content  = View::make($this->link_type.'.'.$this->current_theme.'.backup_restore.restore');
     }
 
     public function postRestore()

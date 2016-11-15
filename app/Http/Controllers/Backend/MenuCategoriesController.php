@@ -22,8 +22,8 @@ class MenuCategoriesController extends AdminController {
 	{
 		$menu_cats = \MenuCategory::latest()->get();
 
-        $this->layout->title = 'All Menu Categories';
-        $this->layout->content = \View::make($this->link_type.'.'.$this->current_theme.'.menu_categories.index')
+        $this->layout->title 	= 'All Menu Categories';
+        $this->layout->content 	= \View::make($this->link_type.'.'.$this->current_theme.'.menu_categories.index')
         								->with('menu_cats', $menu_cats);
 	}
 
@@ -36,9 +36,9 @@ class MenuCategoriesController extends AdminController {
 	{
 		$positions = MenuPosition::lists('name', 'id');
 
-        $this->layout->title = 'Create New Menu Category';
-        $this->layout->content = \View::make($this->link_type.'.'.$this->current_theme.'.menu_categories.create_edit')
-        						->with('positions', $positions);
+        $this->layout->title 	= 'Create New Menu Category';
+        $this->layout->content 	= \View::make($this->link_type.'.'.$this->current_theme.'.menu_categories.create_edit')
+        							->with('positions', $positions);
 	}
 
 	/**

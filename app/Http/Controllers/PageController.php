@@ -810,9 +810,9 @@ class PageController extends Controller {
                 $x++;
             }
         } else {
-            $addressArray = null;
-            $orgTitleArray = null;
-            $org_surlArray = null;
+            $addressArray   = null;
+            $orgTitleArray  = null;
+            $org_surlArray  = null;
         }
 
         return \View::make('public/default2/dye_search')
@@ -824,27 +824,31 @@ class PageController extends Controller {
                         ->with('org_surlArray', $org_surlArray);
     }
 
-    public function dyeSearch(Request $request) {
+    public function dyeSearch(Request $request) 
+    {
         $Searchevnt = new Searchevnt();
-        $evtsdata = $Searchevnt->getAllCategories();
+        $evtsdata   = $Searchevnt->getAllCategories();
 
-        $data = $request->input();
+        $data       = $request->input();
 
-        $Searchevnt = new Searchevnt();
-        $refine_events = $Searchevnt->searchEvents($data, "limit");
-        $rs_events = $Searchevnt->searchEvents($data);
+        $Searchevnt     = new Searchevnt();
+        $refine_events  = $Searchevnt->searchEvents($data, "limit");
+        $rs_events      = $Searchevnt->searchEvents($data);
 
-        /*         * **********************left-map************************** */
+        /***********************left-map************************** */
 
         if (isset($rs_events[0]) && !empty($rs_events[0]->id)) {
 
             $x = 1;
 
             foreach ($rs_events as $uce) {
+
                 $lfal_add = null;
+
                 if (!empty($uce->event_venue)) {
                     $lfal_add .= $uce->event_venue;
                 }
+
                 if (!empty($uce->event_address)) {
                     if (!empty($lfal_add)) {
                         $lfal_add .= ',' . $uce->event_address;
@@ -863,6 +867,7 @@ class PageController extends Controller {
                         $lfal_add = $uce->address_secd;
                     }
                 }
+
                 if (!empty($uce->city)) {
                     if (!empty($lfal_add)) {
                         $lfal_add .= ',' . $uce->city;
@@ -870,6 +875,7 @@ class PageController extends Controller {
                         $lfal_add = $uce->city;
                     }
                 }
+
                 if (!empty($uce->state) && !empty($uce->country)) {
 
                     $getsssdata = DB::table('states')
@@ -904,20 +910,25 @@ class PageController extends Controller {
                         $lfal_add = $getcccdata[0]->name;
                     }
                 }
-                $addressArray[] = $lfal_add;
-                $orgTitleArray[] = $uce->event_name;
-                $org_surlArray[] = $uce->event_url;
+
+                $addressArray[]     = $lfal_add;
+                $orgTitleArray[]    = $uce->event_name;
+                $org_surlArray[]    = $uce->event_url;
+
                 $x++;
+
             }
         } else {
-            $addressArray = null;
-            $orgTitleArray = null;
-            $org_surlArray = null;
+            
+            $addressArray   = null;
+            $orgTitleArray  = null;
+            $org_surlArray  = null;
+
         }
 
 
 
-        /*         * *********************end-lmap**************************** */
+        /**********************end-lmap**************************** */
 
         return \View::make('public/default2/dye_search')
                         ->with('title', 'Search - DiscoverYourEvent')
@@ -929,14 +940,17 @@ class PageController extends Controller {
                         ->with('evtsdata', $evtsdata);
     }
 
-    public function SearchEvent(Request $request) {
+    public function SearchEvent(Request $request) 
+    {
         $mytime = Carbon::now();
         $today  = $mytime->toDateTimeString();
 
         $data = $request->input();
         if (!empty($data['city'])) {
+
             $rl_op = '=';
             $ev_rl = $data['city'];
+            
             $chk_c = DB::table('events')
                         ->where('user_evdelete', '=', 'n')
                         ->where('city', $rl_op, $ev_rl)
@@ -957,42 +971,58 @@ class PageController extends Controller {
                 } else {
                     $cy_poid = 'city';
                 }
+
             }
         } else {
-            $cy_poid = 'city';
-            $rl_op = '!=';
-            $ev_rl = 'zxp';
+
+            $cy_poid    = 'city';
+            $rl_op      = '!=';
+            $ev_rl      = 'zxp';
+
         }
         if (!empty($data['eventday'])) {
+
             if ($data['eventday'] == 'today') {
+                
                 $evdate_op  = '=';
                 $event_date = date("Y-m-d");
+
             } else if ($data['eventday'] == 'tomorrow') {
+                
                 $evdate_op  = '=';
                 $datetime   = new DateTime('tomorrow');
                 $event_date = $datetime->format('Y-m-d');
+
             } else if ($data['eventday'] == 'week') {
+                
                 $evdate_grop    = '>=';
                 $cdate          = date("Y-m-d");
                 $evdate_lsop    = '<=';
                 $event_date     = date('Y-m-d', strtotime('next Sunday'));
+
             } else if ($data['eventday'] == 'weekend') {
+
                 $cdate      = date("Y-m-d");
                 $evdate_op  = '=';
+                
                 if (date('D') != 'Sun') {
                     $event_date = date('Y-m-d', strtotime('next sunday'));
                 } else {
                     $event_date = date('Y-m-d');
                 }
+
             } else {
+
                 $evdate_grop    = '>=';
                 $cdate          = date("Y-m-d");
                 $evdate_lsop    = '<=';
                 $event_date     = date("Y-m-t", strtotime($cdate));
             }
         } else {
-            $evdate_op = '!=';
+            
+            $evdate_op  = '!=';
             $event_date = ' ';
+
         }
 
         $event_data = DB::table('event_data')
@@ -1101,37 +1131,73 @@ class PageController extends Controller {
                         ->with('evtsdata', $evtsdata);
     }
 
-    public function getAccountpage($aname) {
-        //if(Sentry::check()){	
-        $accountdetail = DB::table('user_accounts')->where('user_accounts.status', '=', 'open')
-                        ->orWhere('user_accounts.status', '=', 'transfer')->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
-                        ->select('account_details.id', 'account_details.g_id', 'account_details.name', 'account_details.account_url', 'account_details.website', 'user_accounts.account_urole')->get();
+    public function getAccountpage($aname) 
+    {
+    
+        $accountdetail = DB::table('user_accounts')
+                            ->where('user_accounts.status', '=', 'open')
+                            ->orWhere('user_accounts.status', '=', 'transfer')
+                            ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
+                            ->select('account_details.id', 'account_details.g_id', 'account_details.name', 'account_details.account_url', 'account_details.website', 'user_accounts.account_urole')
+                            ->get();
+
         if (sizeof($accountdetail) > 0) {
+
             foreach ($accountdetail as $acdls) {
+
                 $ac_murl = $acdls->account_url;
+
                 if ($aname == $ac_murl) {
+
                     if (Sentry::check()) {
-                        $id = Sentry::getUser()->id;
-                        $chkme = DB::table('account_details')->where('u_id', '=', $id)->where('account_url', '=', $ac_murl)->select('id')->get();
+
+                        $id     = Sentry::getUser()->id;
+                        $chkme  = DB::table('account_details')
+                                    ->where('u_id', '=', $id)
+                                    ->where('account_url', '=', $ac_murl)
+                                    ->select('id')
+                                    ->get();
+
                         if (!empty($chkme[0]->id)) {
                             Session::put('selaccount', $aname);
                         }
                     }
-                    $acd_gid = $acdls->g_id;
-                    $acd_website = $acdls->website;
-                    $acd_name = $acdls->name;
-                    $accdetails = DB::table('account_details')->where('id', '=', $acdls->id)->get();
+
+                    $acd_gid        = $acdls->g_id;
+                    $acd_website    = $acdls->website;
+                    $acd_name       = $acdls->name;
+                    $accdetails     = DB::table('account_details')
+                                        ->where('id', '=', $acdls->id)
+                                        ->get();
                 }
+
             }
+
             if (Sentry::check() && isset($accdetails[0]->id)) {
-                $id = Sentry::getUser()->id;
-                $followu = DB::table('user_follows')->where('follow_id', '=', $accdetails[0]->id)->where('u_id', '=', $id)->where('follow_type', '=', 'account')->select('id', 'follow')->get();
+
+                $id         = Sentry::getUser()->id;
+                $followu    = DB::table('user_follows')
+                                ->where('follow_id', '=', $accdetails[0]->id)
+                                ->where('u_id', '=', $id)
+                                ->where('follow_type', '=', 'account')
+                                ->select('id', 'follow')
+                                ->get();
+
             } else {
+
                 $followu = null;
+
             }
+
             if (!empty($acd_gid) && isset($accdetails[0]->id)) {
-                $acc_event = DB::table('events')->where('user_evdelete', '=', 'n')->where('account_id', '=', $accdetails[0]->id)->where('private_event', '!=', 'y')
-                                ->select('id', 'account_type', 'event_name', 'event_url', 'event_image', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price', 'event_venue', 'event_address')->get();
+
+                $acc_event = DB::table('events')
+                                ->where('user_evdelete', '=', 'n')
+                                ->where('account_id', '=', $accdetails[0]->id)
+                                ->where('private_event', '!=', 'y')
+                                ->select('id', 'account_type', 'event_name', 'event_url', 'event_image', 'event_dtype', 'event_date', 'event_time', 'event_cost', 'event_price', 'event_venue', 'event_address')
+                                ->get();
+
                 if ($acd_gid == 2) {
                     $cimg_apath = 'business';
                 } elseif ($acd_gid == 5) {
@@ -1139,336 +1205,582 @@ class PageController extends Controller {
                 } else {
                     $cimg_apath = 'club';
                 }
+
                 $event_detailsstr = $acd_website;
                 $event_detailsstr = preg_replace('#^https?://#', '', $event_detailsstr);
-                /*                 * **********map-data********** */
-                $lfalc_add = null;
-                $baddress = null;
-                $bcity = null;
-                $bstates = null;
-                $bcountry = null;
+                
+                /***********map-data********** */
+                $lfalc_add  = null;
+                $baddress   = null;
+                $bcity      = null;
+                $bstates    = null;
+                $bcountry   = null;
+
                 if (!empty($accdetails[0]->address)) {
-                    $lfalc_add = $accdetails[0]->address;
-                    $baddress = $accdetails[0]->address;
+
+                    $lfalc_add  = $accdetails[0]->address;
+                    $baddress   = $accdetails[0]->address;
+
                 }
+
                 if (!empty($accdetails[0]->city) && !empty($accdetails[0]->state)) {
-                    $getcidata = DB::table('cities')->where('id', '=', $accdetails[0]->city)->where('state_id', '=', $accdetails[0]->state)->select('id', 'name')->get();
+
+                    $getcidata = DB::table('cities')
+                                    ->where('id', '=', $accdetails[0]->city)
+                                    ->where('state_id', '=', $accdetails[0]->state)
+                                    ->select('id', 'name')
+                                    ->get();
+
                     if (isset($getcidata[0]->id)) {
+
                         if (!empty($lfalc_add)) {
                             $lfalc_add .= ',' . $getcidata[0]->name;
                         } else {
                             $lfalc_add = $getcidata[0]->name;
                         }
+
                         $bcity = $getcidata[0]->name;
+
                     }
                 }
+
                 if (!empty($accdetails[0]->state) && !empty($accdetails[0]->country)) {
-                    $getssdata = DB::table('states')->where('country_id', '=', $accdetails[0]->country)->where('name', '=', $accdetails[0]->state)->select('id', 'name')->get();
+
+                    $getssdata = DB::table('states')
+                                    ->where('country_id', '=', $accdetails[0]->country)
+                                    ->where('name', '=', $accdetails[0]->state)
+                                    ->select('id', 'name')
+                                    ->get();
+
                     if (!empty($getssdata[0]->id)) {
+                        
                         if (!empty($lfalc_add)) {
                             $lfalc_add .= ',' . $getssdata[0]->name;
                         } else {
                             $lfalc_add = $getssdata[0]->name;
                         }
+
                         $bstates = $getssdata[0]->name;
+
                     }
                 }
+
                 if (!empty($accdetails[0]->country)) {
-                    $getccdata = DB::table('countries')->where('id', '=', $accdetails[0]->country)->select('id', 'name')->get();
+                    $getccdata = DB::table('countries')
+                                    ->where('id', '=', $accdetails[0]->country)
+                                    ->select('id', 'name')
+                                    ->get();
+
                     if (!empty($lfalc_add)) {
                         $lfalc_add .= ', ' . $getccdata[0]->name;
                     } else {
                         $lfalc_add = $getccdata[0]->name;
                     }
+
                     $bcountry = $getccdata[0]->name;
+
                 }
+
                 $mapddress = $lfalc_add;
-                /*                 * ******************end-mmap************* */
-                return \View::make('public/default2/event-select')->with('title', $acd_name . ' - DiscoverYourEvent')->with('maddArr', $mapddress)
-                                ->with('acc_event', $acc_event)->with('event_details', $accdetails)->with('cimg_apath', $cimg_apath)
-                                ->with('baddress', $baddress)->with('bcity', $bcity)->with('bstates', $bstates)->with('bcountry', $bcountry)->with('ev_dtstr', $event_detailsstr)
+                /*******************end-mmap************* */
+
+                return \View::make('public/default2/event-select')
+                                ->with('title', $acd_name . ' - DiscoverYourEvent')
+                                ->with('maddArr', $mapddress)
+                                ->with('acc_event', $acc_event)
+                                ->with('event_details', $accdetails)
+                                ->with('cimg_apath', $cimg_apath)
+                                ->with('baddress', $baddress)
+                                ->with('bcity', $bcity)
+                                ->with('bstates', $bstates)
+                                ->with('bcountry', $bcountry)
+                                ->with('ev_dtstr', $event_detailsstr)
                                 ->with('ufollow', $followu);
+
             } else {
-                return \View::make('public/default2/404')->with('title', '404 Page Not Found - DiscoverYourEvent');
+
+                return \View::make('public/default2/404')
+                        ->with('title', '404 Page Not Found - DiscoverYourEvent');
+
             }
         } else {
-            return Redirect::to('/');
-        }
 
-        /* } else {
-          return Redirect::to('/');
-          } */
+            return Redirect::to('/');
+
+        }
+        
     }
 
-    public function getAccount() {
+    public function getAccount() 
+    {
         if (Sentry::check()) {
+
             $c_aname = Session::get('selaccount');
+            
             if (empty($c_aname)) {
-                $id = Sentry::getUser()->id;
-                $u_pdata = DB::table('users')->where('users.id', '=', $id)->join('group_details', 'users.id', '=', 'group_details.u_id')->get();
-                $cuntd = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-                return \View::make('public/default2/account/index')->with('title', 'Account - DiscoverYourEvent')->with('cuntd', $cuntd)->with('user_data', $u_pdata)->with('active', 'acc');
+                $id         = Sentry::getUser()->id;
+                $u_pdata    = DB::table('users')
+                                ->where('users.id', '=', $id)
+                                ->join('group_details', 'users.id', '=', 'group_details.u_id')
+                                ->get();
+
+                $cuntd      = DB::table('countries')
+                                ->select('id', 'name')
+                                ->where('id', '=', 38)
+                                ->orWhere('id', '=', 231)
+                                ->get();
+
+                return \View::make('public/default2/account/index')
+                            ->with('title', 'Account - DiscoverYourEvent')
+                            ->with('cuntd', $cuntd)
+                            ->with('user_data', $u_pdata)
+                            ->with('active', 'acc');
+
             } else {
+
                 return Redirect::to($c_aname . '/account');
+
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function getNotifications() {
+    public function getNotifications() 
+    {
+
         if (Sentry::check()) {
-            $id = Sentry::getUser()->id;
-            $getmn_data = DB::table('mail_notifications')->where('user_id', '=', $id)->get();
-            return \View::make('public/default2/account/email-notifications')->with('title', 'Email Notifications - DiscoverYourEvent')->with('active', 'nf')->with('getmn_data', $getmn_data);
+
+            $id         = Sentry::getUser()->id;
+            $getmn_data = DB::table('mail_notifications')
+                            ->where('user_id', '=', $id)
+                            ->get();
+
+            return \View::make('public/default2/account/email-notifications')
+                        ->with('title', 'Email Notifications - DiscoverYourEvent')
+                        ->with('active', 'nf')
+                        ->with('getmn_data', $getmn_data);
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function postNotifications(Request $request) {
+    public function postNotifications(Request $request) 
+    {
+        
         if (Sentry::check()) {
-            $uid = Sentry::getUser()->id;
-            $data = $request->input();
-            $validator = Validator::make($request->all(), []);
+
+            $uid        = Sentry::getUser()->id;
+            $data       = $request->input();
+            $validator  = Validator::make($request->all(), []);
+
             if ($validator->fails()) {
-                return Redirect::back()->withErrors($validator)->withInput();
-            } else {
-                if (isset($data['enotification_status'])) {
-                    $enotification_status = 'y';
-                } else {
-                    $enotification_status = 'n';
-                }
-                if (isset($data['event_attend'])) {
-                    $event_attend = 'y';
-                } else {
-                    $event_attend = 'n';
-                }
-                if (isset($data['dye_notf'])) {
-                    $dye_notf = 'y';
-                } else {
-                    $dye_notf = 'n';
-                }
-                if (isset($data['yfollow_page'])) {
-                    $yfollow_page = 'y';
-                } else {
-                    $yfollow_page = 'n';
-                }
-                DB::table('mail_notifications')->where('user_id', '=', $uid)->update(['enotification_status' => $enotification_status,
-                    'event_attend' => $event_attend, 'yfollow_page' => $yfollow_page, 'dye_notf' => $dye_notf, 'updated_at' => date('Y-m-d H:i:s')]);
 
-                $getmn_data = DB::table('mail_notifications')->where('user_id', '=', $uid)->get();
-                return \View::make('public/default2/account/email-notifications')->with('title', 'Email Notifications - DiscoverYourEvent')->with('active', 'nf')->with('getmn_data', $getmn_data)->with('succ_mesg', 'Successfully updated');
+                return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
+
+            } else {
+
+                $enotification_status   = (isset($data['enotification_status'])?'y':'n');
+                $event_attend           = (isset($data['event_attend'])?'y':'n');
+                $dye_notf               = (isset($data['dye_notf'])?'y','n');
+                $yfollow_page           = (isset($data['yfollow_page'])?'y':'n');
+
+                DB::table('mail_notifications')
+                        ->where('user_id', '=', $uid)
+                        ->update([  'enotification_status'  => $enotification_status,
+                                    'event_attend'          => $event_attend, 
+                                    'yfollow_page'          => $yfollow_page, 
+                                    'dye_notf'              => $dye_notf, 
+                                    'updated_at'            => date('Y-m-d H:i:s')
+                                ]);
+
+                $getmn_data = DB::table('mail_notifications')
+                                ->where('user_id', '=', $uid)
+                                ->get();
+
+                return \View::make('public/default2/account/email-notifications')
+                        ->with('title', 'Email Notifications - DiscoverYourEvent')
+                        ->with('active', 'nf')
+                        ->with('getmn_data', $getmn_data)
+                        ->with('succ_mesg', 'Successfully updated');
+
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function getFollowing() {
+    public function getFollowing() 
+    {
         if (Sentry::check()) {
-            $clid = Sentry::getUser()->id;
-            $yr_follow = DB::table('user_follows')->where('user_follows.u_id', '=', $clid)->where('user_follows.follow_type', '=', 'account')->where('user_follows.follow', '=', 'y')
-                    ->join('account_details', 'user_follows.follow_id', '=', 'account_details.id')
-                    ->select('user_follows.id', 'user_follows.follow_id', 'account_details.g_id', 'account_details.name', 'account_details.account_url', 'account_details.upload_file', 'account_details.email', 'account_details.website')
-                    ->paginate(10);
+
+            $clid       = Sentry::getUser()->id;
+            $yr_follow  = DB::table('user_follows')
+                            ->where('user_follows.u_id', '=', $clid)
+                            ->where('user_follows.follow_type', '=', 'account')
+                            ->where('user_follows.follow', '=', 'y')
+                            ->join('account_details', 'user_follows.follow_id', '=', 'account_details.id')
+                            ->select('user_follows.id', 'user_follows.follow_id', 'account_details.g_id', 'account_details.name', 'account_details.account_url', 'account_details.upload_file', 'account_details.email', 'account_details.website')
+                            ->paginate(10);
+
             if (empty($yr_follow[0]->id)) {
+
                 $unfep = DB::table('account_details')->where('account_details.u_id', '!=', $clid)->select('id', 'name', 'account_url')->get();
+
             } else {
+
                 $unfep = 'gc';
+
             }
-            return \View::make('public/default2/account/following-event')->with('title', 'Following - DiscoverYourEvent')->with('follow_acc', $yr_follow)->with('active', 'fl')->with('unfolow', $unfep);
+
+            return \View::make('public/default2/account/following-event')
+                    ->with('title', 'Following - DiscoverYourEvent')
+                    ->with('follow_acc', $yr_follow)
+                    ->with('active', 'fl')
+                    ->with('unfolow', $unfep);
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function getManageuser() {
+    public function getManageuser() 
+    {
         if (Sentry::check()) {
-            return \View::make('public/default2/account/manage-users')->with('title', 'Manage Users - DiscoverYourEvent')->with('active', 'mu');
+            return \View::make('public/default2/account/manage-users')
+                        ->with('title', 'Manage Users - DiscoverYourEvent')
+                        ->with('active', 'mu');
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function getAccnotifications($aname) {
+    public function getAccnotifications($aname) 
+    {
         if (Sentry::check() && !empty($aname)) {
-            $id = Sentry::getUser()->id;
-            $accountdetail = DB::table('user_accounts')->where('user_accounts.u_id', '=', $id)->Where('user_accounts.status', '=', 'open')
-                            ->orWhere('user_accounts.status', '=', 'transfer')->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
-                            ->select('account_details.id', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')->get();
+            $id             = Sentry::getUser()->id;
+            $accountdetail  = DB::table('user_accounts')
+                                ->where('user_accounts.u_id', '=', $id)
+                                ->Where('user_accounts.status', '=', 'open')
+                                ->orWhere('user_accounts.status', '=', 'transfer')
+                                ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
+                                ->select('account_details.id', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')
+                                ->get();
+
             if (sizeof($accountdetail) > 0) {
                 foreach ($accountdetail as $acdls) {
+
                     $ac_murl = $acdls->account_url;
+                    
                     if ($aname == $ac_murl) {
+
                         $account_status = $acdls->status;
-                        $auser_role = $acdls->account_urole;
-                        $accdetails = DB::table('account_details')->where('id', '=', $acdls->id)->get();
+                        $auser_role     = $acdls->account_urole;
+                        $accdetails     = DB::table('account_details')
+                                            ->where('id', '=', $acdls->id)
+                                            ->get();
+
                     }
                 }
-                return \View::make('public/default2/account/accemail-notifications')->with('title', 'Email Notifications - DiscoverYourEvent')->with('event_details', $accdetails)->with('acc_status', $account_status)->with('auser_role', $auser_role)->with('active', 'nf');
+
+                return \View::make('public/default2/account/accemail-notifications')
+                            ->with('title', 'Email Notifications - DiscoverYourEvent')
+                            ->with('event_details', $accdetails)
+                            ->with('acc_status', $account_status)
+                            ->with('auser_role', $auser_role)
+                            ->with('active', 'nf');
+
             } else {
+
                 return Redirect::to('/');
+
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function postAccnotifications($aname, Request $request) {
+    public function postAccnotifications($aname, Request $request) 
+    {
         if (Sentry::check() && !empty($aname)) {
-            $id = Sentry::getUser()->id;
-            $data = $request->input();
-            $validator = Validator::make($request->all(), []);
+
+            $id         = Sentry::getUser()->id;
+            $data       = $request->input();
+            $validator  = Validator::make($request->all(), []);
+
             if ($validator->fails()) {
-                return Redirect::back()->withErrors($validator)->withInput();
+
+                return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
+
             } else {
-                $accountdetail = DB::table('user_accounts')->where('user_accounts.u_id', '=', $id)->Where('user_accounts.status', '=', 'open')
-                                ->orWhere('user_accounts.status', '=', 'transfer')->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
-                                ->select('account_details.id', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')->get();
+
+                $accountdetail = DB::table('user_accounts')
+                                    ->where('user_accounts.u_id', '=', $id)
+                                    ->Where('user_accounts.status', '=', 'open')
+                                    ->orWhere('user_accounts.status', '=', 'transfer')
+                                    ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
+                                    ->select('account_details.id', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')
+                                    ->get();
+
                 if (sizeof($accountdetail) > 0) {
+
                     if (isset($data['flemail_update'])) {
+
                         $flemail_update = 'y';
+
                     } else {
+
                         $flemail_update = 'n';
+
                     }
+
                     foreach ($accountdetail as $acdls) {
+
                         $ac_murl = $acdls->account_url;
+
                         if ($aname == $ac_murl) {
                             $account_status = $acdls->status;
-                            $auser_role = $acdls->account_urole;
-                            DB::table('account_details')->where('id', '=', $acdls->id)->update(['flemail_update' => $flemail_update, 'updated_at' => date('Y-m-d H:i:s')]);
-                            $accdetails = DB::table('account_details')->where('id', '=', $acdls->id)->get();
+                            $auser_role     = $acdls->account_urole;
+                            DB::table('account_details')
+                                ->where('id', '=', $acdls->id)
+                                ->update(['flemail_update' => $flemail_update, 'updated_at' => date('Y-m-d H:i:s')]);
+
+                            $accdetails = DB::table('account_details')
+                                            ->where('id', '=', $acdls->id)
+                                            ->get();
+
                         }
+
                     }
-                    return \View::make('public/default2/account/accemail-notifications')->with('title', 'Email Notifications - DiscoverYourEvent')->with('event_details', $accdetails)->with('acc_status', $account_status)->with('auser_role', $auser_role)->with('active', 'nf')->with('succ_mesg', 'Successfully updated');
+
+                    return \View::make('public/default2/account/accemail-notifications')
+                                ->with('title', 'Email Notifications - DiscoverYourEvent')
+                                ->with('event_details', $accdetails)
+                                ->with('acc_status', $account_status)
+                                ->with('auser_role', $auser_role)
+                                ->with('active', 'nf')
+                                ->with('succ_mesg', 'Successfully updated');
+
                 } else {
+
                     return Redirect::to('/');
+
                 }
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function getAccmuser($aname) {
+    public function getAccmuser($aname) 
+    {
         if (Sentry::check() && !empty($aname)) {
-            $id = Sentry::getUser()->id;
-            $accountdetail = DB::table('user_accounts')->where('user_accounts.u_id', '=', $id)->Where('user_accounts.status', '=', 'open')
-                            ->orWhere('user_accounts.status', '=', 'transfer')->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
-                            ->select('account_details.id', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')->get();
+
+            $id             = Sentry::getUser()->id;
+            $accountdetail  = DB::table('user_accounts')
+                                ->where('user_accounts.u_id', '=', $id)
+                                ->where('user_accounts.status', '=', 'open')
+                                ->orWhere('user_accounts.status', '=', 'transfer')
+                                ->join('account_details', 'user_accounts.account_did', '=', 'account_details.id')
+                                ->select('account_details.id', 'account_details.account_url', 'user_accounts.status', 'user_accounts.account_urole')
+                                ->get();
+
             if (sizeof($accountdetail) > 0) {
+
                 foreach ($accountdetail as $acdls) {
+
                     $ac_murl = $acdls->account_url;
+
                     if ($aname == $ac_murl) {
                         $account_status = $acdls->status;
-                        $auser_role = $acdls->account_urole;
-                        $accdetails = DB::table('account_details')->where('id', '=', $acdls->id)->get();
+                        $auser_role     = $acdls->account_urole;
+                        $accdetails     = DB::table('account_details')
+                                            ->where('id', '=', $acdls->id)
+                                            ->get();
+
                     }
                 }
-                return \View::make('public/default2/account/accmanage-users')->with('title', 'Manage Users - DiscoverYourEvent')->with('event_details', $accdetails)->with('acc_status', $account_status)->with('auser_role', $auser_role)->with('active', 'mu');
+                return \View::make('public/default2/account/accmanage-users')
+                            ->with('title', 'Manage Users - DiscoverYourEvent')
+                            ->with('event_details', $accdetails)
+                            ->with('acc_status', $account_status)
+                            ->with('auser_role', $auser_role)
+                            ->with('active', 'mu');
+
             } else {
+
                 return Redirect::to('/');
+
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
     public function closeAccount($aname, Request $request) {
 		
             $AccountDetails = new AccountDetails;
-            $UserAccounts = new UserAccounts;
-            $UsersFollow = new UsersFollow;
+            $UserAccounts   = new UserAccounts;
+            $UsersFollow    = new UsersFollow;
 			
 			
         if (!empty($aname) && Sentry::check()) {
             
-            $id = Sentry::getUser()->id;
-            $data = $request->input();
-            $acc_did = $data['acc_did'];
+            $id         = Sentry::getUser()->id;
+            $data       = $request->input();
+            $acc_did    = $data['acc_did'];
             
-                $AccountDetails->id = $acc_did;
-                $checkAccount = $AccountDetails->getAccountById();
-                
+            $AccountDetails->id = $acc_did;
+            $checkAccount       = $AccountDetails->getAccountById();                
                 
             if (sizeof($checkAccount) > 0) {
                 
-                $Subject = $checkAccount[0]->name . " account closed by  - Discover Your Event"; //Send Email
+                $Subject        = $checkAccount[0]->name . " account closed by  - Discover Your Event"; //Send Email
 
-                $SendToEmail = Sentry::getUser()->email; // $data['email'];
+                $SendToEmail    = Sentry::getUser()->email; // $data['email'];
 
                 $emdata = array(
-                    'uname' => Sentry::getUser()->full_name,
-                    'uemail' => $SendToEmail,
-                    'caccount_name' => $checkAccount[0]->name,
-                    'redirect_url' => URL('logInSignUp')
-                );
+                                'uname'         => Sentry::getUser()->full_name,
+                                'uemail'        => $SendToEmail,
+                                'caccount_name' => $checkAccount[0]->name,
+                                'redirect_url'  => URL('logInSignUp')
+                            );
                 
-                Mail::send(
-                        'email.account_close', 
-                        $emdata, 
-                        function($message) use ($SendToEmail, $Subject) {
-				$admin_email = config('app.email' , 'info@discoveryourevent.com'); 
+                Mail::send('email.account_close', $emdata, function($message) use ($SendToEmail, $Subject) {
+				                $admin_email = config('app.email' , 'info@discoveryourevent.com'); 
                                 $message->to($SendToEmail)->cc( $admin_email )->subject($Subject);        
                         });
 
-                        $UserAccounts->account_did = $checkAccount[0]->id;
-                        $accountStatus = $UserAccounts->closeAccount();
+                $UserAccounts->account_did  = $checkAccount[0]->id;
+                $accountStatus              = $UserAccounts->closeAccount();
+                
+                $UsersFollow->follow_id     = $checkAccount[0]->id;
+                $UsersFollow->u_id          = $UserAccounts->account_did;
                         
-                        $UsersFollow->follow_id = $checkAccount[0]->id;
-                        $UsersFollow->u_id = $UserAccounts->account_did;
-                        
-                        
-                        
-                            $UsersFollow->where('follow_id', $checkAccount[0]->id)
-                                ->where( 'u_id', $id )
-                                ->where( "follow_type" ,"account" )
-                                ->delete();
-                        
-                        //DB::delete('delete from user_follows WHERE follow_id = ' . $checkAccount[0]->id. . ' && u_id = ' . $id . ' && follow_type = account');
-                        
-                    return Redirect::to('/');
+                $UsersFollow->where('follow_id', $checkAccount[0]->id)
+                            ->where( 'u_id', $id )
+                            ->where( "follow_type" ,"account" )
+                            ->delete();
+                                                
+                return Redirect::to('/');
+
             } 
+
             else {
+
                 return Redirect::back()->with('error_mesg', 'Something wrong! please try again');
+
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function transferAccount($aname, Request $request) {
+    public function transferAccount($aname, Request $request) 
+    {
         if (!empty($aname) && Sentry::check()) {
-            $id = Sentry::getUser()->id;
-            $data = $request->input();
-            $checkAccount = DB::table('account_details')->where('account_details.id', '=', $data['acc_did'])->where('user_accounts.u_id', '=', $id)
-                            ->join('user_accounts', 'account_details.id', '=', 'user_accounts.account_did')
-                            ->select('account_details.id', 'account_details.name')->get();
+            $id     = Sentry::getUser()->id;
+            $data   = $request->input();
+
+            $checkAccount = DB::table('account_details')
+                                ->where('account_details.id', '=', $data['acc_did'])
+                                ->where('user_accounts.u_id', '=', $id)
+                                ->join('user_accounts', 'account_details.id', '=', 'user_accounts.account_did')
+                                ->select('account_details.id', 'account_details.name')
+                                ->get();
+
             if (sizeof($checkAccount) > 0 && !empty($data['email'])) {
+
                 if (isset($data['future-access']) && !empty($data['future-access'])) {
-                    $url_rand = Str::random(12);
-                    $lformat_url = 'dye' . strtolower($url_rand);
-                    DB::table('mail_request')->insert(['sender_uid' => $id, 'account_did' => $checkAccount[0]->id, 'addition_accmail' => $data['email'],
-                        'user_type' => 'admin', 'status' => 'nresponed', 'email_status' => 'sent', 'sdurl_code' => $lformat_url, 'email_nupdate' => 'n', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
+
+                    $url_rand       = Str::random(12);
+                    $lformat_url    = 'dye' . strtolower($url_rand);
+
+                    DB::table('mail_request')
+                        ->insert([  'sender_uid'        => $id, 
+                                    'account_did'       => $checkAccount[0]->id, 
+                                    'addition_accmail'  => $data['email'],
+                                    'user_type'         => 'admin', 
+                                    'status'            => 'nresponed', 
+                                    'email_status'      => 'sent', 
+                                    'sdurl_code'        => $lformat_url, 
+                                    'email_nupdate'     => 'n', 
+                                    'created_at'        => date('Y-m-d H:i:s'), 
+                                    'updated_at'        => date('Y-m-d H:i:s')
+                                ]);
+
                     $accept_url = URL('logInSignUp') . '/transfer/' . $lformat_url;
                     
                     if ($data['future-access'] == 'y') {
-                        DB::table('user_accounts')->where('u_id', '=', $id)->where('account_did', '=', $checkAccount[0]->id)->update(['status' => 'transfer', 'account_urole' => 'event', 'updated_at' => date('Y-m-d H:i:s')]);
-                        return Redirect::to($aname . '/account')->with('succ_mesg', 'Your user role changed and Request sent successfully');
+
+                        DB::table('user_accounts')
+                            ->where('u_id', '=', $id)
+                            ->where('account_did', '=', $checkAccount[0]->id)
+                            ->update([  'status'        => 'transfer', 
+                                        'account_urole' => 'event', 
+                                        'updated_at'    => date('Y-m-d H:i:s')
+                                    ]);
+
+                        return Redirect::to($aname . '/account')
+                                ->with('succ_mesg', 'Your user role changed and Request sent successfully');
+
                     } else {
-                        DB::table('user_accounts')->where('u_id', '=', $id)->where('account_did', '=', $checkAccount[0]->id)->update(['status' => 'close', 'updated_at' => date('Y-m-d H:i:s')]);
+
+                        DB::table('user_accounts')
+                            ->where('u_id', '=', $id)
+                            ->where('account_did', '=', $checkAccount[0]->id)
+                            ->update(['status' => 'close', 'updated_at' => date('Y-m-d H:i:s')]);
+
                         return Redirect::to('/')->with('succ_mesg', 'Request sent successfully');
+
                     }
-                    //return Redirect::back();
+                    
                 } else {
+
                     return Redirect::back()->with('error_mesg', 'Change user role for Account or close the account access yes/no option required');
+
                 }
+
             } else {
+
                 return Redirect::back()->with('error_mesg', 'Something wrong! please try again');
+
             }
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
@@ -1483,44 +1795,72 @@ class PageController extends Controller {
         ]);
 
         if ($validator->fails()) {
+
             return redirect('contact')->withErrors($validator)->withInput();
+
         } else {
+
             $Subject = "Contact form  - Discover Your Event";
+
             //Send Email
-            $SendToEmail = $data['email'];
-            $emdata = array(
-                'uname'         => $data['name'],
-                'uemail'        => $SendToEmail,
-                'uphone'        => $data['phone'],
-                'usubject'      => $data['subject'],
-                'umessage'      => $data['message'],
-                'redirect_url'  => URL('/')
-            );
+            $SendToEmail    = $data['email'];
+            $emdata         = array(
+                                    'uname'         => $data['name'],
+                                    'uemail'        => $SendToEmail,
+                                    'uphone'        => $data['phone'],
+                                    'usubject'      => $data['subject'],
+                                    'umessage'      => $data['message'],
+                                    'redirect_url'  => URL('/')
+                                );
+
             Mail::send('email.contact_form', $emdata, function($message) use ($SendToEmail, $Subject) {
                 $message->to('info@discoveryourevent.com')->subject($Subject);
             });
             
         }
-        return Redirect('contact')->with('success_message', 'Thank you for your message.');
+
+        return Redirect('contact')
+            ->with('success_message', 'Thank you for your message.');
+
     }
 
-    public function getAnotification() {
+    public function getAnotification() 
+    {
         if (Sentry::check()) {
-            $clid = Sentry::getUser()->id;
-            $allNotf = DB::table('notifications')->where('onr_id', '=', $clid)->orderBy('id', 'desc')->paginate(10);
-            return \View::make('public/default2/account/all-notifications')->with('title', 'Your Notifications - DiscoverYourEvent')->with('all_notf', $allNotf);
+
+            $clid       = Sentry::getUser()->id;
+            $allNotf    = DB::table('notifications')
+                            ->where('onr_id', '=', $clid)
+                            ->orderBy('id', 'desc')
+                            ->paginate(10);
+
+            return \View::make('public/default2/account/all-notifications')
+                    ->with('title', 'Your Notifications - DiscoverYourEvent')
+                    ->with('all_notf', $allNotf);
+
         } else {
+
             return Redirect::to('/');
+
         }
     }
 
-    public function getajexNotf() {
+    public function getajexNotf() 
+    {
         if (Sentry::check()) {
-            $clid = Sentry::getUser()->id;
-            $allNotf = DB::table('notifications')->where('onr_id', '=', $clid)->orderBy('id', 'desc')->paginate(10);
+
+            $clid       = Sentry::getUser()->id;
+            $allNotf    = DB::table('notifications')
+                            ->where('onr_id', '=', $clid)
+                            ->orderBy('id', 'desc')
+                            ->paginate(10);
+
             return \View::make('public/default2/ajex/all-notifications')->with('all_notf', $allNotf);
+
         } else {
+
             return Redirect::to('/');
+            
         }
     }
 
