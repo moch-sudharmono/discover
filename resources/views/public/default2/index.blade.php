@@ -7,16 +7,23 @@
  <?php $tok = csrf_token(); ?>
 <div class="container-fluid banner">
  <div class="container text-center">
+
+    <!-- Title Page -->
     <div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1 banner-text">
       <p class="wel-text" data-uk-scrollspy="{cls:'uk-animation-slide-top', repeat:true, delay:800}"> WELCOME TO </p>
       <h1 data-uk-scrollspy="{cls:'uk-animation-slide-left', repeat:true,}"> DiscoverYour<span class="blue-col">Event<span></h1>    
       <p data-uk-scrollspy="{cls:'uk-animation-scale-down', repeat:true, delay:500}"> Discover Your Events Ipsum is a platform to share and find your favourite events.</p>
     </div>
+    <!-- End of Title Page -->
+
+    <!-- Search Form -->
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="slider-form">
         <form class="form-inline" method="post" action="{!!URL('search')!!}">
+
+          <!-- Categories -->
           <div class="col-lg-3 col-sm-3 col-xs-12">
-            <div class="form-group sel">
+            <div class="form-group sel">              
               <select class="selectpicker" data-live-search="true" name="category[]" multiple>
 			        <option value="all" selected>All Categories</option>
     				  @if(!empty($evtsdata))
@@ -27,15 +34,19 @@
               </select>
             </div>
           </div>
+
+          <!-- City Name -->
           <div class="col-lg-3 col-sm-3 col-xs-12">
             <div class="form-group sel">
 			       <input type="text" name="city" value="{{ old('city') }}" placeholder="City or Postal Code" class="form-control">
             </div>
           </div>
+
+          <!-- Event Day -->
           <div class="col-lg-3 col-sm-3 col-xs-12">
             <div class="form-group sel">
               <select class="selectpicker" name="eventday" title="Event Day(s)">
-				<option value="">Select Day</option> 
+				        <option value="">Select Day</option> 
                 <option value="today">Today</option> 
                 <option value="tomorrow">Tomorrow</option>
                 <option value="week">This Week</option>
@@ -44,30 +55,42 @@
               </select>
             </div>
           </div>
+
+          <!-- Search Field -->
           <div class="form-group col-lg-3 col-sm-3 col-xs-12">
-            <input type="text" name="optional_all" placeholder="Event Name or Venue Name" value="{{ old('optional_all') }}" class="form-control">
+            <input type="text" name="optional_all" placeholder="Event or Venue Name" value="{{ old('optional_all') }}" class="form-control">
           </div>
-		  	<input type="hidden" name="_token" id="_token" value="{!! $tok !!}">	
-		   <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-			<input type="submit" class="btn discover-btn" value="Discover Your Events"/>
-		  </div>
+
+		  	  <input type="hidden" name="_token" id="_token" value="{!! $tok !!}">	
+
+          <!-- Button Search -->
+		      <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+			      <input type="submit" class="btn discover-btn" value="Discover Your Events"/>
+		      </div>
+
         </form>
       </div>
     </div>
+    <!-- End of Search Form -->
+
  </div>
 </div>
-    <div class="container">	
-	 <div class="main" id="ipshe">
+
+<!-- Image List -->
+<div class="container">	
+	<div class="main" id="ipshe">    
 		<ul id="cbp-bislideshow" class="cbp-bislideshow">		
-		 <li><img id="default-1" src="{!!URL::to('uploads/city_photos/ca_ab.jpg')!!}"></li>	
-         <li><img id="default-2" src="{!!URL::to('uploads/city_photos/ca_on_ottawa.jpg')!!}"></li>		
-         <li><img id="default-3" src="{!!URL::to('uploads/city_photos/ca_on_toronto.jpg')!!}"></li>	
-         <li><img id="default-4" src="{!!URL::to('uploads/city_photos/us_ca_la.jpg')!!}"></li>	
-         <li><img id="default-5" src="{!!URL::to('uploads/city_photos/us_ct.jpg')!!}"></li>	
-         <li><img id="default-6" src="{!!URL::to('uploads/city_photos/us_nv_vegas.jpg')!!}"></li>	 
+		  <li><img id="default-1" src="{!!URL::to('uploads/city_photos/ca_ab.jpg')!!}"></li>	
+      <li><img id="default-2" src="{!!URL::to('uploads/city_photos/ca_on_ottawa.jpg')!!}"></li>		
+      <li><img id="default-3" src="{!!URL::to('uploads/city_photos/ca_on_toronto.jpg')!!}"></li>	
+      <li><img id="default-4" src="{!!URL::to('uploads/city_photos/us_ca_la.jpg')!!}"></li>	
+      <li><img id="default-5" src="{!!URL::to('uploads/city_photos/us_ct.jpg')!!}"></li>	
+      <li><img id="default-6" src="{!!URL::to('uploads/city_photos/us_nv_vegas.jpg')!!}"></li>	 
 		</ul>
-	 </div> 
-	</div>
+  </div> 
+</div>
+<!-- End of Image List -->
+
 @stop
 @section('content')
 <section class="featured-events">
@@ -97,67 +120,76 @@
           <div class="overbox">
             <div class="title overtext">{!! ucfirst($aet->event_name) !!}</div>
             <div class="tagline overtext">
-              <p> <?php 
-		/*		 if(!empty($aet->event_date)) {
-				   $aev_date = date('M d, Y', strtotime($aet->event_date));
-				 } else {
-				   $aev_date = 'n/a'; 
-				 } */				 
-	    if(!empty($aet->event_date) && $aet->event_dtype == 'single'){
-		  $aev_date = date('M d, Y', strtotime($aet->event_date));
-		} else if($aet->event_dtype == 'multi'){ 		
-		   $getmdate = DB::table('event_multidate')->where('ev_id', '=', $aet->id)->select('id','start_date')->get(); 
-		  $aev_date = date('M d, Y', strtotime($getmdate[0]->start_date)); 
-		} else {
-		  $aev_date = 'n/a'; 
-		}				 
-				 if(!empty($aet->country)){
-                  if(is_numeric($aet->country)){ 						 
-				   $getvcy = DB::table('countries')->where('id', '=', $aet->country)->select('name')->get(); 
-                   $countryn = '/ '.$getvcy[0]->name;	
-            	  } else {
-				   $countryn = null;	 	  
-				  }			  
-				 } else {
-				  $countryn = null;	 
-				 }
-				 
-				?>
+              <p> 
+              <?php 
+          		if(!empty($aet->event_date) && $aet->event_dtype == 'single'){
+          		  
+                $aev_date = date('M d, Y', strtotime($aet->event_date));
+
+          		} else if($aet->event_dtype == 'multi'){ 		
+          		  
+                $getmdate = DB::table('event_multidate')
+                            ->where('ev_id', '=', $aet->id)
+                            ->select('id','start_date')->get(); 
+
+          		  $aev_date = date('M d, Y', strtotime($getmdate[0]->start_date)); 
+
+          		} else {
+
+          		  $aev_date = 'n/a'; 
+
+          		}				 
+
+    				  if(!empty($aet->country)){
+                if(is_numeric($aet->country)){ 						 
+    				    
+                  $getvcy = DB::table('countries')->where('id', '=', $aet->country)->select('name')->get(); 
+                  $countryn = '/ '.$getvcy[0]->name;	
+
+                } else {
+    				      $countryn = null;	 	  
+    				    }			  
+
+    				  } else {
+    				    $countryn = null;	 
+    				  }				 
+				      ?>
 				
-			   {!! $aev_date !!}  <br>
+			          {!! $aev_date !!}  <br>
                 {!! $aet->event_venue !!} {!! $countryn !!}  </p>				
-              <div class="price"> 
-			  <strong>
-			
-		  @if($aet->event_cost == 'paid')
-			  
-		   <?php $alet_price = explode("-", $aet->event_price); ?>
-		   
-			@if(!empty($alet_price[0]))
-			 <?php
-			  $lower = $alet_price[0];
-			  
-			  $alet_prc = toMoney( $lower );
-			  for ($x = 1; $x < sizeof($alet_price); $x++) {
-				$alet_prc .= ' - '. toMoney(  $alet_price[$x] );
-			  }			 
-			 ?> 
-			  {!! $alet_prc !!}
-			@else
-			  ${!! ucfirst($aet->event_price) !!}	
-		    @endif
-			
-		  @else
-			 {!! ucfirst($aet->event_cost) !!}  
-		  @endif 		
-		  </strong>
-		 </div>
-	<div class="more-det">More Details</div>   
-  </div>
+
+              <div class="price">               
+			          <strong>			
+		              @if($aet->event_cost == 'paid')			  
+		                <?php $alet_price = explode("-", $aet->event_price); ?>
+
+              			@if(!empty($alet_price[0]))
+              			 <?php
+              			  $lower     = $alet_price[0];              			  
+              			  $alet_prc  = toMoney( $lower );
+
+              			  for ($x = 1; $x < sizeof($alet_price); $x++) {
+              				  $alet_prc .= ' - '. toMoney(  $alet_price[$x] );
+              			  }
+
+              			 ?> 
+              			  {!! $alet_prc !!}
+              			@else
+              			  ${!! ucfirst($aet->event_price) !!}	
+		                @endif			
+
+		              @else
+			              {!! ucfirst($aet->event_cost) !!}  
+		              @endif 		
+		            </strong>
+		          </div>
+	            
+              <div class="more-det">More Details</div>   
+            </div>
           </div>
-		  </a>
-        </div>
-       </div>
+		    </a>
+      </div>
+    </div>
 	  @endforeach
 	 @else 
 	  <div class="col-lg-3 col-sm-4 col-xs-12 ftr">
@@ -289,12 +321,11 @@ setInterval(function(){
 function showAddress(position) {
 	console.log("showAddress.-1");
 	var lat_long = position.coords.latitude+','+position.coords.longitude;
-	 var tken = jQuery( "input#_token" ).val();
-	 jQuery('#current_location').html('<img src="{!!URL::to("assets/public/default2/images/progress.gif")!!}" style="width:30px"/>');
+	var tken = jQuery( "input#_token" ).val();
+	jQuery('#current_location').html('<img src="{!!URL::to("assets/public/default2/images/progress.gif")!!}" style="width:30px"/>');
 	var postdata = {curlocation: lat_long, _token: tken};
 	var datapst = jQuery.post( '{!!URL("clocation")!!}', postdata );
 	 datapst.done(function( data ){
-    //  $('#cbp-bislideshow').load('{!!URL("ghome-slide/'+lat_long+'")!!}');	    
          var ecy = data.split('~');
 		 $("#geo-cs").show(); 
 		 jQuery("#current_location").html(ecy[0]);
@@ -303,8 +334,7 @@ function showAddress(position) {
 	   $('#all_event').load('{!!URL("ghome-ecity/'+scurl+'")!!}'); 
 	 }		 
       			 
-       // setTimeout(function() { cbpBGSlideshow.init(); },5000);		
-	 });		
+   });		
      $.ajax({
        type: "GET",
        url: '{!!URL("ghome-slide/'+lat_long+'")!!}',
@@ -385,40 +415,44 @@ function showAddress(position) {
    startSlideshow();
   }, interval );
  }
- function stopSlideshow() {
+
+function stopSlideshow() {
   isSlideshowActive = false;
   clearTimeout( slideshowtime );
- }
-   setTimeout(dyeinit(), 700);		   
+}
+
+setTimeout(dyeinit(), 700);		   
  }     
  }
  });   
 } 
 	
-  function saveEvent(evurl){   
+function saveEvent(evurl){   
     $.ajax({
-       type: "GET",
-       url: '{!!URL("saveEvent")!!}/'+evurl,
-     beforeSend: function(){ },
-     complete: function(){ },       	
-    success: function(data) { 
-	 if(data == 'succ'){
-		$("#full-success").css("display", "block");
-		$("#es-mess").html('Event successfully saved on your account');		
-	  setTimeout(function () {
-        window.location = '{!!URL("/")!!}';
-      }, 500); 
-	 } else if(data == 'not-log') {
-		 <?php //session(['persignup' => 'lnot-saved']); ?>
-	  window.location = '{!!URL("createPage/lnot-saved")!!}';
-	 } else {
-	  window.location = '{!!URL("/")!!}'; 
-	 }        
-    }
-   });
-  } 
+      type: "GET",
+      url: '{!!URL("saveEvent")!!}/'+evurl,
+      beforeSend: function(){ },
+      complete: function(){ },       	
+      success: function(data) { 
+	      if(data == 'succ'){
+		      $("#full-success").css("display", "block");
+		      $("#es-mess").html('Event successfully saved on your account');		
+	        
+          setTimeout(function () {
+            window.location = '{!!URL("/")!!}';
+          }, 500); 
+
+	      } else if(data == 'not-log') {
+	        window.location = '{!!URL("createPage/lnot-saved")!!}';
+	      } else {
+	        window.location = '{!!URL("/")!!}'; 
+	      }        
+      }
+    });
+} 
   
 $(document).ready(function(){	  
+ 
  Tipped.delegate('.delegation-ajax', {
      ajax: {
        url: '{!!URL("evt")!!}',
@@ -430,31 +464,32 @@ $(document).ready(function(){
       position: 'topleft'
  });
 
- $("#geo_location").click(function(){ 
-  var vcycode = $("select#country").val();
-  var vscode = $("select#state").val();	
-  var vcytext = $("#country option:selected").text();
-  var vstext = $("#state option:selected").text();	
-   if(vcycode){
-	$('#all_event').load('{!!URL("ghome-ecity/location")!!}/'+vcycode+'/'+vscode);   
-	$("#geo-cs").show(); 
-    $('#current_location').html(vstext);	 
-    $( "#loc_pp" ).trigger( "click" );	 
-   }
+  $("#geo_location").click(function(){ 
+    var vcycode = $("select#country").val();
+    var vscode = $("select#state").val();	
+    var vcytext = $("#country option:selected").text();
+    var vstext = $("#state option:selected").text();	
+    if(vcycode){
+  	  $('#all_event').load('{!!URL("ghome-ecity/location")!!}/'+vcycode+'/'+vscode);   
+  	  $("#geo-cs").show(); 
+      $('#current_location').html(vstext);	 
+      $( "#loc_pp" ).trigger( "click" );	 
+    }
   });	
 
   $("#geo_lrest").click(function(){ 
-	$('#all_event').load('{!!URL("ghome-ecity/location")!!}/y/n'); 
+	  $('#all_event').load('{!!URL("ghome-ecity/location")!!}/y/n'); 
     $("#geo-cs").hide(); 	
     $('#current_location').html(' ');	
-     setTimeout(function () {
-        $( "#loc_pp" ).trigger( "click" );
+      
+      setTimeout(function () {
+      $( "#loc_pp" ).trigger( "click" );
       }, 500); 	    
+
   });
 });	
 
  function followEvent(eid){	 
-  //jQuery("#error-lreq").html('Login required');   
    window.location = '{!!URL("createPage/fapb")!!}';
  }
  </script>
