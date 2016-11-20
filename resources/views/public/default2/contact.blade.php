@@ -15,7 +15,7 @@
       <div class="content-page">
         <div class="row">
           <div class="col-md-12">
-            <div id="contact-map" class="gmaps margin-bottom-40" style="height:360px;"> <img src="{!!URL::to('images/map.jpg')!!}"> </div>
+            <!-- <div id="contact-map" class="gmaps margin-bottom-40" style="height:360px;"> <img src="{!!URL::to('images/map.jpg')!!}"> </div> -->
 			
 			
 			 <div id="errors-div"> @if (Session::has('error_message'))
@@ -50,7 +50,7 @@
           </div>
           <div class="col-md-12 col-sm-12 col-xs-12 contact-forms">
              <div class="col-lg-4 col-sm-12 get-touch"> @if ($post->content != '')
-              <h4><span class="makeitblue"><i class="fa fa-map-marker"></i>Our Contacts:</span></h4>
+              <h4><span class="makeitblue"><i class="fa fa-map-marker"></i>Our Contact:</span></h4>
               {!! $post->content !!}
               @endif </div>           
             
@@ -59,23 +59,23 @@
 				{!! Form::open(array('url'=>'contact/send', 'id'=>'contact-form', 'class'=>'contact-form')) !!}
 				<div class="grid_3 omega">
 	<div class="form-group col-lg-6 col-sm-12"> 
-{!! Form::text('name',Input::old('name'),array('id'=>'name','class'=>'form-control','placeholder'=>'your name...','required'=>'required')) !!} 
+{!! Form::text('name',Input::old('name'),array('id'=>'name','class'=>'form-control','placeholder'=>'Full Name','required'=>'required')) !!} 
 	</div>
 <div class="form-group col-lg-6 col-sm-12"> 
-{!! Form::text('email', Input::old('email'),array('id'=>'email','class'=>'form-control','placeholder'=>'your email...','required'=>'required')) !!} 
+{!! Form::text('email', Input::old('email'),array('id'=>'email','class'=>'form-control','placeholder'=>'Email Address','required'=>'required')) !!} 
 </div>
 				  <div class="form-group col-lg-6 col-sm-12"> 
-{!! Form::text('phone', Input::old('phone'), array('id'=>'phone','class'=>'form-control','placeholder'=>'Phone Number...','required'=>'required')) !!} 
+{!! Form::text('phone', Input::old('phone'), array('id'=>'phone','class'=>'form-control','placeholder'=>'Phone Number','required'=>'required')) !!} 
 </div>
 <div class="form-group col-lg-6 col-sm-12"> 
-{!! Form::text('subject', Input::old('subject'), array('id'=>'subject', 'class'=>'form-control', 'placeholder'=>'your subject...','required'=>'required')) !!} 
+{!! Form::text('subject', Input::old('subject'), array('id'=>'subject', 'class'=>'form-control', 'placeholder'=>'Subject','required'=>'required')) !!} 
 </div>
 
 				  <div id="response"></div>
 				</div>
 				<div class="alpha col-lg-12 col-sm-12">
 				  <div class="form-group"> 
-{!! Form::textarea('message', Input::old('message'),array('id'=>'message','cols'=>'30','rows'=>'10','class'=>'form-control','placeholder'=>'Message...','required'=>'required')) !!} 
+{!! Form::textarea('message', Input::old('message'),array('id'=>'message','cols'=>'30','rows'=>'10','class'=>'form-control','placeholder'=>'Message','required'=>'required')) !!} 
 </div>
 				</div>
 				

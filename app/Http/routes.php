@@ -16,21 +16,6 @@ Route::get('/', function () {
     }
 });
 
-/*Route::post('/upload', function () {
-    //check if file was uploaded
-    if (Request::hasFile('file'))
-    {
-        //houston we have a file!
-        $file = Request::file('file');
-
-        //move it to our public folder and rename it to $name
-        Request::file('file')->move('images', 'insert_file_name.'.$file->getClientOriginalExtension());
-        echo 'file uploaded!';
-        var_dump($file);
-    }else{
-        echo 'no file, no bueno';
-    }
-});*/
 
 //Registration routes...
 Route::get('forgot_password', 'AuthController@getForgotPassword');

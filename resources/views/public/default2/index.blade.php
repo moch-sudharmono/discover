@@ -10,8 +10,7 @@
     <div class="col-md-10 col-sm-12 col-xs-12 col-md-offset-1 banner-text">
       <p class="wel-text" data-uk-scrollspy="{cls:'uk-animation-slide-top', repeat:true, delay:800}"> WELCOME TO </p>
       <h1 data-uk-scrollspy="{cls:'uk-animation-slide-left', repeat:true,}"> DiscoverYour<span class="blue-col">Event<span></h1>
-      <p data-uk-scrollspy="{cls:'uk-animation-scale-down', repeat:true, delay:500}"> Discover Your Events Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the 
-        industry's standard dummy text ever since when ...</p>
+      <p data-uk-scrollspy="{cls:'uk-animation-scale-down', repeat:true, delay:500}"> Discover Your Events Ipsum is simple event database for your area</p>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12">
       <div class="slider-form">
@@ -19,25 +18,18 @@
           <div class="col-lg-3 col-sm-3 col-xs-12">
             <div class="form-group sel">
               <select class="selectpicker" data-live-search="true" name="category[]" multiple>
-			    <option value="all">All Categories</option>
-				  @if(!empty($evtsdata))
-				   @foreach($evtsdata as $etdt)	   
-				    <option value="{!! $etdt !!}">{!! $etdt !!}</option>
-				   @endforeach	
-				  @endif
+			           <option value="all" selected="selected">All Categories</option>
+        				  @if(!empty($evtsdata))
+        				   @foreach($evtsdata as $etdt)	   
+        				    <option value="{!! $etdt !!}">{!! $etdt !!}</option>
+        				   @endforeach	
+        				  @endif
               </select>
             </div>
           </div>
           <div class="col-lg-3 col-sm-3 col-xs-12">
             <div class="form-group sel">
 			 <input type="text" name="city" value="{{ old('city') }}" placeholder="City or Postal Code" class="form-control">
-              <!--<select id="lunch" class="selectpicker" data-live-search="true" name="city" title="City or Postal Code">
-                <option>option 1</option>
-                <option>option 1</option>
-                <option>option 1</option>
-                <option>option 1</option>
-                <option>option 1</option>
-              </select>-->
             </div>
           </div>
           <div class="col-lg-3 col-sm-3 col-xs-12">
@@ -53,7 +45,7 @@
             </div>
           </div>
           <div class="form-group col-lg-3 col-sm-3 col-xs-12">
-            <input type="text" name="optional_all" placeholder="Event Name or Venu Name" value="{{ old('optional_all') }}" class="form-control">
+            <input type="text" name="optional_all" placeholder="Event or Venue Name" value="{{ old('optional_all') }}" class="form-control">
           </div>
 		  	<input type="hidden" name="_token" id="_token" value="{!! $tok !!}">	
 		   <div class="form-group col-lg-12 col-sm-12 col-xs-12">
@@ -66,6 +58,7 @@
 </div>
     <div class="container">	
 	 <div class="main" id="ipshe">
+   <!-- Slideshow -->
 		<ul id="cbp-bislideshow" class="cbp-bislideshow">		
 		 <li><img id="default-1" src="{!!URL::to('uploads/city_photos/ca_ab.jpg')!!}"></li>	
          <li><img id="default-2" src="{!!URL::to('uploads/city_photos/ca_on_ottawa.jpg')!!}"></li>		
@@ -74,6 +67,7 @@
          <li><img id="default-5" src="{!!URL::to('uploads/city_photos/us_ct.jpg')!!}"></li>	
          <li><img id="default-6" src="{!!URL::to('uploads/city_photos/us_nv_vegas.jpg')!!}"></li>	 
 		</ul>
+    <!-- End of Slideshow -->
 	 </div> 
 	</div>
 @stop
