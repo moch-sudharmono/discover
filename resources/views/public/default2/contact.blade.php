@@ -3,49 +3,56 @@
 
 @section('content')
 <section class="sec">
-  <div class="tabbable tabs-left">  
-      <!-- BEGIN SIDEBAR -->
-            @include("public/default2/posts.sidebar")
-            <!-- END SIDEBAR -->
- <div class="form-group col-lg-8 col-sm-8 col-xs-12 ">	
-  <div class="row margin-bottom-40"> 
-    <!-- BEGIN CONTENT -->
-    <div class="col-md-12">
-    <!--   <h2 class="entry-title">Contacts</h2> -->
-      <div class="content-page">
-        <div class="row">
-          <div class="col-md-12">
-            <!-- <div id="contact-map" class="gmaps margin-bottom-40" style="height:360px;"> <img src="{!!URL::to('images/map.jpg')!!}"> </div> -->
+<div class="tabbable tabs-left">  
+  <!-- BEGIN SIDEBAR -->
+  @include("public/default2/posts.sidebar")
+  <!-- END SIDEBAR -->
+  <div class="form-group col-lg-8 col-sm-8 col-xs-12 ">	
+    <div class="row margin-bottom-40"> 
+      <!-- BEGIN CONTENT -->
+      <div class="col-md-12">
+        <div class="content-page">
+          <div class="row">
+            <div class="col-md-12">
+              <!-- <div id="contact-map" class="gmaps margin-bottom-40" style="height:360px;"> <img src="{!!URL::to('images/map.jpg')!!}"> </div> -->
 			
 			
-			 <div id="errors-div"> @if (Session::has('error_message'))
-              <div class="alert alert-error alert-danger"> <strong>Error!</strong> {!! Session::get('error_message') !!} </div>
+			       <div id="errors-div"> 
+              @if (Session::has('error_message'))
+                <div class="alert alert-error alert-danger"> <strong>Error!</strong> {!! Session::get('error_message') !!} </div>
               @endif
+
               @if (Session::has('success_message'))
               <div class="alert alert-success"> <strong>Success!</strong> {!! Session::get('success_message') !!} </div>
               @endif
+
               @if( $errors->count() > 0 )
               <div class="alert alert-error alert-danger">
                 <p>The following errors have occurred:</p>
                 <ul id="form-errors">
-				{!! $errors->first('name', '
-                  <li>:message</li>
+				          {!! $errors->first('name', '
+                    <li>:message</li>
                   ') !!}
+
                   {!! $errors->first('email', '
                   <li>:message</li>
                   ') !!}  
-                 {!! $errors->first('phone', '
+
+                  {!! $errors->first('phone', '
                   <li>:message</li>
                   ') !!}  	
-				 {!! $errors->first('subject', '
+
+				          {!! $errors->first('subject', '
                   <li>:message</li>
                   ') !!} 	
-				 {!! $errors->first('message', '
+
+				          {!! $errors->first('message', '
                   <li>:message</li>
                   ') !!} 				  
                 </ul>
               </div>
-              @endif </div>
+              @endif 
+              </div>
 			  
           </div>
           <div class="col-md-12 col-sm-12 col-xs-12 contact-forms">

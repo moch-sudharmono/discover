@@ -907,19 +907,6 @@ class EventController extends Controller {
     public function getEvents($eventurl) {
         if (!empty($eventurl)) {
 
-            /*
-              $event_data =
-              DB::table('events')
-              ->where('events.user_evdelete', '=', 'n')
-              ->where('events.event_url', '=', $eventurl)
-              ->join('event_data', 'events.event_catid', '=', 'event_data.id')
-              ->select('events.id as eid','events.account_type','events.account_id','events.event_catid','events.contact_person','events.phone_no','events.email_address',
-              'events.website','events.event_name','events.event_url','events.event_image','events.event_venue','events.event_address','events.address_secd',
-              'events.city','events.state','events.country','events.zip_code','events.map_show','events.event_dtype','events.event_date','events.event_time','events.end_date','events.end_time',
-              'events.event_cost','events.event_price','events.ticket_surl','events.event_description','events.fb_link','events.tw_link','events.private_event',
-              'events.password_estatus','events.pass_event','event_data.event_category','event_data.id as ed_id')->get();
-             */
-
             $Model = new Event;
             $event_data = $Model->getEventByUrl($eventurl);
 

@@ -9,12 +9,13 @@
 	  window.open('https://twitter.com/share?url='+escape(url)+'&text='+title+ 'via@' + twitterHandle, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
 	 return false; 
 	}
- function linedinEvent(url, title) {
-  var intWidth = intWidth || '500';
-  var intHeight = intHeight || '400'; 
-  var strParam = 'width=' + intWidth + ',height=' + intHeight;
-  objWindow = window.open('http://www.linkedin.com/shareArticle?url='+url,title,strParam).focus();
- }
+
+ 	function linedinEvent(url, title) {
+	  var intWidth = intWidth || '500';
+	  var intHeight = intHeight || '400'; 
+	  var strParam = 'width=' + intWidth + ',height=' + intHeight;
+	  objWindow = window.open('http://www.linkedin.com/shareArticle?url='+url,title,strParam).focus();
+	 }
 </script>
 
  @if($event_data[0]->password_estatus == 'y')	  
