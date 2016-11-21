@@ -18,138 +18,161 @@
 	 }
 </script>
 
- @if($event_data[0]->password_estatus == 'y')	  
-    <div data-backdrop="static" role="dialog" class="modal fade in" id="eventpss-pop-up" style="display:block; width:100%;">
-				  <div class="modal-dialog">
-					<!-- Modal content-->
-					<div class="modal-content sign_up-form">
-					  <div class="modal-header text-center">
-						<h3 class="modal-title">Event is under password protection</h3>						
-					  </div>
-					   <div id="error-lpopall" class="col-md-12"></div>
-					  <div class="modal-body">
-						<form method="post" id="protect-pass" class="form-inline">
-						  <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-						   <div class="col-lg-9 col-sm-9 col-xs-9">
-							<input type="password" class="form-control evpass" placeholder="Password" name="event_password">
-							<div id="error-evpass" class="help-block with-errors"></div>
-						   </div>	
-						   <div class="col-lg-3 col-sm-3 col-xs-3">
-						    <input type="button" class="btn discover-btn save-btn" value="Unlock" style="margin-top:0 !important;" id="unlock">
-						  </div>
-						  </div>
-						</form>
-					  </div>
-					</div>
-				  </div>
+@if($event_data[0]->password_estatus == 'y')	  
+<div data-backdrop="static" role="dialog" class="modal fade in" id="eventpss-pop-up" style="display:block; width:100%;">
+  <div class="modal-dialog">
+	<!-- Modal content-->
+	<div class="modal-content sign_up-form">
+	  <div class="modal-header text-center">
+		<h3 class="modal-title">Event is under password protection</h3>						
+	  </div>
+	   <div id="error-lpopall" class="col-md-12"></div>
+	  <div class="modal-body">
+		<form method="post" id="protect-pass" class="form-inline">
+		  <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+		   <div class="col-lg-9 col-sm-9 col-xs-9">
+			<input type="password" class="form-control evpass" placeholder="Password" name="event_password">
+			<div id="error-evpass" class="help-block with-errors"></div>
+		   </div>	
+		   <div class="col-lg-3 col-sm-3 col-xs-3">
+		    <input type="button" class="btn discover-btn save-btn" value="Unlock" style="margin-top:0 !important;" id="unlock">
+		  </div>
+		  </div>
+		</form>
+	  </div>
 	</div>
-	<div class="evpass modal-backdrop fade in"></div>
+  </div>
+</div>
+
+<div class="evpass modal-backdrop fade in"></div>
   <div class="full" id="fullevent" style="display:none">	
  @else
   <div class="full">	 
  @endif 
  
-      @if(!empty($event_data[0]->event_image))		  
-	  @if(is_numeric($event_data[0]->event_image)) 	 
-   <?php $evtoimg = DB::table('event_catimages')->where('id', '=', $event_data[0]->event_image)->select('id','ecat_name','ecat_path','ecat_image')->get(); ?>	
-    @if(!empty($evtoimg[0]->id))
-    	<?php $bac_img = URL::to('uploads/'.$evtoimg[0]->ecat_path.'/'.$evtoimg[0]->ecat_name.'/'.$evtoimg[0]->ecat_image); ?>	
-     @else
-		<?php $bac_img = URL::to('assets/public/default2/images/events-pic1.jpg'); ?> 		
-    @endif 
-  @else
-	  
+@if(!empty($event_data[0]->event_image))		  
+	@if(is_numeric($event_data[0]->event_image)) 	 
+   		<?php $evtoimg = DB::table('event_catimages')->where('id', '=', $event_data[0]->event_image)->select('id','ecat_name','ecat_path','ecat_image')->get(); ?>	
+
+    	@if(!empty($evtoimg[0]->id))
+    		<?php $bac_img = URL::to('uploads/'.$evtoimg[0]->ecat_path.'/'.$evtoimg[0]->ecat_name.'/'.$evtoimg[0]->ecat_image); ?>	
+     	@else
+			<?php $bac_img = URL::to('assets/public/default2/images/events-pic1.jpg'); ?> 		
+    	@endif 
+  	@else
 		<?php $bac_img = URL::to('uploads/events/'.$event_data[0]->account_type.'/'.$event_data[0]->event_image); ?>
-	 @endif 	
-      @else
-		<?php $bac_img = URL::to('assets/public/default2/images/events-pic1.jpg'); ?> 
-	  @endif
+	@endif 	
+@else
+	<?php $bac_img = URL::to('assets/public/default2/images/events-pic1.jpg'); ?> 
+@endif
 	  
- <meta property="og:image" content="{!!$bac_img!!}">
+<meta property="og:image" content="{!!$bac_img!!}">
 <meta property="og:url" content="{!!URL('event/'.$event_data[0]->event_url)!!}">
 <meta property="og:title" content="{!!ucfirst($event_data[0]->event_name)!!}"> 
 
-	    <?php 
-		if(!empty($event_data[0]->event_date) && $event_data[0]->event_dtype == 'single'){
-		  $ev_date = date('M d, Y', strtotime($event_data[0]->event_date));
-		} else if($event_data[0]->event_dtype == 'multi'){ 		
-		   $getmdate = DB::table('event_multidate')->where('ev_id', '=', $event_data[0]->eid)->select('id','start_date')->get(); 
-		  $ev_date = date('M d, Y', strtotime($getmdate[0]->start_date)); 
-		} else {
-		  $ev_date = 'n/a'; 
-		}
-		 if(!empty($event_data[0]->country)){	 
-		   $getvcy = DB::table('countries')->where('id', '=', $event_data[0]->country)->select('name')->get(); 
-           $countryn = $getvcy[0]->name;			   
-		 } else {
-		   $countryn = null;	 
-		 }  
-		 if(!empty($event_data[0]->event_description)){
-			$shortDescription = '';
-			$fullDescription = trim(strip_tags($event_data[0]->event_description));
-			$initialCount = 100;
-		  if(strlen($fullDescription) > $initialCount) {
-			$shortDescription = substr($fullDescription,0,$initialCount)."…";
-		  } else {
-        	$shortDescription = $fullDescription;
-		  }
-		 } else {
-		   $shortDescription = null;  
-		 }
-		?>		
-		 <div class="events-page" style="background:rgba(0, 0, 0, 0) url('{!!$bac_img!!}') no-repeat scroll 0 0 / 100% 100%;">
-	@if(!empty($event_data[0]->account_id)) 
-	  <div class="container cont">				  
+<?php 
+
+/*Event Date*/
+if(!empty($event_data[0]->event_date) && $event_data[0]->event_dtype == 'single'){
+	$ev_date = date('M d, Y', strtotime($event_data[0]->event_date));
+} else if($event_data[0]->event_dtype == 'multi'){ 		
+	$getmdate = DB::table('event_multidate')->where('ev_id', '=', $event_data[0]->eid)->select('id','start_date')->get(); 
+  	$ev_date = date('M d, Y', strtotime($getmdate[0]->start_date)); 
+} else {
+  	$ev_date = 'n/a'; 
+}
+
+//Country
+if(!empty($event_data[0]->country)){	 
+	$getvcy = DB::table('countries')->where('id', '=', $event_data[0]->country)->select('name')->get(); 
+   	$countryn = $getvcy[0]->name;			   
+} else {
+	$countryn = null;	 
+}  
+
+//Description
+if(!empty($event_data[0]->event_description)){
+	$shortDescription = '';
+	$fullDescription = trim(strip_tags($event_data[0]->event_description));
+	$initialCount = 100;
+  	
+  	if(strlen($fullDescription) > $initialCount) {
+		$shortDescription = substr($fullDescription,0,$initialCount)."…";
+  	} else {
+		$shortDescription = $fullDescription;
+  	}
+
+} else {
+	$shortDescription = null;  
+}
+?>		
+
+<div class="events-page" style="background:rgba(0, 0, 0, 0) url('{!!$bac_img!!}') no-repeat scroll 0 0 / 100% 100%;">
+@if(!empty($event_data[0]->account_id)) 
+	<div class="container cont">				  
 	   <div class="event-detail col-md-8 col-sm-8 evnt">
         <h3>{!! ucfirst($event_data[0]->event_name) !!}</h3>		
-	@if(!empty($accdata[0]->upload_file))
-	  <img src="{!!URL::to('uploads/account_type/'.$cimg_apath.'/'.$accdata[0]->upload_file)!!}" class="img-responsive"/>
-    @else
-	  <img src="{!!URL::to('assets/public/default2/images/fox-logo.png')!!}" class="img-responsive"/>	
-    @endif
-    <p>
-     <span class="date-text">Address:</span>  
-	  @if(!empty($accdata[0]->address))
-		{!!$accdata[0]->address!!},
-	  @endif 
-	  @if(!empty($bcity))
-		{!!$bcity!!},  
-	  @endif	
-	  @if(!empty($bstates))
-		{!!$bstates!!},  
-	  @endif 
-	  @if(!empty($bcountry))
-		{!!$bcountry!!},  
-	  @endif
-		{!!$accdata[0]->zip_code!!} 
-	  <br>
-	  @if(!empty($accdata[0]->phone) || !empty($accdata[0]->email)) 				 
-		 <span class="date-text"> Contact:</span> 
-       {!!$accdata[0]->phone!!} <br>
-	   @if(!empty($accdata[0]->email)) 	  
-        <span class="date-text">Email:</span><a href="mailto:{{$accdata[0]->email}}" id="mail">{{$accdata[0]->email}}</a> <br>
-       @endif
-	  @endif 	
-	 @if(!empty($accdata[0]->website))    
-       <a href="{{$accdata[0]->website}}">
-		{{preg_replace('#^https?://#', '', $accdata[0]->website)}}  
-       </a>	  <br>
-     @endif  					
-   </p>
+		
+		@if(!empty($accdata[0]->upload_file))
+	  		<img src="{!!URL::to('uploads/account_type/'.$cimg_apath.'/'.$accdata[0]->upload_file)!!}" class="img-responsive"/>
+    	@else
+	  		<img src="{!!URL::to('assets/public/default2/images/fox-logo.png')!!}" class="img-responsive"/>	
+    	@endif
+    	
+    	<p>
+     		<span class="date-text">Address:</span>  
+	  		@if(!empty($accdata[0]->address))
+				{!!$accdata[0]->address!!},
+	  		@endif 
+
+	  		@if(!empty($bcity))
+				{!!$bcity!!},  
+	  		@endif	
+
+	  		@if(!empty($bstates))
+				{!!$bstates!!},  
+	  		@endif 
+
+	  		@if(!empty($bcountry))
+				{!!$bcountry!!},  
+	  		@endif
+
+			{!!$accdata[0]->zip_code!!} 
+
+	  		<br>
+	  		@if(!empty($accdata[0]->phone) || !empty($accdata[0]->email)) 				 
+		 	<span class="date-text"> Contact:</span> 
+   			{!!$accdata[0]->phone!!} <br>
+
+	   			@if(!empty($accdata[0]->email)) 	  
+	        		<span class="date-text">Email:</span><a href="mailto:{{$accdata[0]->email}}" id="mail">{{$accdata[0]->email}}</a> <br>
+	       		@endif
+	  		@endif 	
+
+	 		@if(!empty($accdata[0]->website))    
+       			<a href="{{$accdata[0]->website}}">
+					{{preg_replace('#^https?://#', '', $accdata[0]->website)}}  
+       			</a>	  
+       			<br>
+     		@endif  					
+   		</p>
 <?php 
- if(!empty($event_data[0]->account_id) && !empty($clid)){
-  $followus = DB::table('user_follows')->where('follow_id', '=', $event_data[0]->account_id)->where('u_id', '=', $clid)->where('follow_type', '=', 'account')->select('id','follow')->get(); 
+if(!empty($event_data[0]->account_id) && !empty($clid)){
+	$followus = DB::table('user_follows')->where('follow_id', '=', $event_data[0]->account_id)->where('u_id', '=', $clid)->where('follow_type', '=', 'account')->select('id','follow')->get(); 
 ?>
-	@if(!empty($followus[0]->id))
-	 @if($followus[0]->follow == 'y')	  
-	  <a href="javascript:void(0)" onClick="unflw({!! $followus[0]->id !!})" class="unfollow-event save-event">Unfollow</a>
-	 @endif  
-	@else	  
-     @if(!empty($accdata[0]->id))		  
-	  <a href="javascript:void(0)" onClick="followEvent({!! $event_data[0]->account_id !!})" class="follow-event save-event">Follow</a>
- 	 @endif  				 
-    @endif  				 
+
+@if(!empty($followus[0]->id))
+	@if($followus[0]->follow == 'y')	  
+		<a href="javascript:void(0)" onClick="unflw({!! $followus[0]->id !!})" class="unfollow-event save-event">Unfollow</a>
+	@endif  
+@else	  
+    @if(!empty($accdata[0]->id))		  
+		<a href="javascript:void(0)" onClick="followEvent({!! $event_data[0]->account_id !!})" class="follow-event save-event">Follow</a>
+ 	@endif  				 
+@endif  				 
+
 <?php } ?>
+
  <a href="{!!URL($accdata[0]->account_url)!!}" class="save-event" target="_blank" title="{!!$accdata[0]->name!!}">{!!$accdata[0]->name!!} Page</a>	
  <div class="help-block with-errors" id="error-lreq"></div>		  
 		   <span class="col-md-12 full-success alert mar-top" id="full-success" style="display:none">
@@ -235,9 +258,11 @@
 <a onClick="tweetEvent('{!!URL('event/'.$event_data[0]->event_url)!!}','{!!ucfirst($event_data[0]->event_name)!!}')" href="javascript:void(0);">
 	<img src="{!!URL::to('assets/public/default2/images/twitter.png')!!}"/>
 </a>
+<!-- 
 <a onClick="linedinEvent('{!!URL('event/'.$event_data[0]->event_url)!!}','{!!ucfirst($event_data[0]->event_name)!!}')" href="javascript:void(0);">
 	<img src="{!!URL::to('assets/public/default2/images/share.png')!!}"/>
 </a> 
+-->
 <a href="javascript:void(0);" data-toggle="modal" data-target="#share-pop-up">
 	<img src="{!!URL::to('assets/public/default2/images/share1.png')!!}"/>
 </a>
