@@ -264,7 +264,9 @@ class HomeController extends BaseController {
                 }
             } 
 			
-            /*             * *********************end-lmap**************************** */
+            /**********************end-lmap**************************** */
+
+            dd($all_events);
 					$this->layout->content = 
 							View::make('public.' . $this->current_theme . '.' . $home_blade)
 							->with('page', $page)
@@ -287,12 +289,12 @@ class HomeController extends BaseController {
 							->with('mog_slar', $morg_surlArray);
 //al_event	 rsearch_detail
         }
-        else {
-            
+        else {            
             $date["result"] = 8;
             $all_events = $Event->searchEvents($date , "limit");
             $event_date = $Event->getAllCategories();
             $home_blade = 'index';
+            //dd($all_events);
             $this->layout->content = 
 							View::make('public.' . $this->current_theme . '.' . $home_blade)
 							->with('page', $page)

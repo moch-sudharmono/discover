@@ -77,50 +77,52 @@
     <h2 data-uk-scrollspy="{cls:'uk-animation-scale-down', repeat:true, delay:600}"> Featured Events <span id="geo-cs" style="display:none;">In</span> 
 	 <a href="javascript:void(0)" data-target="#change_location" data-toggle="modal"><span class="your-city" id="current_location"></span></a>
 	</h2>   
-   <div class="all-features" id="all_event">   
+  <div class="all-features" id="all_event">   
     @if(!empty($al_event[0]->id))
-	 @foreach($al_event as $aet) 
-      <div class="col-lg-3 col-sm-4 col-xs-12 ftr">
-        <div class="box">
-	<a href="{!!URL('event/'.$aet->event_url)!!}" class="delegation-ajax more-det" data-tipped-options="ajax:{data:{ event: '{!! $aet->event_url !!}', _token: '{!! $tok !!}' } }"> 
- @if(!empty($aet->event_image))	
-  @if(is_numeric($aet->event_image)) 	 
-   <?php 
+	    @foreach($al_event as $aet) 
+        <div class="col-lg-3 col-sm-4 col-xs-12 ftr">
+          <div class="box">
+	          <a href="{!!URL('event/'.$aet->event_url)!!}" class="delegation-ajax more-det" data-tipped-options="ajax:{data:{ event: '{!! $aet->event_url !!}', _token: '{!! $tok !!}' } }"> 
+            @if(!empty($aet->event_image))	
+              @if(is_numeric($aet->event_image)) 	 
 
-$evtoimg = DB::table('event_catimages')->where('id', '=', $aet->event_image)->select('id','ecat_name','ecat_path','ecat_image')->get(); ?>	
-    @if(!empty($evtoimg[0]->id))	
-     <img src="{!!URL::to('uploads/'.$evtoimg[0]->ecat_path.'/'.$evtoimg[0]->ecat_name.'/'.$evtoimg[0]->ecat_image)!!}" class="img-responsive"/>
-    @endif 
-  @else			 
-	<img src="{!!URL::to('uploads/events/'.$aet->account_type.'/'.$aet->event_image)!!}" class="img-responsive"/>
-  @endif 
- @else
-	<img src="{!!URL::to('assets/public/default2/images/events-pic1.jpg')!!}" class="img-responsive"/> 	  
- @endif
-          <div class="overbox">
-            <div class="title overtext">{!! ucfirst($aet->event_name) !!}</div>
-            <div class="tagline overtext">
-              <p> <?php 
-		/*		 if(!empty($aet->event_date)) {
-				   $aev_date = date('M d, Y', strtotime($aet->event_date));
-				 } else {
-				   $aev_date = 'n/a'; 
-				 } */				 
-	    if(!empty($aet->event_date) && $aet->event_dtype == 'single'){
-		  $aev_date = date('M d, Y', strtotime($aet->event_date));
-		} else if($aet->event_dtype == 'multi'){ 		
-		   $getmdate = DB::table('event_multidate')->where('ev_id', '=', $aet->id)->select('id','start_date')->get(); 
-		  $aev_date = date('M d, Y', strtotime($getmdate[0]->start_date)); 
-		} else {
-		  $aev_date = 'n/a'; 
-		}				 
-				 if(!empty($aet->country)){
-                  if(is_numeric($aet->country)){ 						 
-				   $getvcy = DB::table('countries')->where('id', '=', $aet->country)->select('name')->get(); 
-                   $countryn = '/ '.$getvcy[0]->name;	
-            	  } else {
-				   $countryn = null;	 	  
-				  }			  
+              <?php 
+                $evtoimg = DB::table('event_catimages')->where('id', '=', $aet->event_image)->select('id','ecat_name','ecat_path','ecat_image')->get(); 
+              ?>	
+              
+                @if(!empty($evtoimg[0]->id))	
+                  <img src="{!!URL::to('uploads/'.$evtoimg[0]->ecat_path.'/'.$evtoimg[0]->ecat_name.'/'.$evtoimg[0]->ecat_image)!!}" class="img-responsive"/>
+                @endif 
+              
+              @else			 
+	             <img src="{!!URL::to('uploads/events/'.$aet->account_type.'/'.$aet->event_image)!!}" class="img-responsive"/>
+              @endif 
+            @else
+	            <img src="{!!URL::to('assets/public/default2/images/events-pic1.jpg')!!}" class="img-responsive"/> 	  
+            @endif
+
+<div class="overbox">
+  <div class="title overtext">{!! ucfirst($aet->event_name) !!}</div>
+    <div class="tagline overtext">
+      <p> 
+      <?php 
+		    if(!empty($aet->event_date) && $aet->event_dtype == 'single'){
+		      $aev_date = date('M d, Y', strtotime($aet->event_date));
+		    } else if($aet->event_dtype == 'multi'){ 		
+		      $getmdate = DB::table('event_multidate')->where('ev_id', '=', $aet->id)->select('id','start_date')->get(); 
+		      $aev_date = date('M d, Y', strtotime($getmdate[0]->start_date)); 
+		    } else {
+		      $aev_date = 'n/a'; 
+		    }				 
+
+				if(!empty($aet->country)){
+          if(is_numeric($aet->country)){ 						 
+  			    $getvcy = DB::table('countries')->where('id', '=', $aet->country)->select('name')->get(); 
+            $countryn = '/ '.$getvcy[0]->name;	
+       	  } else {
+				    $countryn = null;	 	  
+				  }	
+
 				 } else {
 				  $countryn = null;	 
 				 }
@@ -279,34 +281,33 @@ setInterval(function(){
  }
  
   var vx = document.getElementById("current_location");
-   function getLocation() {
+  function getLocation() {
   	if (navigator.geolocation) { 
-	 navigator.geolocation.getCurrentPosition(showAddress);
-	} else {
-     $("#geo-cs").show(); 		
-	 vx.innerHTML = "Australia";
-	}
-   }
+	    navigator.geolocation.getCurrentPosition(showAddress);
+	  } else {
+      $("#geo-cs").show(); 		
+	    vx.innerHTML = "Australia";
+	  }
+  }
+
   getLocation();
   
 function showAddress(position) {
 	console.log("showAddress.-1");
 	var lat_long = position.coords.latitude+','+position.coords.longitude;
-	 var tken = jQuery( "input#_token" ).val();
-	 jQuery('#current_location').html('<img src="{!!URL::to("assets/public/default2/images/progress.gif")!!}" style="width:30px"/>');
+	var tken = jQuery( "input#_token" ).val();
+	jQuery('#current_location').html('<img src="{!!URL::to("assets/public/default2/images/progress.gif")!!}" style="width:30px"/>');
 	var postdata = {curlocation: lat_long, _token: tken};
 	var datapst = jQuery.post( '{!!URL("clocation")!!}', postdata );
-	 datapst.done(function( data ){
-    //  $('#cbp-bislideshow').load('{!!URL("ghome-slide/'+lat_long+'")!!}');	    
-         var ecy = data.split('~');
-		 $("#geo-cs").show(); 
-		 jQuery("#current_location").html(ecy[0]);
-     if(ecy[1]){
-		 var scurl = ecy[1].replace(/ /g, "_");
-	   $('#all_event').load('{!!URL("ghome-ecity/'+scurl+'")!!}'); 
-	 }		 
-      			 
-       // setTimeout(function() { cbpBGSlideshow.init(); },5000);		
+	
+  datapst.done(function( data ){
+    var ecy = data.split('~');
+	  $("#geo-cs").show(); 
+		  jQuery("#current_location").html(ecy[0]);
+      if(ecy[1]){
+		    var scurl = ecy[1].replace(/ /g, "_");
+	      $('#all_event').load('{!!URL("ghome-ecity/'+scurl+'")!!}'); 
+	    }		       			       
 	 });		
      $.ajax({
        type: "GET",

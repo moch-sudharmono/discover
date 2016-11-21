@@ -200,10 +200,10 @@ class Searchevnt extends Model {
 				$refine_events = $refine_events->where('events.event_date',  "like" , $custom_date_value);
 			}
 
-			$mytime = Carbon\Carbon::now();
-			$today 	= $mytime->toDateTimeString();
-
-			$refine_events = $refine_events->where('events.event_date',  ">" , $today);
+			/*Hide past event*/
+        	$mytime = Carbon::now();
+        	$today  = $mytime->toDateTimeString();                    
+        	$refine_events = $refine_events->where('events.event_date', ">", $today);
 			
 			if($ac_type){
 				$refine_events = $refine_events->where( "events.account_type" , "=" , $account_type);
