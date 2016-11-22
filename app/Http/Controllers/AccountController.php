@@ -18,15 +18,14 @@ class AccountController extends Controller {
     }
 	
 /**************************User-Profile************************************/	
-	 public function postAccount(Request $request)
+	public function postAccount(Request $request)
     {
-	 if(Sentry::check()){
-		 $id = Sentry::getUser()->id; 
-		 $profile_photo = Sentry::getUser()->photo;
-		  $data = $request->input();		
+     if(Sentry::check()){
+		$id = Sentry::getUser()->id; 
+		$profile_photo = Sentry::getUser()->photo;
+		$data = $request->input();		
 		$validator = Validator::make($request->all(), [	
-         // 'username' => 'required',
-		  'full_name' => 'required|max:255',
+          'full_name' => 'required|max:255',
           'email' => 'required|email',
           'address' => 'required',
           'country' => 'required',
@@ -38,48 +37,17 @@ class AccountController extends Controller {
         ]);	
         
 		if ($validator->fails()) {
-          return Redirect::back()->withErrors($validator)->withInput(); 
-        } else {
-		 // $prof_exitun = DB::table('users')->where('id', '!=', $id)->where('username', '=', $data['username'])->select('id')->get();	
-		  $prof_exitem = DB::table('users')->where('id', '!=', $id)->where('email', '=', $data['email'])->select('id')->get();	
-		 
-		 if(!empty($prof_exitem[0]->id)){
-		/* if(!empty($prof_exitun[0]->id)){
-		  return Redirect::back()->with('name_error', 'The User name has already been taken.')->withInput();	 
-		 } */	 
-		 if(!empty($prof_exitem[0]->id)){
-		  return Redirect::back()->with('email_error', 'The email has already been taken.')->withInput();	 
-		 }		  
-        } else {			 
-		 /*	$input_file = $request->file();
-		 if(!empty($input_file)){			 	
-		 $u_filesize = $input_file['photo']->getClientSize();	
-		  if ($u_filesize < 2000001) {		 
-		  //Upload Image
-			$rid = Str::random(3);		 
-            $destinationPath = 'public/uploads/user_profile/';	
-			
-	        $filename = $input_file['photo']->getClientOriginalName();
-	        $mime_type = $input_file['photo']->getMimeType();
-	        $extension = $input_file['photo']->getClientOriginalExtension();
-	        $filename = basename($input_file['photo']->getClientOriginalName(), ".".$extension).'_'.$rid.'.'.$extension;
-	        $upload_success = $input_file['photo']->move($destinationPath, $filename);
-				
-             File::delete($destinationPath.$profile_photo);		
-			
-			DB::table('users')->where('id', '=', $id)->update(['full_name' => $data['full_name'], 'email' => $data['email'], 'photo' => $filename,'updated_at' => date('Y-m-d H:i:s')]);		   
- 
-		  } else {			  
-			 return redirect($bladename)->with('error', 'Please upload maximum 2mb size file.')->withInput(); 
-			die; 
-		  }		
-         } else {	*/ 
-		  DB::table('users')->where('id', '=', $id)->update(['full_name' => $data['full_name'], 'email' => $data['email'],'updated_at' => date('Y-m-d H:i:s')]);		   
-       //  }
-		DB::table('group_details')->where('u_id', '=', $id)->update(['address' => $data['address'], 'country' => $data['country'], 'state' => $data['state'], 'city' => $data['city'], 'zip_code' => $data['zip_code'], 'phone' =>  $data['phone'], 'updated_at' => date('Y-m-d H:i:s')]); 
-		return Redirect::back()->with('succ_mesg', 'Your information updated successfully');       
-	  }
-	  }
+          	return Redirect::back()->withErrors($validator)->withInput(); 
+        } else {        	
+		  	$prof_exitem = DB::table('users')->where('id', '!=', $id)->where('email', '=', $data['email'])->select('id')->get();			 	
+			if(!empty($prof_exitem[0]->id)){
+			  return Redirect::back()->with('email_error', 'The email has already been taken.')->withInput();	 			 
+        	} else {			 
+        		DB::table('users')->where('id', '=', $id)->update(['full_name' => $data['full_name'], 'email' => $data['email'],'updated_at' => date('Y-m-d H:i:s')]);		         
+				DB::table('group_details')->where('u_id', '=', $id)->update(['address' => $data['address'], 'country' => $data['country'], 'state' => $data['state'], 'city' => $data['city'], 'zip_code' => $data['zip_code'], 'phone' =>  $data['phone'], 'updated_at' => date('Y-m-d H:i:s')]); 
+				return Redirect::back()->with('succ_mesg', 'Your information updated successfully');       
+	  		}
+	  	}
      } else {
 		  return Redirect::to('/');
 	 }

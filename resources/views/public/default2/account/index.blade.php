@@ -26,17 +26,6 @@
             </span>	
 		  @endif
 		 <form class="form-inline" method="post" action="" enctype="multipart/form-data">
-		<!--    <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-              <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>User Name :
-              </label>
-              <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
-                  <input type="text" name="username" class="form-control" value="{!!$user_data[0]->username!!}" required />
-				 @if (Session::has('name_error')) 
-					<span class="help-block with-errors">{!! Session::get('name_error') !!}</span>    
-				   @endif
-				  {!! $errors->first('username', '<span class="help-block with-errors">:message</span>') !!} 
-              </div>
-            </div> -->
 			<div class="form-group col-lg-12 col-sm-12 col-xs-12">
               <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>Full Name :
               </label>
@@ -56,26 +45,6 @@
 				  {!! $errors->first('email', '<span class="help-block with-errors">:message</span>') !!}
               </div>
             </div>			
-	<!-- <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-			<label class="col-lg-3 col-sm-3 col-xs-12 row">User Profile image :</label>			
-		<div class="col-lg-6 col-sm-9 col-xs-12"> 	
-		<div class="col-lg-2 col-sm-2 col-xs-12">
-         @if(!empty($user_data[0]->photo))	
-		  <img src="{!!URL::to('uploads/user_profile/'.$user_data[0]->photo)!!}" class="img-responsive"/>
-		 @else
-		  <img src="{!!URL::to('assets/public/default2/images/blue-icon.png')!!}" class="img-responsive"/>		
-         @endif
-        </div>		
-			
-			  <div class="col-lg-10 col-sm-10 col-xs-12 padd-n"> 
-                      <input id="uploadFile" placeholder="Choose File"  class="form-control" disabled="disabled" />
-                      <div class="fileUpload btn btn-primary"> <span>Upload</span>
-                        <input id="uploadBtn" name="photo" type="file" class="upload"/>
-                      </div>
-				 {!! $errors->first('photo', '<span class="help-block with-errors">:message</span>') !!}	
-                </div>	
-              </div>  				
-            </div> -->
 			<div class="form-group col-lg-12 col-sm-12 col-xs-12">
               <label class="col-lg-3 col-sm-3 col-xs-12 row"><span class="require-val">*</span>Address :
               </label>

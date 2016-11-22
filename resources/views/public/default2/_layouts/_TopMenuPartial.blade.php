@@ -124,20 +124,21 @@
     </li>
   @else
     <li class="" data-toggle="modal" data-target="#login-pop-up"><a href="#">LogIn</a></li>
-				<!-- Login form pop_up -->
+	
+	<!-- Login form pop_up -->
 	<div id="login-pop-up" class="modal fade" role="dialog" data-backdrop="static">
-				  <div class="modal-dialog">
-					<!-- Modal content-->
-					<div class="modal-content sign_up-form">
-					  <div class="modal-header text-center">
-						<button type="button" class="close pup-close" data-dismiss="modal">&times;</button>
-						<h3 class="modal-title">WELCOME TO </h3>
-						<a href="{!!URL('/')!!}">
-						 <img src="{!!URL::to('assets/public/default2/images/logo-pop-up.png')!!}" class="img-responsive">
-						</a>
-					  </div>
-					   <div class="col-md-12" id="error-lpopall"></div>
-					  <div class="modal-body">
+	  <div class="modal-dialog">
+			<!-- Modal content-->
+			<div class="modal-content sign_up-form">
+			  	<div class="modal-header text-center">
+					<button type="button" class="close pup-close" data-dismiss="modal">&times;</button>
+					<h3 class="modal-title">WELCOME TO </h3>
+					<a href="{!!URL('/')!!}">
+				 	<img src="{!!URL::to('assets/public/default2/images/logo-pop-up.png')!!}" class="img-responsive">
+					</a>
+			    </div>
+		 	    <div class="col-md-12" id="error-lpopall"></div>
+					<div class="modal-body">
 						<form class="form-inline" id="signinevent" method="post">
 						  <div class="form-group col-lg-12 col-sm-12 col-xs-12">
 							<input type="email" name="email" placeholder="Email Address" class="form-control sgmail">

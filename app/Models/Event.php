@@ -229,7 +229,7 @@ class Event extends Model {
             } else { // month
                 $event_date = date("Y-m-t", strtotime($cdate));
             }
-        }
+        }        
 
         /*Specific Date*/
         if (!empty($data['event_date'])) {
@@ -308,7 +308,6 @@ class Event extends Model {
         if ($city_search) {
             $refine_events = $refine_events->where(function ($query) use ( $ev_rl ) {
                 $query->where("city", 'like', "%" . $ev_rl . "%")
-                    ->where('events.event_date', ">", $today)
                     ->orwhere("zip_code", 'like', "%" . $ev_rl . "%");
             });
         }
@@ -394,8 +393,7 @@ class Event extends Model {
             \DB::enableQueryLog();
             return dd($refine_events);
 
-        } else if ($return == "limit") {
-
+        } else if ($return == "limit") {        
             $limit = (isset($data["results"]) && $data["results"] > 0) ? $data["results"] : 5;
             return $refine_events = $refine_events->paginate($limit);
 

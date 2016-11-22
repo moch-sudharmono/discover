@@ -909,9 +909,9 @@ class PageController extends Controller {
 
     public function getAccount() {
         if (Sentry::check()) {
-            $c_aname = Session::get('selaccount');
+            $c_aname = Session::get('selaccount');            
             if (empty($c_aname)) {
-                $id = Sentry::getUser()->id;
+                $id = Sentry::getUser()->id;                
                 $u_pdata = DB::table('users')->where('users.id', '=', $id)->join('group_details', 'users.id', '=', 'group_details.u_id')->get();
                 $cuntd = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
                 return \View::make('public/default2/account/index')->with('title', 'Account - DiscoverYourEvent')->with('cuntd', $cuntd)->with('user_data', $u_pdata)->with('active', 'acc');

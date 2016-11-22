@@ -25,7 +25,7 @@ class Searchevnt extends Model {
 
     
 	public  function searchEvents( $data = array()  , $return = '' , $skip_data = null){
-		
+		dd('hallo');
 		$city_search = $category_search = $day_search = $keyword_search = $location_search = $etype_search = $free_event =  false;
 		$event_for_relegion = $event_for_family = $event_for_kids =  $event_cost = $ac_type = $custom_date =  false;
 		$event_operation = '=';

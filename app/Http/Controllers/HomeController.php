@@ -57,17 +57,17 @@ class HomeController extends BaseController {
             $uaccount_dts = $usergroup->getUserAccountDetails();
             if ($uaccount_dts) {
                 $user_account_city = $uaccount_dts->city;
-            }
+            }            
 
             $event_filter = array();
             $event_filter['results'] = 8;
 
-            if (!empty($user_account_city) && $user_account_city != '') {
+            if (!empty($user_account_city) && $user_account_city != '') {                
 
                 $event_filter["city"] = $user_account_city;
                 $event_filter['eventday'] = 'week';
 
-                $all_events = $Event->searchEvents($event_filter, "limit");
+                $all_events = $Event->searchEvents($event_filter, "limit");                
                 $full_event = $Event->searchEvents($event_filter);
 
                 if (sizeof($all_events) < 1) {
@@ -77,25 +77,19 @@ class HomeController extends BaseController {
                     $full_event = $Event->searchEvents($event_filter);
                 }
             } else {
-
                 $all_events = $Event->searchEvents($event_filter, "limit");
                 $full_event = $Event->searchEvents($event_filter);
-            }
+            }            
 
             $attend_event = $Event->getAttendingEvents();
-			
-			
-
+						
             /** get users following * */
             $fl_acc = $UsersFollow->getUserFollow();
             $unfl_acc = $AccountDetails->getCurrentUserAccountDetails();
 
-            
-
             $home_blade = 'index_login';
 
-
-            /*             * *************
+            /* *************
              * main-map
              * ************ */
 
@@ -264,9 +258,7 @@ class HomeController extends BaseController {
                 }
             } 
 			
-            /**********************end-lmap**************************** */
-
-            dd($all_events);
+            /**********************end-lmap**************************** */        
 					$this->layout->content = 
 							View::make('public.' . $this->current_theme . '.' . $home_blade)
 							->with('page', $page)
@@ -287,7 +279,8 @@ class HomeController extends BaseController {
                             ->with('maarray', $maddressArray)
 							->with('mTiAr', $morgTitleArray)
 							->with('mog_slar', $morg_surlArray);
-//al_event	 rsearch_detail
+
+
         }
         else {            
             $date["result"] = 8;
