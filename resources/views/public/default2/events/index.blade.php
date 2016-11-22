@@ -388,7 +388,7 @@ if(!empty($event_data[0]->account_id) && !empty($clid)){
         window.location = '{!!URL("event/".$event_data[0]->event_url)!!}'; 
       }, 500);		 
 	 } if(data == 'not-log') {
-	   $("#au-mess").html('Login required');	   
+	    window.location = '{!!URL("createPage/lnot-saved")!!}';
 	 }        
     }
    });

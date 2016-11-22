@@ -8,19 +8,19 @@
       <div class="modal-header text-center">
         <a href="{!! url('/') !!}"><img src="{!!URL::to('assets/public/default2/images/logo-pop-up.png')!!}" class="img-responsive"></a>
       
-	     @if(isset($personal) && $personal == 'gsh')
-		<h4 class="modal-title">You must log in or sign up in order to create a new page</h4>
-	   @elseif(isset($personal) && $personal == 'cye')
-		<h4 class="modal-title">You must log in or sign up in order to Create An Event</h4> 
-	   @elseif(isset($personal) && $personal == 'lnot-saved')
-		<h4 class="modal-title">You must log in or sign up in order to Save Events</h4> 
-       @elseif(isset($personal) && $personal == 'fap')
-		<h4 class="modal-title">You must log in or sign up in order to follow a page</h4> 
-	   @elseif(isset($personal) && $personal == 'fapb')
-		<h4 class="modal-title">You must log in or sign up in order to Follow this page</h4> 
-	   @else	   
-		<h4 class="modal-title">You must log in or sign up in order to Create Your Event</h4>	
-	   @endif
+	    @if(isset($personal) && $personal == 'gsh')
+			<h4 class="modal-title">You must log in or sign up in order to create a new page</h4>
+		@elseif(isset($personal) && $personal == 'cye')
+			<h4 class="modal-title">You must log in or sign up in order to Create An Event</h4> 
+		@elseif(isset($personal) && $personal == 'lnot-saved')
+			<h4 class="modal-title">You must log in or sign up in order to Save Events</h4> 
+	    @elseif(isset($personal) && $personal == 'fap')
+			<h4 class="modal-title">You must log in or sign up in order to Follow a page</h4> 
+		@elseif(isset($personal) && $personal == 'fapb')
+			<h4 class="modal-title">You must log in or sign up in order to Follow this page</h4> 
+		@else	   
+			<h4 class="modal-title">You must log in or sign up in order to Create Your Event</h4>	
+		@endif
       </div> 
       <h3 class="text-center login_sign-hed"> Login <span class="or"> or </span> Signup </h3>
 	  <div class="col-md-12" id="error-all"></div>
