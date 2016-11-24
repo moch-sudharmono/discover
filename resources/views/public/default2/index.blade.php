@@ -166,9 +166,9 @@
 	  @endforeach
 	 @else 
 	  <div class="col-lg-3 col-sm-4 col-xs-12 ftr">
-        <div class="box">
-		Empty! not found 
-	   </div> 
+      <div class="box">
+      Event not found.
+	    </div> 
      </div> 	   
      @endif 	 
     </div>

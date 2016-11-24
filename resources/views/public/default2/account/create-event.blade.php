@@ -10,119 +10,115 @@
 {!!HTML::style("assets/public/default2/css/jquery-ui.css")!!}
 {!!HTML::script("assets/public/default2/js/jquery-ui.js")!!}  
 <section class="sec inp">
-    <div class="tabbable tabs-left">
-        @include("public/default2/_layouts._AccountMenu")
-        <div class="tab-content form-group col-lg-8 col-sm-8 col-xs-12 ">
-            <h3>Create Your Event</h3>
-            <form class="form-inline" method="post" action="" enctype="multipart/form-data">
+<div class="tabbable tabs-left">
+    @include("public/default2/_layouts._AccountMenu")
+    <div class="tab-content form-group col-lg-8 col-sm-8 col-xs-12 ">
+        <h3>Create Your Event</h3>
+        <form class="form-inline" method="post" action="" enctype="multipart/form-data">
 
-                
-                <!--error fields starts-->
-                
-                
-                @if($errors->has() && (count($errors) > 0 || !empty(Session::get('share_event'))))
+        <!--error fields starts-->
+            
+            @if($errors->has() && (count($errors) > 0 || !empty(Session::get('share_event'))))
                 @foreach ($errors->all() as $key => $error)
                 <span class="col-md-12 full-error alert {{$key}}}">
                     {{$error}}
                 </span>	
                 @endforeach
-                @endif
+            @endif
                 
-                @if(!empty(Session::get('ev_date')))
-                     <span class="col-md-12 full-error alert">Event Start date field is required</span>
-                @endif
+            @if(!empty(Session::get('ev_date')))
+                <span class="col-md-12 full-error alert">Event Start date field is required</span>
+            @endif
                 
-                @if(!empty(Session::get('inv_tkurl')))
+            @if(!empty(Session::get('inv_tkurl')))
                 <span class="col-md-12 full-error alert">
                     <button data-dismiss="alert" aria-label="close" class="close">&times;</button>
                     <strong>Whoops!</strong> {{Session::get('inv_tkurl')}}
                 </span>
-                @endif
+            @endif
                 
-                
-                
-                @if(!empty(Session::get('ev_section')))
+            @if(!empty(Session::get('ev_section')))
                 <span class="col-md-12 full-error alert">
                     <button data-dismiss="alert" aria-label="close" class="close">&times;</button>
                     <strong>Whoops!</strong> {{Session::get('ev_section')}}
                 </span>
-                @endif
+            @endif
                 
                 
-                @if(!empty(Session::get('req_evprice')))
+            @if(!empty(Session::get('req_evprice')))
                 <span class="col-md-12 full-error alert">
                     <button data-dismiss="alert" aria-label="close" class="close">&times;</button>
                     <strong>Whoops!</strong> {{Session::get('req_evprice')}}
                 </span>	
-                @endif
-                @if(!empty(Session::get('failed_upfile')))
+            @endif
+
+            @if(!empty(Session::get('failed_upfile')))
                 <span class="col-md-12 full-error alert">
                     <button data-dismiss="alert" aria-label="close" class="close">&times;</button>
                     <strong>Whoops!</strong> {{Session::get('failed_upfile')}}
                 </span>	
-                @endif
-                @if(!empty(Session::get('pev_req')))
+            @endif
+
+            @if(!empty(Session::get('pev_req')))
                 <span class="col-md-12 full-error alert">
                     <button data-dismiss="alert" aria-label="close" class="close">&times;</button>
                     <strong>Whoops!</strong> {{Session::get('pev_req')}}
                 </span>	
-                @endif                
-                <!--error fields ends-->
+            @endif                
+    
+            <!--error fields ends-->
                 
+                
+            <h4 class="event-head">  <span class="ico-box ico--small">1</span> Contact Details</h4>	 
+            <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+                <label class="col-lg-3 col-sm-3 col-xs-12 row"> Contact Person:
+                </label>
+                <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
+                    <input type="text" name="contact_person" class="form-control" value="{{ old('contact_person') }}"/>
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+                <label class="col-lg-3 col-sm-3 col-xs-12 row"> Phone Number :
+                </label>
+                <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
+                    <input type="text" id="phone_no" name="phone_no" class="form-control" value="{{ old('phone_no') }}"/>
+                    {!! $errors->first('phone_no', '<span class="help-block with-errors">:message</span>') !!}	
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+                <label class="col-lg-3 col-sm-3 col-xs-12 row"> Email Address:
+                </label>
+                <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
+                    <input type="email" name="email_address" class="form-control" value="{{ old('email_address') }}"/>
+                    {!! $errors->first('email_address', '<span class="help-block with-errors">:message</span>') !!}	 
+                </div>
+            </div>
+            <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+                <label class="col-lg-3 col-sm-3 col-xs-12 row"> Website:
+                </label>
+                <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
+                    <input type="text" name="website" class="form-control" value="{{ old('website') }}"/>
+                    {!! $errors->first('website', '<span class="help-block with-errors">:message</span>') !!}	
+                </div>
+            </div>
 
-                
-                
-                
-                
-                <h4 class="event-head">  <span class="ico-box ico--small">1</span> Contact Details</h4>	 
-                <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-                    <label class="col-lg-3 col-sm-3 col-xs-12 row"> Contact Person:
-                    </label>
-                    <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
-                        <input type="text" name="contact_person" class="form-control" value="{{ old('contact_person') }}"/>
-                    </div>
+            <h4 class="event-head"><span class="ico-box ico--small">2</span> Event Details</h4>	 
+            <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+                <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>Event will occur:
+                </label>
+                <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
+                    <input type="radio" name="event_type" class="event_type ind" value="indoor" checked /> <span>Indoor</span>&nbsp; | &nbsp;
+                    <input type="radio" name="event_type" class="event_type ind" value="outdoor"/> <span> Outdoor </span>
                 </div>
-                <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-                    <label class="col-lg-3 col-sm-3 col-xs-12 row"> Phone Number :
-                    </label>
-                    <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
-                        <input type="text" id="phone_no" name="phone_no" class="form-control" value="{{ old('phone_no') }}"/>
-                        {!! $errors->first('phone_no', '<span class="help-block with-errors">:message</span>') !!}	
-                    </div>
-                </div>
-                <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-                    <label class="col-lg-3 col-sm-3 col-xs-12 row"> Email Address:
-                    </label>
-                    <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
-                        <input type="email" name="email_address" class="form-control" value="{{ old('email_address') }}"/>
-                        {!! $errors->first('email_address', '<span class="help-block with-errors">:message</span>') !!}	 
-                    </div>
-                </div>
-                <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-                    <label class="col-lg-3 col-sm-3 col-xs-12 row"> Website:
-                    </label>
-                    <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
-                        <input type="text" name="website" class="form-control" value="{{ old('website') }}"/>
-                        {!! $errors->first('website', '<span class="help-block with-errors">:message</span>') !!}	
-                    </div>
-                </div>
+            </div>
 
-                <h4 class="event-head"><span class="ico-box ico--small">2</span> Event Details</h4>	 
-                <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-                    <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>Event will occur:
-                    </label>
-                    <div class="col-lg-6 col-sm-9 col-xs-12 send"> 
-                        <input type="radio" name="event_type" class="event_type ind" value="indoor" checked /> <span>Indoor</span>&nbsp; | &nbsp;
-                        <input type="radio" name="event_type" class="event_type ind" value="outdoor"/> <span> Outdoor </span>
-                    </div>
+            <div class="form-group col-lg-12 col-sm-12 col-xs-12">
+                <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>Event Category:</label>
+                <div class="col-lg-6 col-sm-9 col-xs-12 send" id="event_category"> 
+                    <img src="{!!URL::to('assets/public/default2/images/progress.gif')!!}" class="img-responsive" style="width:30px"/>
                 </div>
-                <div class="form-group col-lg-12 col-sm-12 col-xs-12">
-                    <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>Event Category:</label>
-                    <div class="col-lg-6 col-sm-9 col-xs-12 send" id="event_category"> 
-                        <img src="{!!URL::to('assets/public/default2/images/progress.gif')!!}" class="img-responsive" style="width:30px"/>
-                    </div>
-                    {!! $errors->first('event_catid', '<span class="help-block with-errors">Event Category is required field</span>') !!}	
-                </div>	
+                {!! $errors->first('event_catid', '<span class="help-block with-errors">Event Category is required field</span>') !!}	
+            </div>	
 
                 <div class="form-group col-lg-12 col-sm-12 col-xs-12">
                     <label class="col-lg-3 col-sm-3 col-xs-12 row"> <span class="require-val">*</span>Event Name:
@@ -342,7 +338,7 @@
                         @endif			
                     </div>
                     <input type="hidden" name="event_dtype" class="form-control" id="event_dtype" value="single"/>	
-                    <!-----multi-date----->	
+                    <!-- multi-date -->	
                     <div class="new-period"></div>
                     <input type="hidden" id="count_p" value="0"/>		   
                     <div class="edit-se_multiple form-group col-lg-8 col-sm-12 col-xs-12">
@@ -561,7 +557,7 @@
                             </div>
                         </div>
                     </div>
-                    <!---multi-end--->		  
+                    <!-- multi-end-->		  
                 </div>
                 <h4 class="event-head"><span class="ico-box ico--small">4</span>Additional options</h4>
                 <div class="col-lg-12 col-sm-12 col-xs-12 rem-text">

@@ -26,13 +26,13 @@ class EventController extends Controller {
         if (Sentry::check()) {
 
             $eventModel = new Event;
-            $md_arr = $eventModel->md_arr;
-            $tmf = $eventModel->tmf;
-            $sdwkfmt = $eventModel->sdwkfmt;
-            $ofday = $eventModel->ofday;
-            $st_cvs = $eventModel->st_cvs;
+            $md_arr     = $eventModel->md_arr;
+            $tmf        = $eventModel->tmf;
+            $sdwkfmt    = $eventModel->sdwkfmt;
+            $ofday      = $eventModel->ofday;
+            $st_cvs     = $eventModel->st_cvs;
 
-            $countries = $eventModel->getEventCountries();
+            $countries  = $eventModel->getEventCountries();
 
             return \View::make('public/default2/account/create-event')
                             ->with('cuntd', $countries)

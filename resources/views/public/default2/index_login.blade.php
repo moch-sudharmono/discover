@@ -1,18 +1,17 @@
 @section('styles')    
 @stop
 @section('content') 
-			 {!!HTML::style("assets/public/default2/css/fullcalendar.css")!!}
-			 {!!HTML::script("assets/public/default2/js/locationpicker.jquery.js")!!}
-			 {!!HTML::script("assets/public/default2/js/map-label.js")!!}
-			 {!!HTML::script("assets/public/default2/js/moment.min.js")!!}  
-			 {!!HTML::script("assets/public/default2/js/fullcalendar.min.js")!!} 
-			 {!!HTML::script("assets/public/default2/js/event/itc-js.js")!!} 
- <?php 
-	
-	$tok = csrf_token(); 
-	$wo = 0;
-    $priceSymbol = config("app.priceSymbol" , "$");
- ?>
+{!!HTML::style("assets/public/default2/css/fullcalendar.css")!!}
+{!!HTML::script("assets/public/default2/js/locationpicker.jquery.js")!!}
+{!!HTML::script("assets/public/default2/js/map-label.js")!!}
+{!!HTML::script("assets/public/default2/js/moment.min.js")!!}  
+{!!HTML::script("assets/public/default2/js/fullcalendar.min.js")!!} 
+{!!HTML::script("assets/public/default2/js/event/itc-js.js")!!} 
+<?php 
+$tok = csrf_token(); 
+$wo = 0;
+$priceSymbol = config("app.priceSymbol" , "$");
+?>
  
 <section class="event-in-your-area">
   <div class="container text-center">
@@ -20,45 +19,45 @@
       <div class="map col-sm-12 col-xs-12 col-md-12" id="main-map"></div>
       <div class="col-md-4 col-sm-4 col-xs-12 event-area-form">
        <form class="form-inline" id="refine_search" method="post">
-          <h3> Refine Your Search</h3>
-          <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
-            <input type="text" placeholder="Location" value="{!!$rsearch_detail!!}" name="ref_location" class="form-control"/>
-          </div>
+        <h3> Refine Your Search</h3>
+        <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
+        	<input type="text" placeholder="Location" value="{!!$rsearch_detail!!}" name="ref_location" class="form-control"/>
+        </div>
 		
-	  <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
+	  	<div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
            <div class="sel">
-            <select class="selectpicker" name="location_range" title="Location Range">
-			
+            <select class="selectpicker" name="location_range" title="Location Range">			
 				<option value="" selected="selected">Search Everywhere</option>
-             @if($ucuntry == 'Canada') 			
-			   <option value="5">5 k/m</option>
-			   <option value="5">5 k/m</option>
-			   <option value="10">10 k/m</option>
-			   <option value="15">15k/m</option>
-			   <option value="25">25k/m</option>
-			   <option value="50">50k/m</option>
-			   <option value="100">100k/m</option>
-			   <option value="200">200k/m</option>
-			 @else   
-			   <option value="5">5 miles</option>
-			   <option value="10">10 miles</option>
-			   <option value="15">15 miles</option>
-			   <option value="25">25 miles</option>
-			   <option value="50">50 miles</option>
-			   <option value="100">100 miles</option>
-			   <option value="200">200 miles</option>
-			 @endif  
+             	@if($ucuntry == 'Canada') 			
+			   	<option value="5">5 k/m</option>
+			   	<option value="10">10 k/m</option>
+			   	<option value="15">15k/m</option>
+			   	<option value="25">25k/m</option>
+			   	<option value="50">50k/m</option>
+			   	<option value="100">100k/m</option>
+			   	<option value="200">200k/m</option>
+			 	@else   
+			   	<option value="5">5 miles</option>
+			   	<option value="10">10 miles</option>
+			   	<option value="15">15 miles</option>
+			   	<option value="25">25 miles</option>
+			   	<option value="50">50 miles</option>
+			   	<option value="100">100 miles</option>
+			   	<option value="200">200 miles</option>
+			 	@endif  
             </select>
            </div>
       </div>
-  @if($ucuntry == 'Canada') 	  
-	<input type="hidden" value="cn" name="ucntyname"/>	
-  @else
-	<input type="hidden" value="usa" name="ucntyname"/>
-  @endif 	  
+
+  		@if($ucuntry == 'Canada') 	  
+			<input type="hidden" value="cn" name="ucntyname"/>	
+  		@else
+			<input type="hidden" value="usa" name="ucntyname"/>
+  		@endif 	  
+
 		  <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
             <div class="sel input-group date" id="datetimepicker2">
-	 <input type="text" name="event_date" id="event_date" class="form-control" placeholder="Date" value="{{ old('event_date') }}"/>
+	 			<input type="text" name="event_date" id="event_date" class="form-control" placeholder="Date" value="{{ old('event_date') }}"/>
 			   <span class="input-group-addon">
 				<span class="glyphicon glyphicon-calendar"></span>
 			   </span>
@@ -67,9 +66,7 @@
 		  
 		  <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non" id="reset-date-fields" style="display:none;">
 				<div><button class="btn"> Select A Day </button></div>
-          </div>
-		  
-		  
+          </div>		 
 		  
 		  <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non" id="eventday">
            <div class="sel">
@@ -105,16 +102,7 @@
             </select>
            </div>
           </div>
-		 <!--  <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
-            <div class="sel">
-              <select class="selectpicker" id="search_event" name="search_event" data-live-search="true">
-                <option value="all">Search All</option> 
-                <option value="attending">Attending Events</option>
-                <option value="following">Following Events</option>
-                <option value="your">Your Events</option>
-              </select>
-            </div>
-          </div> -->
+		 
 		   <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
             <div class="sel">
               <select class="selectpicker" id="search_page" name="search_page">
@@ -127,11 +115,7 @@
             </div>
           </div>
 		    <div class="form-group col-lg-12 col-sm-12 col-xs-12 pad-non">
-            <div class="sel">
-		       <!--	<div><label>Free Events</label><input type="checkbox" name="frevent" value="y"/></div>
-			<div><label>Kids Events</label><input type="checkbox" name="kevent" value="y" /></div>
-			<div><label>Family Events</label><input type="checkbox" name="fmevent" value="y" /></div>
-			<div><label>Religious Events</label><input type="checkbox" name="rlevent" value="y" /></div>-->
+            <div class="sel">		       
               <select class="selectpicker" name="event_type">
                 <option value="all">Search All Events</option> 			  
                 <option value="free">Free Events</option>
@@ -144,19 +128,13 @@
 		  
 		  
           <div class="sel">
-             <input type="name" name="optional_all" placeholder="Event Name or Venu Name " class="form-control"/>          
+             <input type="name" name="optional_all" placeholder="Event or Venue Name " class="form-control"/>          
           </div> 
 		  <input type="hidden" name="_token" id="_token" value="{!! $tok !!}">	
           <input type="submit" value="Search" class="btn b-btn">
         </form>
       </div>
       <div class="col-md-8 col-sm-8 col-xs-12 tab-events text-left">
-     <!--<ul class="nav nav-pills">
-          <li class="active"><a data-toggle="pill" href="#all_event" id="event_data">All Events</a></li>
-          <li><a data-toggle="pill" href="#attending">Attending</a></li>
-          <li><a data-toggle="pill" href="#following">Following</a></li>
-          <li><a data-toggle="pill" href="#our-events">Your Events</a></li>  
-        </ul>-->
         <div class="tab-content">
 		
           <div id="all_event" class="tab-pane fade in active">
