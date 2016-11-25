@@ -382,7 +382,7 @@ $priceSymbol = config("app.priceSymbol" , "$");
    var markers = [];   
    
 	$(window).on('scroll', function() {
-	   if ($(window).scrollTop() > 95) {
+	   /*if ($(window).scrollTop() > 95) {
 			$('.right-side-event-area').addClass('scroll-rs-event');
 	   } else {
 			$('.right-side-event-area').removeClass('scroll-rs-event');    
@@ -392,6 +392,12 @@ $priceSymbol = config("app.priceSymbol" , "$");
 	   } else {
 			$('.event-area-form').removeClass('scroll-event-area-form');     
 	   } 
+
+	   if ($(window).scrollTop() > 95) {
+            $('.header-main1').addClass('scroll-rs-event');
+       } else {
+            $('.header-main1').removeClass('scroll-rs-event');    
+       }*/
 	});
 
 	 var outerPane = $('#all_event'), didScroll = false;
@@ -463,18 +469,9 @@ setInterval(function() {
      event.preventDefault();	
       var ctext = $( "#search_event option:selected" ).val();
 	  var datapst = $.post('{!!URL("refine-search")!!}', $('#refine_search').serialize());
-	  datapst.done(function( data ) {
-		   /*if(ctext =='attending'){
-			 $("#event_data").html('Attending');
-			} else if(ctext =='following'){
-			 $("#event_data").html('Following');	
-			} else if(ctext =='your'){
-			 $("#event_data").html('Your Events');	
-			} else {
-			 $("#event_data").html('All Events');	
-			} */	
-      $("#all_event").html(data);		  	
-	 });
+	  datapst.done(function( data ) {		   
+      	$("#all_event").html(data);		  	
+	 	});
   });  
   
   Tipped.delegate('.delegation-ajax', {
@@ -499,13 +496,11 @@ setInterval(function() {
 	 
 		var token = jQuery('#_token').val();
         var postdata = {'ascid': eid, '_token': token};
-		//jQuery("#follow-page").html('Following');
 	    var datapst = $.post( '{!!URL("account/follow")!!}', postdata );
 	   datapst.done(function( data ) {
 	   if(data == 'success'){   
 			window.location='{!!URL("/")!!}';		 
 	   } else { 
-	    // jQuery("#follow-page").html('Follow');
 			jQuery("#error-lreq").html('Login required');  
 	   } 	
 	  });
@@ -569,51 +564,7 @@ setInterval(function() {
     }
    });
   }  
-  
-	/*
-	var vx = document.getElementById("current_location");
-	
-   function getLocation() {
-  	if (navigator.geolocation) { 
-	 navigator.geolocation.getCurrentPosition(showAddress);
-	} else { 
-	 vx.innerHTML = "Australia";
-	}
-   }
-  getLocation();
-   function showAddress(position) {
-	var lat_long = position.coords.latitude+','+position.coords.longitude;
-	 var tken = jQuery( "input#_token" ).val();
-	 jQuery('#current_location').html('<img src="{!!URL::to("assets/public/default2/images/progress.gif")!!}" style="width:30px"/>');
-	var postdata = {curlocation: lat_long, _token: tken};
-	var datapst = jQuery.post( '{!!URL("clocation")!!}', postdata );
-	 datapst.done(function( data ) {
-          var ecy = data.split('~');
-	    jQuery("#current_location").html(ecy[0]);	
-      if(ecy[1]){
-		 var scurl = ecy[1].replace(/ /g, "_");
-	   $('#featured_events').load('{!!URL("ghome-ecity/'+scurl+'")!!}'); 
-	  }	       
-	 });	
-	} */
-  
- 
-  /*
-  function unattend(evid){
-   if(evid != null){
-	 var tken = jQuery( "input#_token" ).val();  
-	 var postdt = {evntid: evid, _token: tken};
-	var datapost = $.post('{!!URL("event/unattendEvent")!!}', postdt);
-	 datapost.done(function( data ) {
-	  if(data == 'succ'){
-		window.location='{!!URL("/")!!}';	
-	  } else {	
-		window.location='{!!URL("/")!!}';	
-	  }	
-	 });	
-   } 
-  }
-  */
+
  
 $('#flplistsearch').on('click', function(){	 
    var evpgval = $('#efsearch_val').val();

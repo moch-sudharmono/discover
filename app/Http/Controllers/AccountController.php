@@ -20,37 +20,63 @@ class AccountController extends Controller {
 /**************************User-Profile************************************/	
 	public function postAccount(Request $request)
     {
-     if(Sentry::check()){
-		$id = Sentry::getUser()->id; 
-		$profile_photo = Sentry::getUser()->photo;
-		$data = $request->input();		
-		$validator = Validator::make($request->all(), [	
-          'full_name' => 'required|max:255',
-          'email' => 'required|email',
-          'address' => 'required',
-          'country' => 'required',
-		  'state' => 'required',
-		  'city' => 'required',
-          'zip_code' => 'required|min:6|max:6',		  
-		  'phone' => 'required|min:10',          
-		  'photo'=>'mimes:png,gif,jpeg,bmp',
+    if(Sentry::check()){
+		$id 			= Sentry::getUser()->id; 
+		$profile_photo 	= Sentry::getUser()->photo;
+		$data 			= $request->input();		
+		$validator 		= Validator::make($request->all(), [	
+          'full_name' 	=> 'required|max:255',
+          'email' 		=> 'required|email',
+          'address' 	=> 'required',
+          'country' 	=> 'required',
+		  'state' 		=> 'required',
+		  'city' 		=> 'required',
+          'zip_code' 	=> 'required|min:6|max:6',		  
+		  'phone' 		=> 'required|min:10',          
+		  'photo'		=> 'mimes:png,gif,jpeg,bmp'
         ]);	
         
 		if ($validator->fails()) {
           	return Redirect::back()->withErrors($validator)->withInput(); 
         } else {        	
-		  	$prof_exitem = DB::table('users')->where('id', '!=', $id)->where('email', '=', $data['email'])->select('id')->get();			 	
+		  	$prof_exitem = DB::table('users')
+		  					->where('id', '!=', $id)
+		  					->where('email', '=', $data['email'])
+		  					->select('id')
+		  					->get();			 	
+
 			if(!empty($prof_exitem[0]->id)){
-			  return Redirect::back()->with('email_error', 'The email has already been taken.')->withInput();	 			 
-        	} else {			 
-        		DB::table('users')->where('id', '=', $id)->update(['full_name' => $data['full_name'], 'email' => $data['email'],'updated_at' => date('Y-m-d H:i:s')]);		         
-				DB::table('group_details')->where('u_id', '=', $id)->update(['address' => $data['address'], 'country' => $data['country'], 'state' => $data['state'], 'city' => $data['city'], 'zip_code' => $data['zip_code'], 'phone' =>  $data['phone'], 'updated_at' => date('Y-m-d H:i:s')]); 
-				return Redirect::back()->with('succ_mesg', 'Your information updated successfully');       
+			  	return Redirect::back()->with('email_error', 'The email has already been taken.')->withInput();	 			 
+        	} else {
+        					 
+        		DB::table('users')
+        			->where('id', '=', $id)
+        			->update([	'full_name' 	=> $data['full_name'], 
+        						'email' 		=> $data['email'],
+        						'updated_at' 	=> date('Y-m-d H:i:s')
+        					]);		         
+
+				DB::table('group_details')
+					->where('u_id', '=', $id)
+					->update([	'address' 		=> $data['address'], 
+								'country' 		=> $data['country'], 
+								'state' 		=> $data['state'], 
+								'city' 			=> $data['city'], 
+								'zip_code' 		=> $data['zip_code'], 
+								'phone' 		=> $data['phone'], 
+								'updated_at' 	=> date('Y-m-d H:i:s')
+							]); 
+
+				return Redirect::back()
+					->with('succ_mesg', 'Your information updated successfully');       
 	  		}
 	  	}
+
      } else {
-		  return Redirect::to('/');
-	 }
+
+		return Redirect::to('/');
+
+	}
     } 
 	
 	 public function postEvpgList(Request $request)

@@ -429,6 +429,7 @@ html {
 	border: 6px solid #fff;
 	box-shadow: 0 0 1px #c0c0c0;
 	margin-bottom: 20px;
+	margin-top: 20px;
 }
 .pad-non {
 	margin-bottom: 10px!important;
@@ -3505,7 +3506,7 @@ background-color: #fff;
 }
 /******** New Added start***********/
 .scroll-rs-event .map-right{
-	height: 130px;
+	height: 250px;
 }
 .scroll-rs-event .events-hed 
 {
@@ -3883,8 +3884,22 @@ li.one-crpage {
   }
   .right-side-event-area.scroll-rs-event
   {
-	  top:0;
+	  top:69px;
   }
+
+  .header-main1
+  {
+    position: fixed;
+    top: 0px;
+    z-index: 1;
+    width: 100%;
+	
+   }
+  .header-main1.scroll-rs-event
+  {
+	  top:0px;
+  }  
+
  }
  
  @media (min-width: 768px) {

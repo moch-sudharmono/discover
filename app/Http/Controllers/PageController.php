@@ -22,11 +22,15 @@ class PageController extends Controller {
     }
 
     public function getCreatevent() {
-        if (Sentry::check()) {
-            // Sentry::getUser()->id; 	    
-            return \View::make('public/default2/create-page')->with('title', 'Create Your Event - DiscoverYourEvent')->with('active', 'ce');
+        if (Sentry::check()) {            
+            return \View::make('public/default2/create-page')
+                        ->with('title', 'Create Your Event - DiscoverYourEvent')
+                        ->with('active', 'ce');
+
         } else {
+
             return Redirect::to('logInSignUp');
+
         }
     }
 
@@ -44,12 +48,21 @@ class PageController extends Controller {
         }
     }
 
-    public function getStarted() {
-       
+    public function getStarted() 
+    {    
         $cspid = Session::get('cspid');
         if (!empty($cspid)) {
-            $coun_data = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-            return \View::make('public/default2/get-started')->with('title', 'getStarted - DiscoverYourEvent')->with('cou_data', $coun_data)->with('signupid', $cspid);
+            
+            $coun_data = DB::table('countries')
+                            ->select('id', 'name')
+                            ->where('id', '=', 38)
+                            ->orWhere('id', '=', 231)
+                            ->get();
+
+            return \View::make('public/default2/get-started')
+                    ->with('title', 'Get Started - DiscoverYourEvent')
+                    ->with('cou_data', $coun_data)
+                    ->with('signupid', $cspid);
         } else {
             return Redirect::to('/');
         }
@@ -109,8 +122,16 @@ class PageController extends Controller {
 
     public function getCluborgform() {
         if (Sentry::check()) {
-            $coun_data = DB::table('countries')->select('id', 'name')->where('id', '=', 38)->orWhere('id', '=', 231)->get();
-            return \View::make('public/default2/club_organization')->with('title', 'Club/Organization Form - DiscoverYourEvent')->with('cou_data', $coun_data);
+            $coun_data  = DB::table('countries')
+                            ->select('id', 'name')
+                            ->where('id', '=', 38)
+                            ->orWhere('id', '=', 231)
+                            ->get();
+
+            return \View::make('public/default2/club_organization')
+                    ->with('title', 'Club / Organization Form - DiscoverYourEvent')
+                    ->with('cou_data', $coun_data);
+
         } else {
             return Redirect::to('logInSignUp');
         }
@@ -133,73 +154,90 @@ class PageController extends Controller {
             }
             
             $validator = Validator::make($request->all(), [
-                        'name' => 'required|unique:account_details',
-                        'phone' => 'required|min:10',
-                        'email' => 'required|email',
-                        'address' => 'required',
-                        'city' => 'required',
-                        'state' => 'required',
-                        'country' => 'required',
-                        'zip_code' => 'required|min:6|max:6',
-                        'upload_file' => 'mimes:png,gif,jpeg,bmp',
+                        'name'          => 'required|unique:account_details',
+                        'phone'         => 'required|min:10',
+                        'email'         => 'required|email',
+                        'address'       => 'required',
+                        'city'          => 'required',
+                        'state'         => 'required',
+                        'country'       => 'required',
+                        'zip_code'      => 'required|min:6|max:6',
+                        'upload_file'   => 'mimes:png,gif,jpeg,bmp'
             ]);
             
             
             if ($validator->fails()) {
                     return redirect($bladename)->withErrors($validator)->withInput();
             } else {
-                $clid = Sentry::getUser()->id;
+                $clid       = Sentry::getUser()->id;
                 $input_file = $request->file();
+                
                 if (!empty($data['city'])) {
-                    $dcity = $data['city'];
+                    $dcity  = $data['city'];
                 } else {
-                    $dcity = null;
+                    $dcity  = null;
                 }
+
                 if (!empty($input_file)) {
                     $u_filesize = $input_file['upload_file']->getClientSize();
                     if ($u_filesize < 2000001) {
                         //Upload Image
-                        $rid = Str::random(7);
-                        $destinationPath = 'public/uploads/account_type/' . $data['actype'] . '/';
-                        $filename = $input_file['upload_file']->getClientOriginalName();
-                        $mime_type = $input_file['upload_file']->getMimeType();
-                        $extension = $input_file['upload_file']->getClientOriginalExtension();
-                        $filename = basename($input_file['upload_file']->getClientOriginalName(), "." . $extension) . '_' . $rid . '.' . $extension;
-                        $upload_success = $input_file['upload_file']->move($destinationPath, $filename);
-                        /*                         * *************resize-image*************** */
-                        /* $rsfname = basename($input_file['upload_file']->getClientOriginalName(), ".".$extension).'_'.$rid.'_200x200.'.$extension;
-                          $rspath = public_path('uploads/account_type/'.$imgs_apath.'/'.$rsfname);
-                          Image::make($destinationPath.$filename)->resize(200, 200)->save($rspath); */
-                        /*                         * *************************************** */
-                        $grd_id = DB::table('account_details')->insertGetId(['g_id' => $acid, 'u_id' => $clid, 'name' => $data['name'], 'address' => $data['address'], 'city' => $dcity,
-                            'email' => $data['email'], 'state' => $data['state'], 'website' => $data['website'], 'zip_code' => $data['zip_code'], 'upload_file' => $filename,
-                            'country' => $data['country'], 'phone' => $data['phone'], 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
-                        );
+                        $rid                = Str::random(7);
+                        $destinationPath    = 'public/uploads/account_type/' . $data['actype'] . '/';
+                        $filename           = $input_file['upload_file']->getClientOriginalName();
+                        $mime_type          = $input_file['upload_file']->getMimeType();
+                        $extension          = $input_file['upload_file']->getClientOriginalExtension();
+                        $filename           = basename($input_file['upload_file']->getClientOriginalName(), "." . $extension) . '_' . $rid . '.' . $extension;
+                        $upload_success     = $input_file['upload_file']->move($destinationPath, $filename);
+                        
+                        $grd_id             = DB::table('account_details')
+                                                ->insertGetId([ 'g_id'          => $acid, 
+                                                                'u_id'          => $clid, 
+                                                                'name'          => $data['name'], 
+                                                                'address'       => $data['address'], 
+                                                                'city'          => $dcity,
+                                                                'email'         => $data['email'], 
+                                                                'state'         => $data['state'], 
+                                                                'website'       => $data['website'], 
+                                                                'zip_code'      => $data['zip_code'], 
+                                                                'upload_file'   => $filename,
+                                                                'country'       => $data['country'], 
+                                                                'phone'         => $data['phone'], 
+                                                                'created_at'    => date('Y-m-d H:i:s'), 
+                                                                'updated_at'    => date('Y-m-d H:i:s')
+                                                            ]);
                     } else {
+
                         return redirect($bladename)->with('failed_upfile', 'Please upload max file size of 2mb.')->withInput();
                         die;
                     }
                 } else {
-                    $grd_id = DB::table('account_details')->insertGetId(['g_id' => $acid, 'u_id' => $clid, 'name' => $data['name'], 'address' => $data['address'], 'city' => $dcity,
-                        'email' => $data['email'], 'state' => $data['state'], 'website' => $data['website'], 'zip_code' => $data['zip_code'], 'country' => $data['country'],
-                        'phone' => $data['phone'], 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]
-                    );
+                    $grd_id = DB::table('account_details')
+                                ->insertGetId([ 'g_id'      => $acid, 
+                                                'u_id'      => $clid, 
+                                                'name'      => $data['name'], 
+                                                'address'   => $data['address'], 
+                                                'city'      => $dcity,
+                                                'email'     => $data['email'], 
+                                                'state'     => $data['state'], 
+                                                'website'   => $data['website'], 
+                                                'zip_code'  => $data['zip_code'], 
+                                                'country'   => $data['country'],
+                                                'phone'     => $data['phone'], 
+                                                'created_at' => date('Y-m-d H:i:s'), 
+                                                'updated_at' => date('Y-m-d H:i:s')
+                                            ]);
                 }
 
-                DB::table('user_accounts')->insert(['u_id' => $clid, 'account_did' => $grd_id, 'status' => 'open', 'account_urole' => 'admin', 'created_at' => date('Y-m-d H:i:s'), 'updated_at' => date('Y-m-d H:i:s')]);
-                //Send Email
-                /* 	$SendToEmail = $data['email'];
-                  $eve = url('logInSignUp');
-                  $Subject = "You are successfully select the Account Type - Discover Your Event";
-                  $emdata = array(
-                  'uname'      => Sentry::getUser()->full_name,
-                  'uemail'      => Sentry::getUser()->email,
-                  'loginurl'    => $eve
-                  );
-                  Mail::send('email.signup_email', $emdata, function($message) use ($SendToEmail, $Subject)
-                  {
-                  $message->to($SendToEmail)->cc('vikassharma.itcorporates@gmail.com')->subject($Subject);
-                  }); */
+                DB::table('user_accounts')
+                    ->insert([  'u_id' => $clid, 
+                                'account_did' => $grd_id, 
+                                'status' => 'open', 
+                                'account_urole' => 'admin', 
+                                'created_at' => date('Y-m-d H:i:s'), 
+                                'updated_at' => date('Y-m-d H:i:s')
+                            ]);
+                
                 return Redirect::to('account-user/' . $data['actype'])->with('saccid', $grd_id);
             }
         } else {
@@ -207,19 +245,30 @@ class PageController extends Controller {
         }
     }
 
-    public function getSetaccount() {
-        
+    public function getSetaccount() 
+    {        
         $grd_id = Session::get('grd_id');
         if (!empty($grd_id)) {
-            $get_ctyd = DB::table('group_details')->where('id', '=', $grd_id)->select('country')->get();
+            $get_ctyd   = DB::table('group_details')
+                            ->where('id', '=', $grd_id)
+                            ->select('country')
+                            ->get();
             
-            $event_data = DB::table('event_data')->distinct('event_category')->select('event_category')->get();
+            $event_data = DB::table('event_data')
+                            ->distinct('event_category')
+                            ->select('event_category')
+                            ->get();
+
             foreach ($event_data as $obj_arr) {
                 $et_dt[] = $obj_arr->event_category;
             }
             
-            $evtsdata = array_unique($et_dt);
-            return \View::make('public/default2/setup-account')->with('title', 'Set up Personal Account - DiscoverYourEvent')->with('evtsdata', $evtsdata)->with('grd_id', $grd_id)->with('get_ctyd', $get_ctyd);
+            $evtsdata   = array_unique($et_dt);
+            return \View::make('public/default2/setup-account')
+                        ->with('title', 'Setup Personal Account - DiscoverYourEvent')
+                        ->with('evtsdata', $evtsdata)
+                        ->with('grd_id', $grd_id)
+                        ->with('get_ctyd', $get_ctyd);
         }
         else {
             return Redirect::to('/');
@@ -328,13 +377,21 @@ class PageController extends Controller {
     }
 
     public function getAccountu($actype) {
-        $cspid = Session::get('saccid');
+        $cspid  = Session::get('saccid');
         if (!empty($cspid) && Sentry::check()) {
-            $atype = ucfirst($actype);
-            $account_name = DB::table('account_details')->where('id', '=', $cspid)->select('name', 'account_url')->get();
-            $ac_murl = $account_name[0]->account_url;
-            return \View::make('public/default2/account_user')->with('title', 'Set up ' . $atype . ' Account User - DiscoverYourEvent')->with('accountyp', $actype)->with('acid', $cspid)
-                            ->with('account_url', $ac_murl);
+            $atype          = ucfirst($actype);
+            $account_name   = DB::table('account_details')
+                                ->where('id', '=', $cspid)
+                                ->select('name', 'account_url')
+                                ->get();
+
+            $ac_murl        = $account_name[0]->account_url;
+
+            return \View::make('public/default2/account_user')
+                        ->with('title', 'Setup ' . $atype . ' Account User - DiscoverYourEvent')
+                        ->with('accountyp', $actype)
+                        ->with('acid', $cspid)
+                        ->with('account_url', $ac_murl);
         } else {
             return Redirect::to('/');
         }

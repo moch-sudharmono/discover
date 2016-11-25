@@ -58,6 +58,7 @@ class EventCategories extends Model {
 		$event_categories = $event_categories->join('event_taxonomy_meta_data', 'event_data.id' , '=', 'event_taxonomy_meta_data.event_id');
 		$event_categories = $event_categories->select('event_data.id','event_data.event_category');
 		$event_categories = $event_categories->get();
+		dd($event_categories);
 		return $event_categories;
 	}
 }

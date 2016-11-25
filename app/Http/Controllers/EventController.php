@@ -387,7 +387,6 @@ class EventController extends Controller {
                 $eventCategories = $catModel->getEventCategories($filter);
             }
 
-
             if (sizeof($eventCategories) > 0) {
                 $return .= '<select name="event_catid" class="event_category">';
                 foreach ($eventCategories as $key => $category) {
